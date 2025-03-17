@@ -5,5 +5,13 @@ export default defineNuxtConfig({
 
   pages: true,
 
+
+  components: [
+    { path: '~/components', extensions: ['.vue'] } // автоматический импорт компонентов из папки
+  ],
+
+  imports: {
+    autoImport: true // автоматический импорт composables (по умолчанию включен)
+  },
   modules: ['@element-plus/nuxt']
 })

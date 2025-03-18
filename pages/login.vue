@@ -7,7 +7,7 @@
                 <el-form-item label="Password">
                     <el-input v-model="password"  name="password" placeholder="Password" show-password required/>
                 </el-form-item>
-                <el-button :disabled="!isFormValid || isLoading" @click="handleSubmit()">Submit</el-button>
+                <el-button :disabled="!isFormValid || isLoading" @click="handleSubmit()" @keyup.enter="handleSubmit">Submit</el-button>
             <div v-if="!isFormValid">
                 <el-text>*Enter your login</el-text> <br>
                 <el-text>

@@ -1,7 +1,9 @@
 import {defineStore} from 'pinia'
 
-export const UseUserStore = defineStore('user', {
-    state: () =>({
-        isAuth: null as boolean | null
-    })
+export const UseUserStore = defineStore('user', () => {
+
+const isAuth = ref<boolean | null>(null)
+
+
+return { isAuth}
 })

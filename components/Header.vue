@@ -3,8 +3,16 @@
     <header class="header">
         <h1 class="header__title title">Заголовок</h1>
         <nav class="header__menu">
-            <NuxtLink class="header__menu-path" to="/"> Главная</NuxtLink>
-            <NuxtLink class="header__menu-path" to="/login" > Логин</NuxtLink>
+            <NuxtLink class="header__menu-path" to="/">
+              <el-button>
+                Главная
+              </el-button>
+            </NuxtLink>
+            <NuxtLink class="header__menu-path" to="/login" >
+              <el-button>
+                Вход
+              </el-button>
+            </NuxtLink>
         </nav>
     </header>
   </div>
@@ -29,6 +37,7 @@ $font-stack:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding: 10px;
 
 
   &__title {
@@ -37,19 +46,21 @@ $font-stack:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
 
   &__menu {
+    align-self: flex-end;
     display: flex;
     justify-content:flex-start;
-    padding: 20px;
   }
 
   &__menu-path {
     margin-right: 30px;
   }
+
 }
 
 .title {
   font: 5ch $font-stack;
   color: white;
   padding: 20px;
+
 }
 </style>

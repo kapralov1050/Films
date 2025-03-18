@@ -4,8 +4,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   pages: true,
-
-
+  
   components: [
     { path: '~/components', extensions: ['.vue'] } // автоматический импорт компонентов из папки
   ],
@@ -13,5 +12,6 @@ export default defineNuxtConfig({
   imports: {
     autoImport: true // автоматический импорт composables (по умолчанию включен)
   },
-  modules: ['@element-plus/nuxt']
+  modules: ['@element-plus/nuxt', '@pinia/nuxt' ],
+  
 })

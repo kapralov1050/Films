@@ -1,5 +1,9 @@
 <template>
-  <div class="main">
+  <div>
+    <Header />
+    <slot>
+    </slot>
+    <Footer />
   </div>
 </template>
 
@@ -13,9 +17,4 @@
 
 
 <style scoped>
-.main{
-  height: 80vh;
-  
-}
-
 </style>

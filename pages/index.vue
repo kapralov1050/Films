@@ -1,5 +1,6 @@
 <template>
-  <div class="main">
+  <div>
+    <NuxtLink to="/login"> Login</NuxtLink>
   </div>
 </template>
 
@@ -9,13 +10,3 @@
 
 </script>
 
-
-
-
-<style scoped>
-.main{
-  height: 80vh;
-  
-}
-
-</style>

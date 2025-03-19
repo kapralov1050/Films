@@ -4,6 +4,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   pages: true,
+
+  css: ['~/assets/scss/main.scss'],
   
   components: [
     { path: '~/components', extensions: ['.vue'] } // автоматический импорт компонентов из папки

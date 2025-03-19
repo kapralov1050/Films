@@ -13,6 +13,3 @@
 
 
 
-
-<style scoped>
-</style>

@@ -2,20 +2,31 @@
     <div class="form" @submit.prevent="handleSubmit">
           <el-form class="form__container">
                 <el-form-item label="Login">
-                    <el-input v-model="name"  name="username" placeholder="Login" required/>
+                    <el-input v-model="name" name="username" placeholder="Login" required/>
                 </el-form-item>
                 <el-form-item label="Password">
-                    <el-input v-model="password"  name="password" placeholder="Password" show-password required/>
+                    <el-input v-model="password" name="password" placeholder="Password" show-password required/>
                 </el-form-item>
-                <el-button :disabled="!isFormValid || isLoading" @click="handleSubmit()" @keyup.enter="handleSubmit">Submit</el-button>
+                <el-button 
+                   :disabled="!isFormValid || isLoading" 
+                   @click="handleSubmit()" 
+                   @keyup.enter="handleSubmit"
+                >
+                Submit
+                </el-button>
             <div v-if="!isFormValid">
-                <el-text>*Enter your login</el-text> <br>
                 <el-text>
-                    *The password must contain at least one number.</el-text>
+                   *Enter your login. 
+                </el-text>
+                <br>
+                <el-text> 
+                   *The password must contain at least one number
+                </el-text>
             </div>
-            <div v-show="userStore.isAuth !== null">
-                <el-text v-if="userStore.isAuth" >Authorization successful</el-text>
-                <el-text v-else >Authorization failed</el-text>
+            <div v-show="isShowError">
+                <el-text >
+                    Authorization failed
+                </el-text>
             </div>
         </el-form>
     </div>
@@ -26,9 +37,10 @@
     <script setup lang="ts">
     
 
-    const name = ref<string>()
-    const password = ref<string>()
-    const isLoading = ref<boolean>()
+    const name = ref('')
+    const password = ref('')
+    const isLoading = ref(false)
+    const isShowError = ref(false)
     const userStore = UseUserStore()
     
     
@@ -40,11 +52,8 @@
         try{
             isLoading.value = true
             await new Promise(resolve => setTimeout(resolve, 2000))
-            if (name.value.trim() === 'user' && password.value === '1111') {
-            userStore.isAuth = true;
-            } else {
-            userStore.isAuth = false;
-            }
+            userStore.isAuth = name.value.trim() === 'user' && password.value === '1111'
+            isShowError.value = userStore.isAuth 
             } catch(error) {
                 console.log(error)
                 userStore.isAuth = false
@@ -54,7 +63,7 @@
     }
 
     watch([name, password], () => {
-        userStore.isAuth = null
+        isShowError.value = false
     })
     
     </script>

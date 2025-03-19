@@ -2,7 +2,7 @@ import {defineStore} from 'pinia'
 
 export const UseUserStore = defineStore('user', () => {
 
-const isAuth = ref<boolean | null>(null)
+const isAuth = ref(false)
 
 
 return { isAuth}

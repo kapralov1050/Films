@@ -84,14 +84,14 @@ watch([name, password], () => {
 
 <style lang="scss" scoped>
 .main{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color:rgb(23, 24, 29);
-  width:100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background-color:rgb(23, 24, 29);
+width:100%;
+height: 100vh;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
 
   &__element{
     margin-bottom: 10px;
@@ -100,18 +100,18 @@ watch([name, password], () => {
 
 .login-form {
 
-  color: white;
-  background-color: rgb(64, 76, 94);
-  height: 300px;
-  width: 400px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  border: 1px solid rgb(110, 110, 110);
-  border-radius: 10px;
-  padding-top: 50px;
+color: white;
+background-color: rgb(64, 76, 94);
+height: 300px;
+width: 400px;
+padding: 20px;
+display: flex;
+flex-direction: column;
+justify-content: flex-start;
+align-items: center;
+border: 1px solid rgb(110, 110, 110);
+border-radius: 10px;
+padding-top: 50px;
 
   &__input-field {
     margin: 5px;
@@ -143,29 +143,29 @@ watch([name, password], () => {
 }
 
 .button {
-  width: 320px;
-  font-size: 18px;
-  align-self: center;
-  padding: 10px;
+width: 320px;
+font-size: 18px;
+align-self: center;
+padding: 10px;
 }
 
 .title {
-  padding: 10px;
-  text-align: center;
-  font-size: 24px;
-  color: white;
+padding: 10px;
+text-align: center;
+font-size: 24px;
+color: white;
 }
 
 .logo {
-  height: 100px;
-  width: 100px;
-  color: white;
-  border: 2px solid white;
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+height: 100px;
+width: 100px;
+color: white;
+border: 2px solid white;
+border-radius: 50%;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
 }
 
 // @media (min-width:750px) {

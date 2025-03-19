@@ -1,40 +1,7 @@
 <template>
-<<<<<<< HEAD
   <div class="main" @submit.prevent="handleSubmit">
     <div class="logo main__element">
        <h1>TMDB</h1>
-=======
-    <div class="form" @submit.prevent="handleSubmit">
-          <el-form class="form__container">
-                <el-form-item label="Login">
-                    <el-input v-model="name" name="username" placeholder="Login" required/>
-                </el-form-item>
-                <el-form-item label="Password">
-                    <el-input v-model="password" name="password" placeholder="Password" show-password required/>
-                </el-form-item>
-                <el-button 
-                   :disabled="!isFormValid || isLoading" 
-                   @click="handleSubmit()" 
-                   @keyup.enter="handleSubmit"
-                >
-                Submit
-                </el-button>
-            <div v-if="!isFormValid">
-                <el-text>
-                   *Enter your login. 
-                </el-text>
-                <br>
-                <el-text> 
-                   *The password must contain at least one number
-                </el-text>
-            </div>
-            <div v-show="isShowError">
-                <el-text >
-                    Authorization failed
-                </el-text>
-            </div>
-        </el-form>
->>>>>>> e4181fbc0d3bcc3e84aabff9035e8271182f291b
     </div>
         <p class="title main__element">Authorization</p>
     <div class="login-form main__element">
@@ -93,12 +60,7 @@
         try{
             isLoading.value = true
             await new Promise(resolve => setTimeout(resolve, 2000))
-<<<<<<< HEAD
             name.value.trim() === 'user' && password.value === '1111' ? userStore.isAuth = true : isShowError.value = true;
-=======
-            userStore.isAuth = name.value.trim() === 'user' && password.value === '1111'
-            isShowError.value = userStore.isAuth 
->>>>>>> e4181fbc0d3bcc3e84aabff9035e8271182f291b
             } catch(error) {
                 console.log(error)
                 userStore.isAuth = false
@@ -108,11 +70,7 @@
     }
 
     watch([name, password], () => {
-<<<<<<< HEAD
         isShowError.value = false;
-=======
-        isShowError.value = false
->>>>>>> e4181fbc0d3bcc3e84aabff9035e8271182f291b
     })
     
     </script>

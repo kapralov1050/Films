@@ -62,6 +62,7 @@ const isLoading = ref(false)
 const isShowError = ref(false)
 
 const userStore = UseUserStore()
+const router = useRouter()
 
 const buttonText = computed(() => isLoading.value ? 'Loading...' : 'Sign in')
     
@@ -70,6 +71,7 @@ async function handleSubmit() {
     isLoading.value = true
     await new Promise(resolve => setTimeout(resolve, 1500))
     name.value.trim() === 'user' && password.value === '1111' ? userStore.isAuth = true : isShowError.value = true
+    router.push('/top-movies')
   } catch(error) {
       console.log(error)
   } finally {

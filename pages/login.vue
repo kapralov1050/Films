@@ -6,9 +6,7 @@
       </h1>
   </div>
   <div class="title main__element">
-      <p>
         Authorization
-      </p>
   </div>
   <div class="login-form main__element">
       <label 
@@ -45,8 +43,9 @@
       >
         {{ buttonText }}
       </el-button>
-      <div v-show="isShowError"
-      class="login-form__err-message"
+      <div 
+        v-show="isShowError"
+        class="login-form__err-message"
       >
         Authorization failed
       </div>

@@ -37,7 +37,7 @@
       >
       <el-button 
         class="button login-form__button"
-        :disabled="isFormEmpty || isLoading"
+        :disabled="!name || !password || isLoading"
         @click="handleSubmit"
         @keyup.enter="handleSubmit"
       >
@@ -57,16 +57,13 @@
 <script setup lang="ts">
 const name = ref('')
 const password = ref('')
+
 const isLoading = ref(false)
 const isShowError = ref(false)
-const hasInteracted = ref(false)
+
 const userStore = UseUserStore()
+
 const buttonText = computed(() => isLoading.value ? 'Loading...' : 'Sign in')
-
-
-const isFormEmpty = computed<boolean>(()=> {
-  return name.value == '' || password.value == ''
-})
     
 async function handleSubmit() {
   try{
@@ -79,11 +76,6 @@ async function handleSubmit() {
       isLoading.value = false
   }
 }
-
-watch([name, password], () => {
-    isShowError.value = false
-    hasInteracted.value = true
-})
 </script>
 
 

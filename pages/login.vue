@@ -22,6 +22,7 @@
         v-model="name"
         name="user"
         type="text"
+        required
       >
       <label 
         for="password" 
@@ -38,14 +39,24 @@
       >
       <el-button 
         class="button login-form__button"
-        :disabled="!isFormValid || isLoading"
+        :disabled="isFormEmpty || isLoading"
         @click="handleSubmit"
         @keyup.enter="handleSubmit"
       >
         Sign in 
       </el-button>
-      <div class="login-form__err-message" v-show="isShowError">
-        Authorization failed
+      <div 
+      class="login-form__help-message" 
+      v-if="hasInteracted && !isFormValid && !isLoading"
+      >
+        <p>*Enter your login</p>
+        <p>*Password must contain at least one number</p>
+      </div>
+      <div 
+      v-else-if="isShowError" 
+      class="login-form__err-message"
+      >
+        <p>Authorization failed</p>
       </div>
   </div>
 </div>
@@ -57,27 +68,33 @@ const name = ref('')
 const password = ref('')
 const isLoading = ref(false)
 const isShowError = ref(false)
+const hasInteracted = ref(false)
 const userStore = UseUserStore()
 
+
+const isFormEmpty = computed<boolean>(()=> {
+  return name.value == '' || password.value == ''
+})
 const isFormValid = computed<boolean>(() => {
-    return /\d/.test(password.value) && name.value.trim().length > 0
+  return /\d/.test(password.value) && name.value.trim().length > 0
 })
     
 async function handleSubmit() {
-    try{
-        isLoading.value = true
-        await new Promise(resolve => setTimeout(resolve, 2000))
-        name.value.trim() === 'user' && password.value === '1111' ? userStore.isAuth = true : isShowError.value = true;
-        } catch(error) {
-            console.log(error)
-            userStore.isAuth = false
-        } finally {
-            isLoading.value = false
-        }
+  try{
+    isLoading.value = true
+    await new Promise(resolve => setTimeout(resolve, 1500))
+    name.value.trim() === 'user' && password.value === '1111' ? userStore.isAuth = true : isShowError.value = true
+  } catch(error) {
+      console.log(error)
+      userStore.isAuth = false
+  } finally {
+      isLoading.value = false
+  }
 }
 
 watch([name, password], () => {
-    isShowError.value = false;
+    isShowError.value = false
+    hasInteracted.value = true
 })
 </script>
 

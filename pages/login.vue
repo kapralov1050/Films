@@ -75,7 +75,6 @@ async function handleSubmit() {
     name.value.trim() === 'user' && password.value === '1111' ? userStore.isAuth = true : isShowError.value = true
   } catch(error) {
       console.log(error)
-      userStore.isAuth = false
   } finally {
       isLoading.value = false
   }

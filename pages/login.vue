@@ -43,20 +43,12 @@
         @click="handleSubmit"
         @keyup.enter="handleSubmit"
       >
-        Sign in 
+        {{ buttonText }}
       </el-button>
-      <div 
-      class="login-form__help-message" 
-      v-if="hasInteracted && !isFormValid && !isLoading"
-      >
-        <p>*Enter your login</p>
-        <p>*Password must contain at least one number</p>
-      </div>
-      <div 
-      v-else-if="isShowError" 
+      <div v-show="isShowError"
       class="login-form__err-message"
       >
-        <p>Authorization failed</p>
+        Authorization failed
       </div>
   </div>
 </div>
@@ -70,13 +62,11 @@ const isLoading = ref(false)
 const isShowError = ref(false)
 const hasInteracted = ref(false)
 const userStore = UseUserStore()
+const buttonText = computed(() => isLoading.value ? 'Loading...' : 'Sign in')
 
 
 const isFormEmpty = computed<boolean>(()=> {
   return name.value == '' || password.value == ''
-})
-const isFormValid = computed<boolean>(() => {
-  return /\d/.test(password.value) && name.value.trim().length > 0
 })
     
 async function handleSubmit() {

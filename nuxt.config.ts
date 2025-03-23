@@ -8,12 +8,12 @@ export default defineNuxtConfig({
   css: ['~/assets/scss/main.scss'],
   
   components: [
-    { path: '~/components', extensions: ['.vue'] } // автоматический импорт компонентов из папки
+    { path: '~/components', extensions: ['.vue'] } 
   ],
 
   imports: {
-    autoImport: true // автоматический импорт composables (по умолчанию включен)
+    autoImport: true 
   },
-  modules: ['@element-plus/nuxt', '@pinia/nuxt' ],
   
+  modules: ['@element-plus/nuxt', '@pinia/nuxt' ],
 })

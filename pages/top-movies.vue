@@ -65,30 +65,51 @@
               </template>
           </el-input>
         </div> 
-        <div class="header__divider"></div>
+        <el-divider direction="vertical" />
         <NuxtLink class="header__sign-button sign-button" to="/login"> Sign In</NuxtLink>
     </el-header>
     <el-main class="main">
-      <div class="title-block">
-        <div class="title-block__subtitle">
-          <div class="title-block__h3-title">
-            <h3>IMDb Charts</h3>
-          </div>
-          <div class="title-block__share-group">
-            <span>Share</span>
-            <el-button :icon="Share"/>
-          </div>
+      <div class="title-group">
+        <div class="title-group__subtitle-block">
+          <h3 class="title-group__subtitle" >IMDb Charts</h3>
+          <span class="title-group__share-button">Share
+            <el-icon><Share /></el-icon>
+          </span>
         </div>
-        <div class="title-block__main-title">
-          <h1>IMDb Top 250 Movies</h1>
-          <div>As rated by regular IMDb voters.</div>
+        <div class="title-group__title-block">
+          <h1 class="title-group__title">
+            IMDb Top 250 Movies
+          </h1>
+          <span class="title-group__title-description">As rated by regular IMDb voters.</span>
         </div>
       </div>
-      <!-- <ul>
-          <li v-for="movie in moviesStore.data" :key="movie.id">
-              {{ movie.originalTitle }}
-          </li>
-      </ul> -->
+      <div class="movies-list">
+        <ul>
+            <li v-for="(movie, idx) in moviesStore.topMovies" :key="movie.id">
+              <div class="movies-list__movie-card-container">
+                <div class="movies-list__movie-card-item">
+                  <div class="movie-card-item__primary-img-block">
+                    <img class="primary-img" src="" :alt="movie.originalTitle">
+                  </div>
+                  <div class="movie-card-item__info-block">
+                    <h3>{{ idx + 1 }}. {{ movie.primaryTitle }}</h3>
+                    <div class="movie-card-item__movie-info">
+                      <span>{{movie.startYear}}</span>
+                      <span>{{ formattedDuration(movie.runtimeMinutes) }}</span>
+                      <span>{{ AgeRating[movie.contentRating] }}</span>                                       
+                    </div>
+                    <div class="movie-card-item__movie-rating">
+                      <el-icon><Star /></el-icon>
+                      <span>{{ movie.averageRating }}</span>
+                      <span>{{  }}</span>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </li>
+        </ul>
+      </div>
     </el-main>
     <el-footer height="80px">Footer</el-footer>
   </el-container>
@@ -98,23 +119,30 @@
 
 
 <script setup>
-import { Menu, Search, Share } from '@element-plus/icons-vue'
+import { Menu, Search, Share, Star, StarFilled } from '@element-plus/icons-vue'
+import { AgeRating } from '~/types/ageRatings'
+
 const isMenuVisible = ref(false)
 const searchInput = ref('')
 const searchSelectedValue = ref()
 const moviesStore = UseMoviesStore()
+
+function formattedRating(rating){
+  return Math.round(rating/1000000)
+}
+
+function formattedDuration(duration){
+  const hours = Math.floor(duration / 60)
+  const mins = duration % 60
+  return `${hours}h ${mins}m`
+}
 
 function toggleMenu(){
   isMenuVisible.value = !isMenuVisible.value
 }
 
 onMounted( async () => {
- try{
-    const response = await instance.get('top250-movies')
-    moviesStore.data = response.data
- } catch (error) {
-    console.log(error)
- }
+  moviesStore.topMovies = await moviesStore.getTopMovies()
 })
 
 </script>
@@ -131,6 +159,10 @@ onMounted( async () => {
   gap: $gap;
 }
 
+.el-container{
+  background-color: black;
+}
+
 .imdb-logo-link{
   margin: 5px;
 }
@@ -138,7 +170,7 @@ onMounted( async () => {
 .header{
   height: 60px;
   width: 100%;
-  background-color: black;
+  background-color: rgb(27, 27, 27);
   @include flex(row, flex-start, center, 0);
 
   &__side-menu-button{
@@ -165,33 +197,46 @@ onMounted( async () => {
 }
 
 .main{
-background-color: white;
+background-color: rgb(255, 255, 255);
 width: 80%;
 @include flex(column, flex-start, center, 0);
 align-self:center;
-
 }
 
-.title-block{
-width: 100%;
-height: auto;
-@include flex(column, center, center, 0);
+.title-group{
+  @include flex(column, flex-end, center, 0);
+  width: 100%;
+  
+  &__subtitle-block{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    width: inherit;
+  }
+  &__subtitle{
+    display: block;
+  }
+  &__share-button{
+    display: block;
+  }
 
-    &__subtitle{
-      @include flex(row, space-between, center, 0);
-      width: 100%;
-    }
-    &__h3-title{
-      width: 20%;
-      padding: 5px;
-    }
-    &__share-group{
-      width: auto;
-      padding: 5px;
-    }
-    &__main-title{
-      align-self: flex-start;
-    }
+  &__title-block{
+    width: inherit;
+  }
+}
 
+.movies-list{
+  width: 800px;
+  min-height: 300px;
+  border: 1px solid rgb(199, 199, 199);
+  border-radius: 5px;
+  padding: 10px;
+  @include flex(column, flex-start,center,0);
+  
+  &__movie-card-container{
+    width: 775px;
+    height: 115px;
+    border-bottom: 1px solid rgb(199, 199, 199);
+  }
 }
 </style>

@@ -63,40 +63,12 @@
           <ul>
             <li v-for="(movie, idx) in moviesStore.topMovies" :key="movie.id">
               <div class="movies-list__movie-card-container">
-                <div class="movie-card-item">
-                  <div class="movie-card-item__primary-img-block">
-                    <el-link :href="movie.url" target="_blank">
-                      <el-image
-                        class="movie-card-item__primary-img"
-                        :src="movie.primaryImage"
-                        :fit="fit"
-                        :alt="movie.originalTitle"
-                      />
-                    </el-link>
-                  </div>
-                  <div class="movie-card-item__info">
-                    <h3 class="movie-card-item__title">{{ idx + 1 }}. {{ movie.primaryTitle }}</h3>
-                    <div class="movie-card-item__meta">
-                      <span class="movie-card-item__year movie-card-item__meta-item">{{ movie.startYear }}</span>
-                      <span class="movie-card-item__duration movie-card-item__meta-item">{{ formattedDuration(movie.runtimeMinutes) }}</span>
-                      <span class="movie-card-item__rating-block movie-card-item__meta-item">{{ AgeRating[movie.contentRating] }}</span>
-                    </div>
-                    <div class="movie-card-item__rating-block">
-                      <el-icon class="movie-card-item__rate-icon"><StarFilled /></el-icon>
-                      <span class="movie-card-item__average movie-card-item__rating-item">{{ movie.averageRating }}</span>
-                      <span class="movie-card-item__votes movie-card-item__meta-item">{{ formatVotesInMillions(movie.numVotes) }}</span>
-                      <el-button class="movie-card-item__rate-button" text type="primary">
-                        <el-icon><Star /></el-icon>
-                        Rate
-                      </el-button>
-                    </div>
-                  </div>
-                  <div class="movie-card-item__right-info-button">
-                    <el-button text circle>
-                      <el-icon><InfoFilled /></el-icon>
-                    </el-button>
-                  </div>
-                </div>
+               <MovieCard
+                :movie="movie"
+                :index="idx"
+                @rate="handleRate"
+                @showDetails="showMovieDetails(movie.id)" 
+              />
               </div>
             </li>
           </ul>
@@ -110,24 +82,20 @@
 
 <script setup>
 import { Menu, Search, Share, Star, StarFilled, InfoFilled } from '@element-plus/icons-vue'
-import { AgeRating } from '~/types/ageRatings'
+import MovieCard from '@/components/MovieCard.vue';
 
 const isMenuVisible = ref(false)
 const searchInput = ref('')
 const searchSelectedValue = ref()
 const moviesStore = UseMoviesStore()
 
-function formatVotesInMillions(votes) {
-  const votesInMillions = votes / 1000000
-  const formatted = votesInMillions.toFixed(1)
-  return `(${formatted.endsWith('.0') ? formatted.slice(0, -2) : formatted}M)`
-}
+const handleRate = (index) => {
+console.log(index)
+};
 
-function formattedDuration(duration) {
-  const hours = Math.floor(duration / 60)
-  const mins = duration % 60
-  return `${hours}h ${mins}m`
-}
+const showMovieDetails = (movieId) => {
+  // Логика показа деталей
+};
 
 function toggleMenu() {
   isMenuVisible.value = !isMenuVisible.value
@@ -194,6 +162,7 @@ onMounted(async () => {
 .main {
   background-color: rgb(255, 255, 255);
   width: 60%;
+  height: auto;
   @include flex(column, flex-start, center, 0);
   align-self: center;
 }
@@ -236,54 +205,6 @@ onMounted(async () => {
     border-bottom: 1px solid rgb(199, 199, 199);
     display: flex;
     align-items: center;
-  }
-}
-
-.movie-card-item {
-  display: flex;
-  width: inherit;
-
-  &__primary-img-block {
-    width: 10%;
-    margin-right: 20px;
-  }
-
-  &__primary-img {
-    width: 72px;
-    height: 106px;
-    object-fit: cover;
-    border-radius: 10px;
-  }
-
-  &__info {
-    @include flex(column, center, flex-start, 8px);
-    flex: 1;
-  }
-
-  &__meta {
-    display: inline-block;
-  }
-
-  &__meta-item {
-    margin-right: 10px;
-    color: rgb(99, 99, 99);
-  }
-
-  &__rating-block {
-    display: inline-block;
-  }
-
-  &__rating-item {
-    margin-right: 5px;
-  }
-  
-  &__rate-icon {
-    color: rgb(255, 188, 4);
-  }
-
-  &__right-info-button {
-    width: 10%;
-    @include flex(row, center, center, 0);
   }
 }
 </style>

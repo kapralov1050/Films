@@ -15,8 +15,9 @@
 
         <div class="movie__short-info__score">
           <div class="rating">
-            <span class="rating__value">{{selectedMovie.averageRating}}/10</span>
-            <span class="rating__votes">{{ movieVotes }}</span>
+            <RatingButton :rating="selectedMovie.averageRating" :votes="movieVotes" />
+            <!-- <span class="rating__value">{{selectedMovie.averageRating}}/10</span>
+            <span class="rating__votes">{{ movieVotes }}</span> -->
           </div>
         </div>
       </div>
@@ -36,23 +37,54 @@
           <div class="movie__main-info__description">
             {{ selectedMovie.description }}
           </div>
+          <el-divider />
           <div class="movie__main-info__creators">
             <span class="movie__main-info__person">
               Director(s):
               <span v-for="director in selectedMovie.directors" :key="director.id">
-                {{ director.fullName }}
+                <el-link 
+                  class="movie__main-info__person-link" 
+                  type="primary" 
+                  :href="director.url"
+                >
+                    {{ director.fullName }}
+                </el-link>
               </span>
             </span>
+
             <span class="movie__main-info__person">
               Writer(s):
               <span v-for="writer in selectedMovie.writers" :key="writer.id">
-                {{ writer.fullName }}
+                <el-link 
+                  class="movie__main-info__person-link" 
+                  type="primary" 
+                  :href="writer.url"
+                >
+                    {{ writer.fullName }}
+                </el-link>
               </span>
             </span>
+
             <span class="movie__main-info__person">
               Cast:
               <span v-for="actor in selectedMovie.cast" :key="actor.id">
-                {{ actor.fullName }}
+                <el-popover
+                  :disabled="!actor.characters?.length"
+                  :content="actor.characters?.[0] || ''"
+                  placement="top"
+                  effect="dark"
+                  show-after="200"
+                >
+                  <template #reference>
+                    <el-link 
+                      class="movie__main-info__person-link" 
+                      type="primary" 
+                      :href="actor.url"
+                    >
+                      {{ actor.fullName }}
+                    </el-link>
+                  </template>
+                </el-popover>
               </span>
             </span>
           </div>
@@ -69,6 +101,7 @@
 
 
 <script setup>
+import RatingButton from '~/components/RatingButton.vue'
 import { AgeRating } from '~/types/ageRatings'
 
 const route = useRoute()
@@ -119,7 +152,7 @@ onMounted(async () => {
 
   &__short-info{
   color: white;
-  width: 1280px;
+  width: 100%;
   min-height: 100px;
   flex-grow: 1;
   @include flex(row, space-between, center,0);
@@ -164,12 +197,12 @@ onMounted(async () => {
 
     &__details{
       height: inherit;
-      
+      padding: 1.5rem;
     }
 
     &__genre{
       display: inline-block;
-      margin: 0.2rem 0.2rem 0.2rem 2rem;
+      margin: 0.2rem 0.2rem 0.2rem 0.2rem;
       padding: 8px 15px;
       font-weight: 400;
       border: 1px solid rgb(255, 217, 0);
@@ -177,17 +210,24 @@ onMounted(async () => {
     }
 
     &__description{
-      padding: 2rem;
       font-size: 1.3rem;
+      line-height: 1.5rem;
+      margin: 3rem 0;
     }
 
     &__creators{
       @include flex(column, center, flex-start, 2rem);
     }
+
+    &__person{
+      @include flex(row, space, flex-start, 1rem);
+      flex-wrap: wrap;
+    }
   }
 }
 
-
-
+.custom-black-popover{
+  background-color: black;
+}
 
 </style>

@@ -15,8 +15,8 @@ export const UseMovieDetailsStore = defineStore('MovieDetailsStore', () => {
 
     const formatVotes = (votes:number) => {
         return votes <= 1000000 
-        ? `(${(votes/1000).toFixed(0)}K)` : votes >= 1000000 
-        ? `(${(votes/1000000).toFixed(1)}M)` : votes
+        ? `${(votes/1000).toFixed(0)}K` : votes >= 1000000 
+        ? `${(votes/1000000).toFixed(1)}M` : votes
     }
 
     const formatDuration = (duration: number) => {

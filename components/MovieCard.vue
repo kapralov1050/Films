@@ -56,16 +56,14 @@ const props = defineProps({
 
 const emit = defineEmits(['rate', 'showDetails']);
 
+const movieDetailsStore = UseMovieDetailsStore()
+
 const formattedVotes = computed(() => {
-    const votes = props.movie.numVotes
-    return votes <= 1000000 
-    ? `(${(votes/1000).toFixed(0)}K)` : votes >= 1000000 
-    ? `(${(votes/1000000).toFixed(1)}M)` : votes
+ return movieDetailsStore.formatVotes(props.movie.numVotes)
 })
 
 const formattedDuration = computed(() => {
-    const duration = props.movie.runtimeMinutes
-    return duration ? `${Math.floor(duration / 60)}h ${duration % 60}m` : 'N/A'
+  return movieDetailsStore.formatVotes(props.movie.runtimeMinutes)
 })
 
 const rateMovie = () => {

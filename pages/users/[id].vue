@@ -15,7 +15,7 @@
 
         <div class="movie__short-info__score">
           <div class="rating">
-            <RatingButton :rating="selectedMovie.averageRating" :votes="movieVotes" />
+            <RatingButton :rating="selectedMovie.averageRating" :votes="movieVotes" :id="id"/>
             <!-- <span class="rating__value">{{selectedMovie.averageRating}}/10</span>
             <span class="rating__votes">{{ movieVotes }}</span> -->
           </div>

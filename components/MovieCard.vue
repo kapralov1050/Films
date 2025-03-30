@@ -17,21 +17,9 @@
             <span class="movie-card-item__duration movie-card-item__meta-item">{{ formattedDuration }}</span>
             <span class="movie-card-item__rating-block movie-card-item__meta-item">{{ AgeRating[movie.contentRating] }}</span>
         </div>
-        <div class="movie-card-item__rating-block">
-            <el-icon class="movie-card-item__rate-icon"><StarFilled /></el-icon>
-            <span class="movie-card-item__average movie-card-item__rating-item">{{ movie.averageRating }}</span>
-            <span class="movie-card-item__votes movie-card-item__meta-item">{{ formattedVotes }}</span>
-            <el-button class="movie-card-item__rate-button" @click="rateMovie" text type="primary">
-            <el-icon><Star /></el-icon>
-            Rate
-            <RatingWindow :movie-title="movie.primaryTitle"/>
-            </el-button>
-        </div>
     </div>
-    <div class="movie-card-item__right-info-button">
-    <el-button text circle>
-        <el-icon><InfoFilled /></el-icon>
-    </el-button>
+    <div class="movie-card-item__rating-block">
+      <RatingButton :rating="movie.averageRating" :votes="movie.numVotes" :id="movie.id"/>
     </div>
 </div>
 </template>
@@ -40,6 +28,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import RatingButton from '~/components/RatingButton.vue'
 import { StarFilled, Star, InfoFilled } from '@element-plus/icons-vue';
 import { AgeRating } from '~/types/ageRatings'
 
@@ -54,7 +43,7 @@ const props = defineProps({
     }
 })
 
-const emit = defineEmits(['rate', 'showDetails']);
+const emit = defineEmits(['showDetails']);
 
 const movieDetailsStore = UseMovieDetailsStore()
 
@@ -65,10 +54,6 @@ const formattedVotes = computed(() => {
 const formattedDuration = computed(() => {
   return movieDetailsStore.formatVotes(props.movie.runtimeMinutes)
 })
-
-const rateMovie = () => {
-    ratingStore.isModalOpen = !ratingStore.isModalOpen
-}
 </script>
 
 
@@ -85,7 +70,7 @@ const rateMovie = () => {
 
 
 .movie-card-item {
-  display: flex;
+  @include flex(row, space-between, center,0);
   width: inherit;
 
   &__primary-img-block {
@@ -115,7 +100,8 @@ const rateMovie = () => {
   }
 
   &__rating-block {
-    display: inline-block;
+    transform-origin: right top;
+    padding-right: 20px;
   }
 
   &__rating-item {

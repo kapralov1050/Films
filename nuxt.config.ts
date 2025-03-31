@@ -6,6 +6,30 @@ export default defineNuxtConfig({
   pages: true,
 
   css: ['~/assets/scss/main.scss'],
+
+  image: {
+    inject: true,
+    format: ['webp', 'avif'],
+    quality: 90,
+    screens: {
+      mobile: 320,
+      tablet: 640,
+      desktop: 1024
+    }
+  },
+
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `
+            @use "~/assets/scss/variables.scss" as *;
+            @use "~/assets/scss/mixins.scss" as *;
+          `
+        }
+      }
+    }
+  },
   
   components: [
     { path: '~/components', extensions: ['.vue'] } 
@@ -15,5 +39,5 @@ export default defineNuxtConfig({
     autoImport: true 
   },
   
-  modules: ['@element-plus/nuxt', '@pinia/nuxt' ],
+  modules: ['@element-plus/nuxt', '@pinia/nuxt', '@nuxt/image'],
 })

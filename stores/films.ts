@@ -3,9 +3,9 @@ import {defineStore} from 'pinia'
 export const UseMoviesStore = defineStore('moviesStore', () => {
     const topMovies = ref({})
 
-    async function getTopMovies() {
+    async function getTopMovies(list: string) {
         try{
-            const response = await instance.get('top250-movies')
+            const response = await instance.get(list)
             const data = response.data
             return data
          } catch (error) {

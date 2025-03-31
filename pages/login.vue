@@ -71,7 +71,10 @@ async function handleSubmit() {
     isLoading.value = true
     await new Promise(resolve => setTimeout(resolve, 1500))
     name.value.trim() === 'user' && password.value === '1111' ? userStore.isAuth = true : isShowError.value = true
-    router.push('/top-movies')
+
+    if(userStore.isAuth){
+      router.push('/top-movies')
+    }
   } catch(error) {
       console.log(error)
   } finally {
@@ -82,5 +85,90 @@ async function handleSubmit() {
 
 
 <style lang="scss">
-@use "~/assets/scss/pages/_login.scss";
+.main{
+  background-color:$login-background;
+  width:100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__element {
+    margin-bottom: 10px;
+  }
+}
+
+.login-form {
+  color: white;
+  background-color: $login-form;
+  height: 300px;
+  width: 400px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  border: 1px solid $login-form;
+  border-radius: 10px;
+  padding-top: 50px;
+
+  &__input-field {
+    margin: 5px;
+    color: white;
+    background-color:$login-background;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    font-size: 18px;
+    width: 300px;
+  }
+
+  &__input-label {
+    margin: 15px 5px 5px 40px;
+    color: white;
+    align-self: flex-start;
+    font-size: 18px;
+  }
+
+  &__button{
+    margin-top: 20px;
+  }
+
+  &__err-message{
+    margin: 15px;
+    color: rgb(255, 255, 255);
+    background-color:$login-err-background;
+    border: 1px solid $login-err-border;
+    border-radius: 5px;
+    padding: 20px;
+  }
+}
+
+.button {
+  width: 320px;
+  font-size: 18px;
+  align-self: center;
+  padding: 10px;
+}
+
+.title {
+  padding: 10px;
+  text-align: center;
+  font-size: 24px;
+  color: white;
+}
+
+.logo {
+  height: 100px;
+  width: 100px;
+  color: white;
+  border: 2px solid white;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+}
 </style>

@@ -1,9 +1,7 @@
 import {defineStore} from 'pinia'
 
 export const UseUserStore = defineStore('user', () => {
-
-const isAuth = ref(false)
-
-
-return { isAuth}
+    const isAuth = useLocalStorage('isAuth', false)
+    const username = useLocalStorage('username', 'default')
+    return { isAuth, username}
 })

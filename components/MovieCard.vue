@@ -57,12 +57,15 @@ const formattedDuration = computed(() => {
 
 <style scoped lang="scss">
 .movie-card-item {
-  @include flex(row, space-between, center, 0);
+  @include flex(row, space-between, flex-start, 0);
   width: inherit;
 
   &__primary-img-block {
-    flex: 1;
-    margin-right: 20px;
+    margin-right: 1rem;
+  }
+
+  &__title{
+    font-size: 1.5rem;
   }
 
   &__primary-img {
@@ -90,7 +93,7 @@ const formattedDuration = computed(() => {
 
   &__rating-block {
     transform-origin: right top;
-    padding-right: 20px;
+    padding-top: 1.5rem;
   }
 
   &__rating-item {

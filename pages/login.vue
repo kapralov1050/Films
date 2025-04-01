@@ -71,9 +71,10 @@ async function handleSubmit() {
     isLoading.value = true
     await new Promise(resolve => setTimeout(resolve, 1500))
     name.value.trim() === 'user' && password.value === '1111' ? userStore.isAuth = true : isShowError.value = true
-
+    
     if(userStore.isAuth){
       router.push('/top-movies')
+      userStore.username = name.value
     }
   } catch(error) {
       console.log(error)

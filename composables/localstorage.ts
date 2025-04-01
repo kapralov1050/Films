@@ -1,6 +1,6 @@
 type UserValues = 
     | string
-    |number
+    | number
     | boolean
     | null
     | undefined

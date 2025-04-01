@@ -1,13 +1,15 @@
 import axios from 'axios';
 
-export const searchMovies = async (Params = {}) => {
+export const searchMovies = async (genre: string = 'Drama') => {
     const options = {
         method: 'GET',
         url: 'https://imdb236.p.rapidapi.com/imdb/search',
         params: {
           type: 'movie',
-          genre: 'Drama',
-          rows: '10'
+          genre: genre,
+          rows: '25',
+          sortOrder: 'ASC',
+          sortField: 'id'
         },
         headers: {
           'x-rapidapi-key': 'd9b40c4f18msh3a5772053cf6973p175cf0jsnbf7c99f820fa',

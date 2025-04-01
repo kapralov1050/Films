@@ -1,100 +1,107 @@
 <template>
 <header class="header">
-    <el-button @click="toggleMenu" class="header__side-menu-button">
-      <el-icon><Menu /></el-icon>
-    </el-button>
-    <el-drawer v-model="isMenuVisible" direction="ltr" size="250px">
-      <el-menu>
-        <el-menu-item v-for="item in MovieListsSelection" :key="item.value" :index="item.index" @click="handleSelect(item.value)">{{ item.label }}</el-menu-item>
-      </el-menu>
-    </el-drawer>
-    <NuxtLink to="/" class="imdb-logo-link">
-      <img src="@/assets/images/logo.png" height="80px">
-    </NuxtLink>
-    <div class="header__input-group">
-      <el-input class="header__search-input-field" v-model="searchInput" placeholder="Search IMDb">
-        <template #prepend>
-          <el-select
-            class="header__select-dropdown"
-            v-model="selectedMovieList"
-            placeholder="Select"
-            size="large"
-            style="width: 120px;"
+  <el-button @click="toggleMenu" class="header__side-menu-button">
+    <el-icon><Menu /></el-icon>
+  </el-button>
+  <el-drawer v-model="isMenuVisible" direction="ltr" size="250px">
+    <el-menu>
+      <el-menu-item v-for="item in MovieListsSelection" :key="item.value" :index="item.index" @click="handleSelect(item.value)">{{ item.label }}</el-menu-item>
+    </el-menu>
+  </el-drawer>
+  <NuxtLink to="/" class="imdb-logo-link">
+    <img src="@/assets/images/logo.png" height="80px">
+  </NuxtLink>
+  <div class="header__input-group">
+    <el-input class="header__search-input-field" v-model="searchInput" placeholder="Search IMDb" required>
+      <template #prepend>
+        <el-select
+          class="header__select-dropdown"
+          v-model="selectedGenre"
+          placeholder="Select"
+          size="large"
+          style="width: 120px;"
+        >
+          <el-option
+            v-for="item in genres"
+            :key="item.value"
+            :label="item.value"
+            :value="item"
           >
-            <el-option
-              v-for="item in MovieListsSelection"
-              :key="item.value"
-              :label="item.label"
-              :value="item"
-            >
-            </el-option>
-          </el-select>
-        </template>
-        <template #append>
-          <el-button :icon="Search" @click="searchStart" />
-        </template>
-      </el-input>
-    </div>
-    <el-divider direction="vertical" />
-    <NuxtLink class="header__sign-button sign-button" to="/login">Sign In</NuxtLink>
+          </el-option>
+        </el-select>
+      </template>
+      <template #append>
+        <el-button :icon="Search" @click="handleSearch" />
+      </template>
+    </el-input>
+  </div>
+  <div v-show="isAuth" class="header__watchlist">
+    <el-icon :size="30" color="white">
+      <CollectionTag />
+    </el-icon>
+    <el-button link class="header__watchlist-button">
+      WatchList
+    </el-button>
+  </div>
+  <div v-show="isAuth" class="header__user-label">
+    {{ username }}
+  </div>
+  <el-divider class="header__divider" direction="vertical" />
+  <el-button @click="handleLogOut" link>
+    <NuxtLink v-if="!isAuth" to="/login">Sign In</NuxtLink>
+    <NuxtLink v-else >Log Out</NuxtLink>
+  </el-button>
 </header>
 </template>
 
+
 <script setup>
-import { Menu, Search, Share, Star, StarFilled, InfoFilled } from '@element-plus/icons-vue'
+import { CollectionTag, Menu, Search} from '@element-plus/icons-vue'
 
 const isMenuVisible = ref(false)
-
+const selectedGenre = ref('')
+const searchInput = ref(null)
 const emit = defineEmits(['select-movielist'])
 
-const handleSelect = (list) => {
-  emit('select-movielist', list)
-  toggleMenu()
-}
+const genresStore = UseGenresStore()
+const { genres } = storeToRefs(genresStore)
+const user = UseUserStore()
+const { isAuth, username } = storeToRefs(user)
 
-const selectedMovieList = ref('')
-const MovieListsSelection = [
-  {
-    value: 'top250-movies',
-    label: 'Top 250 Movies',
-    index: 1
-  },
-  {
-    value: 'top-box-office',
-    label: 'Top Box Office (US)',
-    index: 2
-  },
-  {
-    value: 'most-popular-movies',
-    label: 'Most Popular Movies',
-    index: 3
-  },
-  {
-    value: 'top-rated-english-movies',
-    label: 'Top Rated English Movies',
-    index: 4
-  },
-  {
-    value: 'lowest-rated-movies',
-    label: 'Lowest Rated Movies',
-    index: 5
-  },
-
-]
+const router = useRouter()
 
 function toggleMenu() {
   isMenuVisible.value = !isMenuVisible.value
 }
 
-//Вызов поиска
-async function searchStart() {
-  const results = await searchMovies({
-  type: 'movie'
-})
-
-console.log(results)
+function handleSelect(list) {
+  emit('select-movielist', list)
+  toggleMenu()
 }
 
+async function handleSearch() {
+  try {
+    if(selectedGenre.value && searchInput.value){
+    const searchResults = await searchMovies(selectedGenre.value)
+    const searchByGenre = searchResults.results.filter(item =>
+      item.primaryTitle?.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+      item.originalTitle?.toLowerCase().includes(searchInput.value.toLowerCase())
+    )
+    console.log(searchByGenre)
+  }
+  } catch(error) {
+    console.log(error)
+  }
+}
+
+function handleLogOut() {
+  router.push('/login')
+  setTimeout(() => isAuth = false, 1000)
+}
+
+onMounted(async () => {
+  await genresStore.getGenres()
+})
 </script>
 
 
@@ -104,7 +111,7 @@ $font-stack: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 .header {
   height: inherit;
   padding: 0 25px;
-  background-color: rgb(27, 27, 27);
+  background-color: $login-background;
   @include flex(row, center, center, 0);
 
   &__side-menu-button {
@@ -131,9 +138,24 @@ $font-stack: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
   &__sign-button {
+    padding-left: 1.5rem;
     text-decoration: none;
     color: white;
     font-weight: bold;
+  }
+
+  &__user-label{
+    color: white;
+    font-size: 2rem;
+    padding: 0 1.5rem;
+  }
+
+  &__watchlist{
+    @include flex(row, center, center,0)
+  }
+
+  &__watchlist-button{
+    font-size: 1.5rem;
   }
 }
 </style>

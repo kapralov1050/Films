@@ -1,9 +1,10 @@
 <template>
   <div class="movie-card-item">
-    <div class="movie-card-item__primary-img-block">
+    <div class="movie-card-item__primary-img-block primary-img-block">
+      <el-button class="primary-img-block__watchlist-button" @click="$emit('addToWatchList')" :icon="View" link></el-button>
       <NuxtLink :to="`/users/${movie.id}`">
         <NuxtImg
-          class="movie-card-item__primary-img"
+          class="primary-img-block__primary-img"
           :src="movie.primaryImage"
           :alt="movie.originalTitle"
           loading="lazy"
@@ -26,6 +27,7 @@
 </template>
 
 <script setup>
+import { View } from '@element-plus/icons-vue';
 import { computed } from 'vue';
 import RatingButton from '~/components/RatingButton.vue';
 import { AgeRating } from '~/types/ageRatings';
@@ -40,8 +42,6 @@ const props = defineProps({
     default: 0,
   },
 });
-
-const emit = defineEmits(['showDetails']);
 
 const movieDetailsStore = UseMovieDetailsStore();
 
@@ -66,14 +66,6 @@ const formattedDuration = computed(() => {
 
   &__title{
     font-size: 1.5rem;
-  }
-
-  &__primary-img {
-    width: 100%;
-    max-width: 120px;
-    height: auto;
-    object-fit: cover;
-    border-radius: 10px;
   }
 
   &__info {
@@ -107,6 +99,28 @@ const formattedDuration = computed(() => {
   &__right-info-button {
     width: 10%;
     @include flex(row, center, center, 0);
+  }
+}
+
+.primary-img-block {
+  position: relative;
+  width: 100%;
+  max-width: 120px;
+
+  &__primary-img {
+    width: 100%;
+    max-width: 120px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  &__watchlist-button{
+    position: absolute;
+    z-index: 10;
+    color: white;
+    top: 0.5rem;
+    left: 0.5rem;
   }
 }
 </style>

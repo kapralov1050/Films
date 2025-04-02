@@ -22,7 +22,7 @@
               <MovieCard
               :movie="movie"
               :index="idx"
-              @showDetails="showMovieDetails(movie.id)" 
+              @addToWatchList = "addToUserWatchList(idx)"
             />
           </li>
         </ul>
@@ -37,10 +37,18 @@
 import MovieCard from '@/components/MovieCard.vue';
 
 const moviesStore = UseMoviesStore()
+const watchlist = UseWatchListStore()
+const {userWatchList} = storeToRefs(watchlist)
 const selectedMovieList = ref('top250-movies')
 
 function HandleMovieList(list) {
   selectedMovieList.value = list
+}
+
+function addToUserWatchList(index) {
+  const movieToPush = moviesStore.topMovies[index]
+  userWatchList.value.push(movieToPush);
+  console.log(userWatchList.value);
 }
 
 watch(selectedMovieList, async(newValue) => {

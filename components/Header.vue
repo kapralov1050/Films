@@ -1,72 +1,90 @@
 <template>
-<header class="header">
-  <el-button @click="toggleMenu" class="header__side-menu-button">
-    <el-icon><Menu /></el-icon>
-  </el-button>
-  <el-drawer v-model="isMenuVisible" direction="ltr" size="250px">
-    <el-menu>
-      <el-menu-item v-for="item in MovieListsSelection" :key="item.value" :index="item.index" @click="handleSelect(item.value)">{{ item.label }}</el-menu-item>
-    </el-menu>
-  </el-drawer>
-  <NuxtLink to="/" class="imdb-logo-link">
-    <img src="@/assets/images/logo.png" height="80px">
-  </NuxtLink>
-  <div class="header__input-group">
-    <el-input class="header__search-input-field" v-model="searchInput" placeholder="Search IMDb" required>
-      <template #prepend>
-        <el-select
-          class="header__select-dropdown"
-          v-model="selectedGenre"
-          placeholder="Select"
-          size="large"
-          style="width: 120px;"
-        >
-          <el-option
-            v-for="item in genres"
-            :key="item.value"
-            :label="item.value"
-            :value="item"
-          >
-          </el-option>
-        </el-select>
-      </template>
-      <template #append>
-        <el-button :icon="Search" @click="handleSearch" />
-      </template>
-    </el-input>
-  </div>
-  <div v-show="isAuth" class="header__watchlist">
-    <el-icon :size="30" color="white">
-      <CollectionTag />
-    </el-icon>
-    <el-button link class="header__watchlist-button">
-      WatchList
+  <header class="header">
+    <el-button @click="toggleMenu" class="header__menu-button">
+      <el-icon><Menu /></el-icon>
     </el-button>
-  </div>
-  <div v-show="isAuth" class="header__user-label">
-    {{ username }}
-  </div>
-  <el-divider class="header__divider" direction="vertical" />
-  <el-button @click="handleLogOut" link>
-    <NuxtLink v-if="!isAuth" to="/login">Sign In</NuxtLink>
-    <NuxtLink v-else >Log Out</NuxtLink>
-  </el-button>
-</header>
-</template>
+    <el-drawer v-model="isMenuVisible" direction="ltr" size="250px" class="header__drawer">
+      <el-menu class="header__nav-menu">
+        <el-menu-item v-for="item in MovieListsSelection" :key="item.value" :index="item.index" @click="handleSelect(item.value)" class="header__nav-item">{{ item.label }}</el-menu-item>
+      </el-menu>
+    </el-drawer>
+    <NuxtLink to="/" class="header__logo-link">
+      <img src="@/assets/images/logo.png" height="80px" class="header__logo">
+    </NuxtLink>
+    <div class="header__search">
+      <el-input class="header__search-input" v-model="searchInput" placeholder="Search IMDb" required>
+        <template #prepend>
+          <el-select
+            class="header__search-select"
+            v-model="selectedGenre"
+            placeholder="Select"
+            size="large"
+            style="width: 120px;"
+          >
+            <el-option
+              v-for="item in genres"
+              :key="item.value"
+              :label="item.value"
+              :value="item"
+              class="header__search-option"
+            >
+            </el-option>
+          </el-select>
+        </template>
+        <template #append>
+          <el-button :icon="Search" @click="handleSearch" class="header__search-button" />
+        </template>
+      </el-input>
+    </div>
+    <WatchListButton v-show="isAuth" @open-watchlist="openWatchlist"/>
+    <WatchListDialog />
+    <div v-show="isAuth" class="header__user">
+      {{ username.toUpperCase() }}
+    </div>
+    <el-divider class="header__divider" direction="vertical" />
+    <el-button @click="handleLogOut" link class="header__auth-button">
+      <NuxtLink v-if="!isAuth" to="/login" class="header__auth-link">Sign In</NuxtLink>
+      <NuxtLink v-else class="header__auth-link">Log Out</NuxtLink>
+    </el-button>
+  </header>
+  </template>
 
 
 <script setup>
-import { CollectionTag, Menu, Search} from '@element-plus/icons-vue'
+import { Menu, Search} from '@element-plus/icons-vue'
 
 const isMenuVisible = ref(false)
 const selectedGenre = ref('')
 const searchInput = ref(null)
 const emit = defineEmits(['select-movielist'])
 
+const MovieListsSelection = [
+  {
+    value: 'top250-movies',
+    label: 'Top 250 Movies'
+  },
+  {
+    value: 'top-box-office',
+    label: 'Top Top Box Office'
+  },
+  {
+    value: 'most-popular-movies',
+    label: 'Most Popular Movies'
+  },
+  {
+    value: 'top-rated-english-movies',
+    label: 'Top Rated English Movies'
+  },
+  {
+    value: 'lowest-rated-movies',
+    label: 'Lowest Rated Movies'
+  },
+]
+
 const genresStore = UseGenresStore()
 const { genres } = storeToRefs(genresStore)
-const user = UseUserStore()
-const { isAuth, username } = storeToRefs(user)
+const userstore = UseUserStore()
+const { isAuth, username, isWatchListVisible } = storeToRefs(userstore)
 
 const router = useRouter()
 
@@ -94,6 +112,10 @@ async function handleSearch() {
   }
 }
 
+function openWatchlist() {
+  isWatchListVisible.value = true;
+}
+
 function handleLogOut() {
   router.push('/login')
   setTimeout(() => isAuth = false, 1000)
@@ -114,19 +136,27 @@ $font-stack: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: $login-background;
   @include flex(row, center, center, 0);
 
-  &__side-menu-button {
+  &__menu-button {
     margin: 5px;
   }
   
-  &__input-group {
+  &__search {
     flex: 1;
     display: flex;
     justify-content: center;
-  }
 
-  &__search-input-field {
-    width: 50rem;
-    font-size: large;
+    &-input {
+      width: 50rem;
+      font-size: large;
+    }
+
+    &-select {
+      // стили для селекта, если нужны
+    }
+
+    &-button {
+      // стили для кнопки поиска, если нужны
+    }
   }
 
   &__divider {
@@ -137,25 +167,42 @@ $font-stack: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0 1rem;
   }
 
-  &__sign-button {
+  &__auth-button {
     padding-left: 1.5rem;
-    text-decoration: none;
+    
+    &-link {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+    }
+  }
+
+  &__user {
     color: white;
-    font-weight: bold;
-  }
-
-  &__user-label{
-    color: white;
-    font-size: 2rem;
-    padding: 0 1.5rem;
-  }
-
-  &__watchlist{
-    @include flex(row, center, center,0)
-  }
-
-  &__watchlist-button{
     font-size: 1.5rem;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+
+
+  &__logo {
+    &-link {
+      // стили для ссылки логотипа, если нужны
+    }
+  }
+
+  &__drawer {
+    // стили для выезжающего меню, если нужны
+  }
+
+  &__nav {
+    &-menu {
+      // стили для меню навигации
+    }
+
+    &-item {
+      // стили для пунктов меню
+    }
   }
 }
 </style>

@@ -47,8 +47,9 @@ function HandleMovieList(list) {
 
 function addToUserWatchList(index) {
   const movieToPush = moviesStore.topMovies[index]
-  userWatchList.value.push(movieToPush);
-  console.log(userWatchList.value);
+  if(!userWatchList.value.some(movie => movie.id === movieToPush.id)) {
+    userWatchList.value.push(movieToPush);
+  } 
 }
 
 watch(selectedMovieList, async(newValue) => {

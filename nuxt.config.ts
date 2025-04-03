@@ -39,5 +39,10 @@ export default defineNuxtConfig({
     autoImport: true 
   },
   
-  modules: ['@element-plus/nuxt', '@pinia/nuxt', '@nuxt/image'],
+  modules: [
+    '@element-plus/nuxt',
+    '@pinia/nuxt',
+    '@nuxt/image',
+    '@vueuse/nuxt',
+  ],
 })

@@ -51,40 +51,20 @@
 
 
 <script setup>
+import { useLocalStorage } from '@vueuse/core'
 import { Menu, Search} from '@element-plus/icons-vue'
 
+const isAuth = useLocalStorage('isAuth', false)
+const username = useLocalStorage('username', 'default')
 const isMenuVisible = ref(false)
 const selectedGenre = ref('')
 const searchInput = ref(null)
 const emit = defineEmits(['select-movielist'])
 
-const MovieListsSelection = [
-  {
-    value: 'top250-movies',
-    label: 'Top 250 Movies'
-  },
-  {
-    value: 'top-box-office',
-    label: 'Top Top Box Office'
-  },
-  {
-    value: 'most-popular-movies',
-    label: 'Most Popular Movies'
-  },
-  {
-    value: 'top-rated-english-movies',
-    label: 'Top Rated English Movies'
-  },
-  {
-    value: 'lowest-rated-movies',
-    label: 'Lowest Rated Movies'
-  },
-]
-
 const genresStore = UseGenresStore()
 const { genres } = storeToRefs(genresStore)
 const userstore = UseUserStore()
-const { isAuth, username, isWatchListVisible } = storeToRefs(userstore)
+const { isWatchListVisible } = storeToRefs(userstore)
 
 const router = useRouter()
 
@@ -118,7 +98,7 @@ function openWatchlist() {
 
 function handleLogOut() {
   router.push('/login')
-  setTimeout(() => isAuth = false, 1000)
+  setTimeout(() => isAuth.value = false, 1000)
 }
 
 onMounted(async () => {

@@ -55,12 +55,15 @@
     
   
 <script setup lang="ts">
+import { useLocalStorage } from '@vueuse/core'
+
 const name = ref('')
 const password = ref('')
 
 const isLoading = ref(false)
 const isShowError = ref(false)
-const userstore = UseUserStore()
+const isAuth = useLocalStorage('isAuth', false)
+const username = useLocalStorage('username', 'default')
 
 const router = useRouter()
 
@@ -70,15 +73,15 @@ async function handleSubmit() {
   try{
     isLoading.value = true
     await new Promise(resolve => setTimeout(resolve, 1500))
-    name.value.trim() === 'user' && password.value === '1111' ? userstore.isAuth = true : isShowError.value = true
+    name.value.trim() === 'user' && password.value === '1111' ? isAuth.value = true : isShowError.value = true
     
-    if(userstore.isAuth){
-      router.push('/top-movies')
-      userstore.username = name.value
+    if(isAuth.value){
+      username.value = name.value
     }
   } catch(error) {
       console.log(error)
   } finally {
+      router.push('/top-movies')
       isLoading.value = false
   }
 }

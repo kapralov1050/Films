@@ -5,7 +5,7 @@
     </el-button>
     <el-drawer v-model="isMenuVisible" direction="ltr" size="250px" class="header__drawer">
       <el-menu class="header__nav-menu">
-        <el-menu-item v-for="item in MovieListsSelection" :key="item.value" :index="item.index" @click="handleSelect(item.value)" class="header__nav-item">{{ item.label }}</el-menu-item>
+        <el-menu-item v-for="option in moviesStore.moviesListOptions" :key="option.value" :index="option.index" @click="handleSelect(option.value)" class="header__nav-item">{{ item.label }}</el-menu-item>
       </el-menu>
     </el-drawer>
     <NuxtLink to="/" class="header__logo-link">
@@ -61,33 +61,11 @@ const selectedGenre = ref('')
 const searchInput = ref(null)
 const emit = defineEmits(['select-movielist'])
 
-const MovieListsSelection = [
-  {
-    value: 'top250-movies',
-    label: 'Top 250 Movies'
-  },
-  {
-    value: 'top-box-office',
-    label: 'Top Top Box Office'
-  },
-  {
-    value: 'most-popular-movies',
-    label: 'Most Popular Movies'
-  },
-  {
-    value: 'top-rated-english-movies',
-    label: 'Top Rated English Movies'
-  },
-  {
-    value: 'lowest-rated-movies',
-    label: 'Lowest Rated Movies'
-  },
-]
-
 const genresStore = UseGenresStore()
 const { genres } = storeToRefs(genresStore)
 const userstore = UseUserStore()
 const { isWatchListVisible } = storeToRefs(userstore)
+const moviesStore = UseMoviesStore()
 
 const router = useRouter()
 

@@ -1,9 +1,9 @@
 import {defineStore} from 'pinia'
 
 export const UseMoviesStore = defineStore('moviesStore', () => {
-    const topMovies = ref({})
+    const selectedMoviesList = ref({})
 
-    async function getTopMovies(list: string) {
+    async function getMoviesList(list: string) {
         try{
             const response = await instance.get(list)
             const data = response.data
@@ -13,5 +13,5 @@ export const UseMoviesStore = defineStore('moviesStore', () => {
          }
     }
 
-    return {topMovies, getTopMovies}
+    return {selectedMovieList, getMoviesList}
 })

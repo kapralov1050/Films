@@ -5,7 +5,7 @@
     </el-button>
     <el-drawer v-model="isMenuVisible" direction="ltr" size="250px" class="header__drawer">
       <el-menu class="header__nav-menu">
-        <el-menu-item v-for="option in moviesStore.moviesListOptions" :key="option.value" :index="option.index" @click="handleSelect(option.value)" class="header__nav-item">{{ item.label }}</el-menu-item>
+        <el-menu-item v-for="option in moviesStore.moviesListOptions" :key="option.value" :index="option.index" @click="handleSelect(option.value)" class="header__nav-item">{{ option.label }}</el-menu-item>
       </el-menu>
     </el-drawer>
     <NuxtLink to="/" class="header__logo-link">

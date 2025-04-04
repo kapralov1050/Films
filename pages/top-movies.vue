@@ -2,7 +2,7 @@
   <div>
     <el-container>
       <el-header>
-        <Header @select-movielist="HandleMovieList"/>
+        <Header />
       </el-header>
       <el-main class="main">
         <div class="title-group">
@@ -18,7 +18,7 @@
           </div> -->
         </div>
         <ul class="movies-list">
-          <li class="movies-list__movie-card-container" v-for="(movie, idx) in moviesStore.topMovies" :key="movie.id">
+          <li class="movies-list__movie-card-container" v-for="(movie, idx) in selectedMoviesList" :key="movie.id">
               <MovieCard
               :movie="movie"
               :index="idx"
@@ -37,27 +37,16 @@
 import MovieCard from '@/components/MovieCard.vue';
 
 const moviesStore = UseMoviesStore()
-const watchlist = UseWatchListStore()
-const {userWatchList} = storeToRefs(watchlist)
-const selectedMovieList = ref('top250-movies')
+const { MovieListOption } = storeToRefs(moviesStore)
+const { addToUserWatchList } = UseWatchList()
 
-function HandleMovieList(list) {
-  selectedMovieList.value = list
-}
 
-function addToUserWatchList(index) {
-  const movieToPush = moviesStore.topMovies[index]
-  if(!userWatchList.value.some(movie => movie.id === movieToPush.id)) {
-    userWatchList.value.push(movieToPush);
-  } 
-}
-
-watch(selectedMovieList, async(newValue) => {
-  moviesStore.topMovies = await moviesStore.getTopMovies(newValue)
+watch(MovieListOption, async(newValue) => {
+  moviesStore.selectedMoviesList = await moviesStore.getMoviesList(newValue)
 })
 
 onMounted(async () => {
-  moviesStore.topMovies = await moviesStore.getTopMovies(selectedMovieList.value)
+  moviesStore.selectedMoviesList = await moviesStore.getMoviesList(MovieListOption.value)
 })
 </script>
 

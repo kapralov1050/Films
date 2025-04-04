@@ -1,5 +1,5 @@
 <template>
-<el-dialog class="watch-list" v-model="userStore.isWatchListVisible" title="WatchList" width="fit-content" center>
+<el-dialog class="watch-list" v-model="isWatchListVisible" title="WatchList" width="fit-content" center>
     <ul class="watch-list__items">
         <li class="watch-list__item" 
             v-for="(movie, idx) in watchlist.userWatchList" 
@@ -20,10 +20,7 @@
 <script setup>
 import MovieCard from './MovieCard.vue';
 
-const userStore = UseUserStore()
-const watchlist = UseWatchListStore()
-
-
+const {watchlist, isWatchListVisible} = UseWatchList()
 </script>
 
 

@@ -6,19 +6,16 @@
       </el-header>
       <el-main class="main">
         <div class="title-group">
-          <!-- <div class="title-group__subtitle-block">
+          <div class="title-group__subtitle-block">
             <h3 class="title-group__subtitle">IMDb Charts</h3>
-            <span class="title-group__share-button">
-              Share <el-icon><Share /></el-icon>
-            </span>
           </div>
           <div class="title-group__title-block">
+            <div class="title-group__title-divider" direction="vertical"></div>
             <h1 class="title-group__title">IMDb Top 250 Movies</h1>
-            <span class="title-group__title-description">As rated by regular IMDb voters.</span>
-          </div> -->
+          </div>
         </div>
         <ul class="movies-list">
-          <li class="movies-list__movie-card-container" v-for="(movie, idx) in selectedMoviesList" :key="movie.id">
+          <li class="movies-list__movie-card-container" v-for="(movie, idx) in moviesStore.selectedMoviesList.results" :key="movie.id">
               <MovieCard
               :movie="movie"
               :index="idx"
@@ -37,16 +34,13 @@
 import MovieCard from '@/components/MovieCard.vue';
 
 const moviesStore = UseMoviesStore()
-const { MovieListOption } = storeToRefs(moviesStore)
-const { addToUserWatchList } = UseWatchList()
-
-
-watch(MovieListOption, async(newValue) => {
-  moviesStore.selectedMoviesList = await moviesStore.getMoviesList(newValue)
-})
 
 onMounted(async () => {
-  moviesStore.selectedMoviesList = await moviesStore.getMoviesList(MovieListOption.value)
+  try{
+    moviesStore.selectedMoviesList = await moviesStore.getMoviesList()
+  } catch(error) {
+    console.error('Error:', error)
+  }
 })
 </script>
 
@@ -65,6 +59,7 @@ onMounted(async () => {
 }
 .main {
   background-color: rgb(255, 255, 255);
+  padding: 2rem;
   width: 60%;
   height: auto;
   @include flex(column, flex-start, center, 0);
@@ -84,6 +79,8 @@ onMounted(async () => {
 
   &__subtitle {
     display: block;
+    font-size: 2rem;
+    font-weight: bold;
   }
 
   &__share-button {
@@ -92,6 +89,19 @@ onMounted(async () => {
 
   &__title-block {
     width: inherit;
+    display: flex;
+  }
+
+  &__title {
+    padding-left: 1rem;
+    font-size: 3rem;
+  }
+
+  &__title-divider {
+    height: inherit;
+    border: 0.2rem solid gold;
+    border-radius: 1rem;
+    
   }
 }
 

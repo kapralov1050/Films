@@ -5,15 +5,15 @@
       <NuxtLink :to="`/users/${movie.id}`">
         <NuxtImg
           class="primary-img-block__primary-img"
-          :src="movie.primaryImage"
-          :alt="movie.originalTitle"
+          :src= "posterSmall"
+          :alt="movie.original_title"
           loading="lazy"
           format="webp"
         />
       </NuxtLink>
     </div>
     <div class="movie-card-item__info">
-      <h3 class="movie-card-item__title">{{ index + 1 }}. {{ movie.primaryTitle }}</h3>
+      <h3 class="movie-card-item__title">{{ index + 1 }}. {{ movie.original_title }}</h3>
       <div class="movie-card-item__meta">
         <span class="movie-card-item__year movie-card-item__meta-item">{{ movie.startYear }}</span>
         <span class="movie-card-item__duration movie-card-item__meta-item">{{ formattedDuration }}</span>
@@ -52,6 +52,8 @@ const formattedVotes = computed(() => {
 const formattedDuration = computed(() => {
   return movieDetailsStore.formatVotes(props.movie.runtimeMinutes);
 });
+
+const posterSmall = `https://image.tmdb.org/t/p/w185${props.movie.poster_path}`;
 </script>
 
 

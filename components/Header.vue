@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <div class="header__side-menu">
-      <el-button @click="toggleMenu" class="header__menu-button">
+      <!-- <el-button @click="toggleMenu" class="header__menu-button">
         <el-icon><Menu /></el-icon>
       </el-button>
       <el-drawer v-model="isMenuVisible" direction="ltr" size="250px" class="header__drawer">
@@ -16,20 +16,19 @@
             {{ option.label }}
           </el-menu-item>
         </el-menu>
-      </el-drawer>
+      </el-drawer> -->
       <NuxtLink to="/" class="header__logo-link">
         <img src="@/assets/images/logo.png" height="80px" class="header__logo">
       </NuxtLink>
     </div>
     <div class="header__search">
-      <el-autocomplete 
+      <el-input 
         class="header__search-input" 
-        :fetch-suggestions="querySearch"
-        v-model="searchInput" 
+        v-model="params.searchValue" 
         placeholder="Search IMDb" 
         required
       >
-        <template #prepend>
+        <!-- <template #prepend>
           <el-select
             class="header__search-select"
             v-model="selectedGenre"
@@ -46,11 +45,11 @@
             >
             </el-option>
           </el-select>
-        </template>
+        </template> -->
         <template #append>
-          <el-button :icon="Search" @click="handleSearch" class="header__search-button" />
+          <el-button :icon="Search" @click="searchMovies" class="header__search-button" />
         </template>
-      </el-autocomplete>
+      </el-input>
     </div>
     <div class="header__user-block">
       <WatchListButton v-show="isAuth" @open-watchlist="openWatchlist"/>
@@ -74,7 +73,16 @@ import { Menu, Search} from '@element-plus/icons-vue'
 const { isAuth, username, handleLogOut } = useAuth()
 const { isMenuVisible, handleSelect, toggleMenu, moviesListOptions } = UseMovieList()
 const { openWatchlist } = UseWatchList()
-const { selectedGenre, genres, searchInput, handleSearch } = UseSearch()
+// const { selectedGenre, genres, searchInput, handleSearch } = UseSearch()
+const moviesStore = UseMoviesStore()
+const params = ref({searchValue: ''})
+const router = useRouter()
+
+async function searchMovies() {
+  const {data: searchMoviesListData} = await moviesStore.getSearchMoviesList({originalTitle: params.searchValue})
+  moviesStore.searchMoviesList = searchMoviesListData
+  router.push('/search')
+}
 </script>
 
 

@@ -12,7 +12,7 @@ export const searchMovies = async (genre: string = 'Drama') => {
           sortField: 'id'
         },
         headers: {
-          'x-rapidapi-key': 'd9b40c4f18msh3a5772053cf6973p175cf0jsnbf7c99f820fa',
+          'x-rapidapi-key': '11557a4255mshf6794685dbb97c8p13fbbdjsn877a5d68d3f6',
           'x-rapidapi-host': 'imdb236.p.rapidapi.com'
         }
       };

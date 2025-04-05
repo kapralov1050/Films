@@ -98,7 +98,7 @@
 </template>
 
 <script setup>
-import RatingButton from '~/components/RatingButton.vue';
+import RatingButton from '~/components/RatingBlock.vue';
 import { AgeRating } from '~/types/ageRatings';
 
 const route = useRoute();

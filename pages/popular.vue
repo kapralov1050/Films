@@ -8,15 +8,21 @@
             <div class="title-divider"></div>
             <h1 class="title">Popular Movies</h1>
         </div>
-        <ul class="movies-list">
-          <li class="movies-list__movie-card-container" v-for="(movie, idx) in moviesStore.selectedMoviesList.results" :key="movie.id">
+        <ul 
+          class="movies-list" 
+          v-loading="isLoading" 
+          element-loading-text="Loading..."
+        >
+          <li 
+            class="movies-list__movie-card-container" 
+            v-for="(movie, idx) in moviesStore.selectedMoviesList.results" :key="movie.id"
+          >
               <MovieCard
               :movie="movie"
-              :index="idx"
             />
           </li>
         </ul>
-        <Pagination class="pagination"/>
+        <Pagination @update:page="handlePageChange" :page="moviesStore.currentPage" :totalresults="moviesStore.selectedMoviesList.total_results" class="pagination"/>
       </el-main>
     </el-container>
 </template>
@@ -24,20 +30,33 @@
 
 <script setup>
 const moviesStore = useMoviesStore()
+const isLoading = ref(false)
 
-watch(() => moviesStore.currentPage, async (newpage) => {
-    try {
+const handlePageChange = async (newPage) => {
+  moviesStore.currentPage = newPage;
+};
+
+const fetchData = async() => {
+  try {
     moviesStore.selectedMoviesList = await moviesStore.getMoviesList()
-    } catch(error) {
-    console.error('Error:', error)
-    }
-})
+  } catch(error) {
+  console.error('Error:', error)
+  } finally {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+}
+
+watch(() => moviesStore.currentPage, fetchData);
 
 onMounted(async () => {
+  isLoading.value = true
   try{
+    await new Promise(resolve => setTimeout(resolve, 1000))
     moviesStore.selectedMoviesList = await moviesStore.getMoviesList()
   } catch(error) {
     console.error('Error:', error)
+  } finally {
+    isLoading.value = false
   }
 })
 </script>
@@ -51,7 +70,7 @@ onMounted(async () => {
 
 .main {
   padding: 2rem;
-  width: 70%;
+  width: 60%;
   height: auto;
   @include flex(column, center, flex-start, 0);
   align-self: center;
@@ -59,10 +78,9 @@ onMounted(async () => {
 
 .title-group {
   @include flex(row, flex-start, center, 0);
-  width: 100%;
+  width: inherit;
   height: inherit;
   margin-bottom: 1rem;
-  margin-left: 10rem;
 }
 
 .title {
@@ -80,10 +98,11 @@ onMounted(async () => {
 .movies-list {
   @include flex(column, center, center, 0);
   align-self: center;
-  width: 70%;
+  min-height: 60vh;
+  width: 95%;
   
   &__movie-card-container {
-    width: 100%;
+    width: inherit;
     height: fit-content;
     padding: 1rem;
     display: flex;

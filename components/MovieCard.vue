@@ -1,16 +1,14 @@
 <template>
   <div class="movie-card">
-    <div class="movie-card__image">
-      <NuxtLink :to="`/users/${movie.id}`">
-        <NuxtImg
-          class="movie-card__poster"
-          :src="`https://image.tmdb.org/t/p/w342${props.movie.poster_path}`"
-          :alt="movie.original_title"
-          loading="lazy"
-          format="webp"
-        />
-      </NuxtLink>
-    </div>
+    <NuxtLink class="movie-card__image" :to="`/users/${movie.id}`">
+      <NuxtImg
+        class="movie-card__poster"
+        :src="`https://image.tmdb.org/t/p/w342${props.movie.poster_path}`"
+        :alt="movie.original_title"
+        loading="lazy"
+        format="webp"
+      />
+    </NuxtLink>
     
     <div class="movie-card__meta">
       <div class="movie-card__head">
@@ -38,23 +36,23 @@
         <el-icon :size="30" class="movie-card__star">
           <StarFilled />
         </el-icon>
-        <div>{{ movie.vote_average }}</div>
+        <div>{{ movie.vote_average.toFixed(1) }}</div>
         <div 
-          v-if="userRating !== 0" 
+          v-if="currentRating !== null" 
           class="movie-card__user-rating" 
-          @click="handleRateChange"
+          @click="removeRating(movie.id)"
         >
           <el-icon :size="30" class="movie-card__star">
             <StarFilled color="rgb(50.8, 116.6, 184.5)"/>
           </el-icon>
-          <span>{{ userRating }} /10</span>
+          <span>{{ currentRating }} /10</span>
         </div>
         <div v-else class="movie-card__user-rating">
           <Button @click="toggleRateBlock">Rate</Button>
           <el-rate
             class="movie-card__rate-button"
             v-model="userRating"
-            @click="rateMovie"
+            @click="rateMovie(movie.id)"
             v-show="rateBlockVisible"
             :max="10"
             show-score
@@ -66,25 +64,26 @@
   </div>
 </template>
 
-<script setup>
-import { View, StarFilled, CollectionTag } from '@element-plus/icons-vue';
+<script setup lang="ts">
+import { StarFilled, CollectionTag } from '@element-plus/icons-vue';
 import { dateToYear } from '~/helpers/formatDate';
+import type { movieRating } from '~/types/film';
 
 const props = defineProps({
   movie: {
     type: Object,
     required: true,
-  },
-  index: {
-    type: Number,
-    default: 0,
-  },
+  }
 });
 
 const moviesStore = useMoviesStore()
-const userRating = ref(0)
 const rateBlockVisible = ref(false)
 const watchedStatus = ref(false)
+const ratings = useLocalStorage<movieRating[]>('movie-ratings',[]);
+const userRating = ref(0)
+const currentRating = computed(() => {
+  return ratings.value.find(item => item.id == props.movie.id)?.rating || null
+})
 
 const toggleRateBlock = () => {
   rateBlockVisible.value = !rateBlockVisible.value
@@ -101,16 +100,25 @@ const toggleWatched = () => {
   }
 }
 
-function rateMovie() {
-  const rated = useLocalStorage(`movie-rating-${props.movie.id}`, userRating.value);
+function rateMovie(movieId: number) {
+  const ratings = useLocalStorage<movieRating[]>('movie-ratings', []);
+  const existingIndex = ratings.value.findIndex(item => item.id == movieId)
+
+  if(existingIndex !== -1) {
+    ratings.value[existingIndex].rating = userRating.value
+  } else {
+    ratings.value.push({id: movieId, rating: userRating.value})
+  }
   rateBlockVisible.value = false
-  return rated
 }
 
-function handleRateChange() {
+function removeRating(movieId: number) {
+  const ratings = useLocalStorage<movieRating[]>('movie-ratings', []);
+  ratings.value = ratings.value.filter(item => item.id !== movieId);
   userRating.value = 0
 }
 </script>
+
 
 <style scoped lang="scss">
 .movie-card {
@@ -120,14 +128,13 @@ function handleRateChange() {
 
   &__image {
     position: relative;
-    width: auto;
-    max-width: 300px;
     height: auto;
+    width: auto;
   }
 
   &__poster {
     align-self: center;
-    max-height: 17rem;
+    max-height: 16rem;
     width: auto;
     object-fit: cover;
     border-radius: 10px;
@@ -140,6 +147,7 @@ function handleRateChange() {
 
   &__meta {
     @include flex(column, space-between, flex-start, 0.5rem);
+    flex: 1;
     height: inherit;
     padding-left: 2rem;
   }
@@ -152,6 +160,10 @@ function handleRateChange() {
   &__year {
     margin-right: 10px;
     color: rgb(99, 99, 99);
+  }
+
+  &__overview {
+    width: 60%;
   }
 
   &__rating {

@@ -24,3 +24,8 @@ export interface Film {
     averageRating: number;
     numVotes: number;
   }
+
+  export interface movieRating {
+    id: number;
+    rating: number;
+  }

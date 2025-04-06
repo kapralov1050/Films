@@ -9,12 +9,12 @@
     </NuxtLink>
     <el-input 
       class="header__search" 
-      v-model="searchValue" 
+      v-model="searchMovieStore.searchValue" 
       placeholder="Search" 
       required
     >
       <template #append>
-        <el-button :icon="Search" @click="searchMovies" />
+        <el-button :icon="Search" @click="handleSearch" />
       </template>
     </el-input>
     <ElIcon 
@@ -29,15 +29,14 @@
 <script setup>
 import { User, Search } from '@element-plus/icons-vue'
 
-const moviesStore = useMoviesStore()
-const searchValue = ref('')
+const searchMovieStore = useSearchMovieStore()
 const router = useRouter()
 
-async function searchMovies() {
-  const searchMoviesListData = await moviesStore.searchMovie(searchValue.value)
-  moviesStore.searchedMovies = searchMoviesListData
-  console.log(moviesStore.searchedMovies)
+async function handleSearch() {
+  const searchMoviesListData = await searchMovieStore.searchMovie(searchMovieStore.searchValue)
+  searchMovieStore.searchedMovies = searchMoviesListData
   router.push('/search')
+  searchMovieStore.isLoading = true
 }
 </script>
 

@@ -99,7 +99,6 @@
 
 <script setup>
 import RatingButton from '~/components/RatingBlock.vue';
-import { AgeRating } from '~/types/ageRatings';
 
 const route = useRoute();
 const id = route.params.id;

@@ -4,10 +4,7 @@
         <Header />
       </el-header>
       <el-main class="main">
-        <div class="title-group">
-            <div class="title-divider"></div>
-            <h1 class="title">Popular Movies</h1>
-        </div>
+        <h1 class="title">Popular Movies</h1>
         <ul 
           class="movies-list" 
           v-loading="isLoading" 
@@ -76,19 +73,13 @@ onMounted(async () => {
   align-self: center;
 }
 
-.title-group {
-  @include flex(row, flex-start, center, 0);
-  width: inherit;
-  height: inherit;
-  margin-bottom: 1rem;
-}
-
 .title {
   padding-left: 1rem;
+  margin]-bottom: 1rem;
   font-size: 3rem;
 }
 
-.title-divider {
+.title::before {
   height: 4rem;
   border:  solid gold;
   border-radius: 1rem; 

@@ -1,53 +1,57 @@
 <template>
-  <div class="movie-card">
-    <NuxtLink class="movie-card__image" :to="`/users/${movie.id}`">
+  <article class="movie-card">
+    <NuxtLink class="movie-card__image" :to="`/movie/${movie.id}`">
       <NuxtImg
         class="movie-card__poster"
-        :src="`https://image.tmdb.org/t/p/w342${props.movie.poster_path}`"
+        :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`"
         :alt="movie.original_title"
         loading="lazy"
         format="webp"
       />
     </NuxtLink>
-    
-    <div class="movie-card__meta">
-      <div class="movie-card__head">
+
+    <section class="movie-card__meta">
+      <header class="movie-card__head">
         <div class="movie-card__content">
           <h3 class="movie-card__title">{{ movie.original_title }}</h3>
-          <div class="movie-card__year">
+          <time 
+            class="movie-card__year" 
+            :datetime="movie.release_date"
+          >
             {{ dateToYear(movie.release_date) }}
-          </div>
+          </time>
         </div>
         <el-icon :size="30">
           <CollectionTag />
         </el-icon>
-      </div>
+      </header>
 
-      <div class="movie-card__overview">
+      <p class="movie-card__overview">
         {{ movie.overview }}
-      </div>
-      
-      <div class="movie-card__rating">
-        <div class="movie-card__watched-button">
+      </p>
+
+      <ul class="movie-card__rating">
+        <li class="movie-card__watched-button">
           <Button @click="toggleWatched">
             {{ watchedStatus ? 'Watched' : 'Mark as Watched' }}
           </Button>
-        </div>
-        <el-icon :size="30" class="movie-card__star">
-          <StarFilled />
-        </el-icon>
-        <div>{{ movie.vote_average.toFixed(1) }}</div>
-        <div 
+        </li>
+          <el-icon :size="30" class="movie-card__star">
+            <StarFilled />
+          </el-icon>
+          {{ movie.vote_average.toFixed(1) }}
+
+        <li 
           v-if="currentRating !== null" 
           class="movie-card__user-rating" 
           @click="removeRating(movie.id)"
         >
           <el-icon :size="30" class="movie-card__star">
-            <StarFilled color="rgb(50.8, 116.6, 184.5)"/>
+            <StarFilled color="rgb(50.8, 116.6, 184.5)" />
           </el-icon>
           <span>{{ currentRating }} /10</span>
-        </div>
-        <div v-else class="movie-card__user-rating">
+        </li>
+        <li v-else class="movie-card__user-rating">
           <Button @click="toggleRateBlock">Rate</Button>
           <el-rate
             class="movie-card__rate-button"
@@ -58,10 +62,10 @@
             show-score
             score-template="{value} /10"
           />
-        </div>
-      </div>
-    </div>
-  </div>
+        </li>
+      </ul>
+    </section>
+  </article>
 </template>
 
 <script setup lang="ts">
@@ -109,6 +113,7 @@ function rateMovie(movieId: number) {
   } else {
     ratings.value.push({id: movieId, rating: userRating.value})
   }
+  console.log(ratings.value)
   rateBlockVisible.value = false
 }
 

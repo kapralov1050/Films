@@ -47,50 +47,53 @@ onMounted(async () => {
 })
 </script>
 
+
 <style scoped lang="scss">
 .el-header {
-padding: 0;
-height: 4rem;
+  padding: 0;
+  height: 4rem;
 }
 
 .main {
-padding: 2rem;
-width: 70%;
-height: auto;
-@include flex(column, center, flex-start, 0);
-align-self: center;
+  padding: 2rem;
+  width: 70%;
+  height: auto;
+  @include flex(column, center, flex-start, 0);
+  align-self: center;
 }
 
 .title {
-padding-left: 1rem;
-font-size: 3rem;
-margin-bottom: 1rem;
+  padding-left: 1rem;
+  font-size: 3rem;
+  margin-bottom: 1rem;
 }
 
 .title::before {
-height: 4rem;
-border: solid gold;
-border-radius: 1rem;
+  content: "";
+  margin-right: 1rem;
+  height: 4rem;
+  border: solid gold;
+  border-radius: 1rem;
 }
 
 .movies-list {
-@include flex(column, center, center, 0);
-align-self: center;
-width: 70%;
-min-height: 60vh;
+  @include flex(column, center, center, 0);
+  align-self: center;
+  width: 70%;
+  min-height: 60vh;
 
-&__movie-card-container {
+  &__movie-card-container {
     width: 100%;
     height: fit-content;
     padding: 1rem;
     display: flex;
     align-items: center;
     justify-content: space-around;
-}
+  }
 }
 
 .pagination {
-align-self: center;
-margin: 2rem;
+  align-self: center;
+  margin: 2rem;
 }
 </style>

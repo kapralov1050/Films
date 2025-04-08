@@ -6,7 +6,7 @@ export const useMoviesStore = defineStore('moviesStore', () => {
   const totalWatched = 0
   const currentPage = ref(1)
 
-  async function getMoviesList() {
+  async function getPopularMovieList() {
       try{
           const response = await instance.get('movie/popular', {
             params: {
@@ -22,9 +22,9 @@ export const useMoviesStore = defineStore('moviesStore', () => {
   }
 
   return {
-          getMoviesList,
-          selectedMoviesList,
-          totalWatched,
-          currentPage
-        }
+    getPopularMovieList,
+    selectedMoviesList,
+    totalWatched,
+    currentPage
+  }
 })

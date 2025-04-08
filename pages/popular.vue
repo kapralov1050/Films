@@ -12,14 +12,17 @@
         >
           <li 
             class="movies-list__movie-card-container" 
-            v-for="(movie, idx) in moviesStore.selectedMoviesList.results" :key="movie.id"
+            v-for="(movie, idx) in moviesStore.selectedMoviesList.results" 
+            :key="movie.id"
           >
-              <MovieCard
-              :movie="movie"
-            />
+            <MovieCard :movie="movie"/>
           </li>
         </ul>
-        <Pagination @update:page="handlePageChange" :page="moviesStore.currentPage" :totalresults="moviesStore.selectedMoviesList.total_results" class="pagination"/>
+        <Pagination 
+          @update:page="handlePageChange" 
+          :page="moviesStore.currentPage" 
+          :totalresults="moviesStore.selectedMoviesList.total_results" class="pagination"
+        />
       </el-main>
     </el-container>
 </template>
@@ -35,7 +38,7 @@ const handlePageChange = async (newPage) => {
 
 const fetchData = async() => {
   try {
-    moviesStore.selectedMoviesList = await moviesStore.getMoviesList()
+    moviesStore.selectedMoviesList = await moviesStore.getPopularMovieList()
   } catch(error) {
   console.error('Error:', error)
   } finally {
@@ -49,7 +52,7 @@ onMounted(async () => {
   isLoading.value = true
   try{
     await new Promise(resolve => setTimeout(resolve, 1000))
-    moviesStore.selectedMoviesList = await moviesStore.getMoviesList()
+    moviesStore.selectedMoviesList = await moviesStore.getPopularMovieList()
   } catch(error) {
     console.error('Error:', error)
   } finally {
@@ -75,16 +78,17 @@ onMounted(async () => {
 
 .title {
   padding-left: 1rem;
-  margin]-bottom: 1rem;
+  margin-bottom: 1rem;
   font-size: 3rem;
 }
 
 .title::before {
+  content: "";
+  margin-right: 1rem;
   height: 4rem;
   border:  solid gold;
   border-radius: 1rem; 
 }
-
 
 .movies-list {
   @include flex(column, center, center, 0);

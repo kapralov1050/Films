@@ -1,39 +1,24 @@
 <template>
-<div class="watchlist">
-    <el-button link class="watchlist-link" @click="$emit('open-watchlist')">
-        <el-icon :size="30" color="white" class="watchlist-icon">
-            <CollectionTag />
-        </el-icon>
-        WatchList
-    </el-button>
-</div>
+  <el-button @click="addToWatchList(movie)" text circle>
+    <el-icon :size="25">
+      <CollectionTag :color="isInWatchList(movie) ? 'rgb(255, 217, 0)' : 'rgb(0, 0, 0)'"/>
+    </el-icon>
+  </el-button>
 </template>
 
 
-
-<script setup>
+<script setup lang="ts">
 import { CollectionTag } from '@element-plus/icons-vue';
+import type { Film } from "~/types/common"
 
+const props = defineProps<{
+  movie: Film | null
+}>()
+
+const {isInWatchList, addToWatchList } = useWatchList()
 </script>
 
 
+<style scoped>
 
-
-<style lang="scss" scoped>
-
-.watchlist {
-    @include flex(row, center, center, 0);
-
-    &-icon:hover {
-
-    }
-
-    &-link {
-      font-size: large;
-    }
-  }
-
-  .watchlist:hover .watchlist-icon {
-    color: $star-color;
-  }
 </style>

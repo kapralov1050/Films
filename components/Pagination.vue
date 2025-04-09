@@ -10,18 +10,16 @@
 
 
 <script setup lang="ts">
-  const props = defineProps({
-    page: {type: Number, default: true},
-    totalresults: {type: Number, default: true}
-  })
-  const emit = defineEmits(['update:page']);
-  
-  const handlePageChange = (newPage: number) => {
-    emit('update:page', newPage);
-  };
+import type {paginationParams} from "~/types/common"
+
+const props = defineProps<paginationParams>()
+const emit = defineEmits(['update:page']);
+
+const handlePageChange = (newPage: number) => {
+  emit('update:page', newPage);
+};
 </script>
 
 
 <style>
-
 </style>

@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import type { Film } from '~/types/film'
+import type { Film } from '~/types/common'
 
 export const useMoviesStore = defineStore('moviesStore', () => {
   const selectedMoviesList = ref<Film[]>([])

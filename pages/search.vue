@@ -1,32 +1,35 @@
 <template>
-    <el-container>
-        <el-header>
-        <Header />
-        </el-header>
-        <el-main class="main">
-        <h1 class="title">Search Results</h1>
-        <ul class="movies-list" v-loading="searchMovieStore.isLoading">
-            <li 
-            v-for="(movie, idx) in searchMovieStore.searchedMovies.results" 
-            :key="movie.id"
-            class="movies-list__movie-card-container"
-            >
-            <MovieCard
-                :movie="movie"
-            />
-            </li>
-        </ul>
-        <Pagination @update:page="handlePageChange" :page="searchMovieStore.currentPage" :totalresults="searchMovieStore.searchedMovies.total_results / 2" class="pagination"/>
-        </el-main>
-    </el-container>
+  <el-container>
+    <el-header>
+    <Header />
+    </el-header>
+    <el-main class="main">
+    <h1 class="title">Search Results</h1>
+    <ul class="movies-list" v-loading="searchMovieStore.isLoading">
+      <li 
+        v-for="(movie, idx) in searchMovieStore.searchedMovies.results" 
+        :key="movie.id"
+        class="movies-list__movie-card-container"
+      >
+      <MovieCard :movie="movie" />
+      </li>
+    </ul>
+    <Pagination 
+      @update:page="handlePageChange" 
+      :page="searchMovieStore.currentPage" 
+      :totalresults="searchMovieStore.searchedMovies.total_results / 2" class="pagination"
+    />
+    </el-main>
+  </el-container>
 </template>
+
 
 <script setup>
 const searchMovieStore = useSearchMovieStore()
 
 const handlePageChange = async (newPage) => {
-    searchMovieStore.currentPage = newPage;
-};
+  searchMovieStore.currentPage = newPage;
+}
 
 const fetchData = async() => {
   try {

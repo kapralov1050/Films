@@ -12,6 +12,7 @@
   </div>
 </template>
 
+
 <script setup>
 import { Star} from '@element-plus/icons-vue';
 </script>
@@ -19,7 +20,7 @@ import { Star} from '@element-plus/icons-vue';
 
 <style scoped>
 .rate-button {
-    font-size: 1rem;
-    color: rgb(0, 98, 211);
-    }
+  font-size: 1rem;
+  color: rgb(0, 98, 211);
+  }
 </style>

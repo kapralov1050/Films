@@ -7,7 +7,9 @@
       <article class="movie-card">
         <NuxtImg
           class="poster"
-          :src="`https://image.tmdb.org/t/p/w500${movieDetailsStore.selectedMovie.poster_path}`"
+          :src="`https://image.tmdb.org/t/p/w500
+          
+          ${movieDetailsStore.selectedMovie.poster_path}`"
           :alt="movieDetailsStore.selectedMovie.title"
           format="webp"
         />
@@ -22,7 +24,10 @@
             <span class="meta__details__inline-list">
               <h4> Genres: </h4>
               <ul>
-                <li v-for="genre in movieDetailsStore.selectedMovie.genres" :key="genre.id">
+                <li 
+                  v-for="genre in movieDetailsStore.selectedMovie.genres" 
+                  :key="genre.id"
+                >
                   {{ genre.name }}
                 </li>
               </ul>
@@ -30,7 +35,10 @@
             <span class="meta__details__inline-list">
               <h4> Country: </h4>
               <ul>
-                <li v-for="country in movieDetailsStore.selectedMovie.production_countries" :key="country.id">
+                <li 
+                  v-for="country in movieDetailsStore.selectedMovie.production_countries" 
+                  :key="country.id"
+                >
                   {{ country.name }}
                 </li>
               </ul>
@@ -38,7 +46,10 @@
             <span class="meta__details__inline-list">
               <h4> Language: </h4>
               <ul>
-                <li v-for="language in movieDetailsStore.selectedMovie.spoken_languages" :key="language.id">
+                <li 
+                  v-for="language in movieDetailsStore.selectedMovie.spoken_languages" 
+                  :key="language.id"
+                >
                   {{ language.name }}
                 </li>
               </ul>
@@ -46,21 +57,32 @@
           </section>
         </div>
         <div class="rating">
-          <p class="rating__average">{{ movieDetailsStore.selectedMovie.vote_average }}</p>
+          <p class="rating__average">
+            {{ movieDetailsStore.selectedMovie.vote_average }}
+          </p>
           <el-icon :size="30" class="star">
             <StarFilled color="rgb(255, 217, 0)" />
           </el-icon>
-          <p class="rating__votes">{{ movieDetailsStore.selectedMovie.vote_count }} ratings</p>
+          <p class="rating__votes">
+            {{ movieDetailsStore.selectedMovie.vote_count }} ratings
+          </p>
         </div>
       </article>
       <article class="recommendations">
-        <h1 class="recommendations__title"> Recommendations </h1>
+        <h1 class="recommendations__title">
+           Recommendations
+        </h1>
         <el-scrollbar>
           <section class="scroll-content">
-            <div v-for="item in movieDetailsStore.movieRecommendations.results" class="scroll-item">
+            <div 
+              v-for="item in movieDetailsStore.movieRecommendations.results" 
+              class="scroll-item"
+            >
               <NuxtImg
                 :src="`https://image.tmdb.org/t/p/w500${item.poster_path}`"
                 :alt="item.title"
+                width="300px"
+                height="auto"
                 loading="lazy"
                 format="webp"
               />
@@ -144,7 +166,7 @@ onMounted(async () => {
 }
 
 .rating {
-  flex:1;
+  flex: 1;
   font-size: 2.5rem;
 
   &__average {
@@ -161,6 +183,7 @@ onMounted(async () => {
 .recommendations {
   background-color: rgb(235, 180.6, 99);
   color: white;
+  height: auto;
   padding-bottom: 2rem;
 
   &__title {
@@ -170,17 +193,16 @@ onMounted(async () => {
 }
 
 .scroll-content {
-  @include flex(row, center, center, 2rem);
+  @include flex(row, flex-start, center, 0);
   height: auto;
-  width: 100vw;
+  width: fit-content;
 }
 
-.scroll-item{
+.scroll-item {
   @include flex(column, center, center, 1rem);
-  padding-bottom: 1rem;
+  margin: 2rem;
   flex-shrink: 0;
-  max-width: 300px;
-  height: 400px;
+  max-height: 450px;
   text-align: center;
 }
 </style>

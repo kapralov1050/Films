@@ -9,11 +9,12 @@
         format="webp"
       />
     </NuxtLink>
-
     <section class="movie-card__meta">
       <header class="movie-card__head">
         <div class="movie-card__content">
-          <h3 class="movie-card__title">{{ movie.original_title }}</h3>
+          <h3 class="movie-card__title">
+            {{ movie.original_title }}
+          </h3>
           <time 
             class="movie-card__year" 
             :datetime="movie.release_date"
@@ -21,107 +22,29 @@
             {{ dateToYear(movie.release_date) }}
           </time>
         </div>
-        <el-icon :size="30">
-          <CollectionTag />
-        </el-icon>
+        <WatchListButton :movie="movie"/>
       </header>
-
       <p class="movie-card__overview">
         {{ movie.overview }}
       </p>
-
-      <ul class="movie-card__rating">
-        <li class="movie-card__watched-button">
-          <Button @click="toggleWatched">
-            {{ watchedStatus ? 'Watched' : 'Mark as Watched' }}
-          </Button>
-        </li>
-          <el-icon :size="30" class="movie-card__star">
-            <StarFilled />
-          </el-icon>
-          {{ movie.vote_average.toFixed(1) }}
-
-        <li 
-          v-if="currentRating !== null" 
-          class="movie-card__user-rating" 
-          @click="removeRating(movie.id)"
-        >
-          <el-icon :size="30" class="movie-card__star">
-            <StarFilled color="rgb(50.8, 116.6, 184.5)" />
-          </el-icon>
-          <span>{{ currentRating }} /10</span>
-        </li>
-        <li v-else class="movie-card__user-rating">
-          <Button @click="toggleRateBlock">Rate</Button>
-          <el-rate
-            class="movie-card__rate-button"
-            v-model="userRating"
-            @click="rateMovie(movie.id)"
-            v-show="rateBlockVisible"
-            :max="10"
-            show-score
-            score-template="{value} /10"
-          />
-        </li>
-      </ul>
+      <section class="movie-card__rating">
+        <el-icon :size="30" color="rgb(255, 217, 0)">
+          <StarFilled />
+        </el-icon>
+        {{ movie.vote_average.toFixed(1) }}
+        <RatingButton :movieId="movie.id"/>
+      </section>
     </section>
   </article>
 </template>
 
+
 <script setup lang="ts">
-import { StarFilled, CollectionTag } from '@element-plus/icons-vue';
+import { StarFilled } from '@element-plus/icons-vue';
 import { dateToYear } from '~/helpers/formatDate';
-import type { movieRating } from '~/types/film';
+import type { Film } from '~/types/common';
 
-const props = defineProps({
-  movie: {
-    type: Object,
-    required: true,
-  }
-});
-
-const moviesStore = useMoviesStore()
-const rateBlockVisible = ref(false)
-const watchedStatus = ref(false)
-const ratings = useLocalStorage<movieRating[]>('movie-ratings',[]);
-const userRating = ref(0)
-const currentRating = computed(() => {
-  return ratings.value.find(item => item.id == props.movie.id)?.rating || null
-})
-
-const toggleRateBlock = () => {
-  rateBlockVisible.value = !rateBlockVisible.value
-}
-
-const toggleWatched = () => {
-  watchedStatus.value = !watchedStatus.value
-  if (watchedStatus.value) {
-    moviesStore.totalWatched++
-    console.log(moviesStore.totalWatched)
-  } else {
-    moviesStore.totalWatched--
-    console.log(moviesStore.totalWatched)
-  }
-}
-
-function rateMovie(movieId: number) {
-  const ratings = useLocalStorage<movieRating[]>('movie-ratings', []);
-  const existingIndex = ratings.value.findIndex(item => item.id == movieId)
-
-  if(existingIndex !== -1) {
-    ratings.value[existingIndex].rating = userRating.value
-  } else {
-    ratings.value.push({id: movieId, rating: userRating.value})
-  }
-  console.log(ratings.value)
-  rateBlockVisible.value = false
-}
-
-function removeRating(movieId: number) {
-  const ratings = useLocalStorage<movieRating[]>('movie-ratings', []);
-  ratings.value = ratings.value.filter(item => item.id !== movieId);
-  userRating.value = 0
-}
+defineProps<{movie: Film}>();
 </script>
 
 
@@ -172,33 +95,7 @@ function removeRating(movieId: number) {
   }
 
   &__rating {
-    @include flex(row, flex-start, center, 0.5rem);
-  }
-
-  &__user-rating {
-    @include flex(row, center, center, 0);
-    padding-left: 1rem;
-  }
-
-  &__rate-button {
-    z-index: 10;
-  }
-
-  &__star {
-    color: $star-color;
-  }
-
-  &__watchlist-btn {
-    position: absolute;
-    z-index: 10;
-    color: white;
-    background-color: rgba(43, 43, 43, 0.5);
-    border-radius: 10px 0 10px 0;
-    border: none;
-
-    &:hover {
-      background-color: rgba(87, 87, 87, 0.5);
-    }
+    @include flex(row, center, center, 0.5rem);
   }
 }
 </style>

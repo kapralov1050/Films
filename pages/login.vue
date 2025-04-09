@@ -1,56 +1,56 @@
 <template>
-<div class="main" @submit.prevent="handleSubmit">
-  <div class="logo main__element">
-      <h1>
-        TMDB
-      </h1>
+  <div class="main" @submit.prevent="handleSubmit">
+    <div class="logo main__element">
+        <h1>
+          TMDB
+        </h1>
+    </div>
+    <div class="title main__element">
+          Authorization
+    </div>
+    <div class="login-form main__element">
+        <label 
+          for="name" 
+          class="login-form__input-label"
+        >
+          Username
+        </label>
+        <input
+          class="login-form__input-field"
+          v-model="name"
+          name="user"
+          type="text"
+          required
+        >
+        <label 
+          for="password" 
+          class="login-form__input-label"
+        >
+          Password
+        </label>
+        <input
+          class="login-form__input-field" 
+          v-model="password"
+          name="password" 
+          type="password"
+          required
+        >
+        <el-button 
+          class="button login-form__button"
+          :disabled="!name || !password || isLoading"
+          @click="handleSubmit"
+          @keyup.enter="handleSubmit"
+        >
+          {{ buttonText }}
+        </el-button>
+        <div 
+          v-show="isShowError"
+          class="login-form__err-message"
+        >
+          Authorization failed
+        </div>
+    </div>
   </div>
-  <div class="title main__element">
-        Authorization
-  </div>
-  <div class="login-form main__element">
-      <label 
-        for="name" 
-        class="login-form__input-label"
-      >
-        Username
-      </label>
-      <input
-        class="login-form__input-field"
-        v-model="name"
-        name="user"
-        type="text"
-        required
-      >
-      <label 
-        for="password" 
-        class="login-form__input-label"
-      >
-        Password
-      </label>
-      <input
-        class="login-form__input-field" 
-        v-model="password"
-        name="password" 
-        type="password"
-        required
-      >
-      <el-button 
-        class="button login-form__button"
-        :disabled="!name || !password || isLoading"
-        @click="handleSubmit"
-        @keyup.enter="handleSubmit"
-      >
-        {{ buttonText }}
-      </el-button>
-      <div 
-        v-show="isShowError"
-        class="login-form__err-message"
-      >
-        Authorization failed
-      </div>
-  </div>
-</div>
 </template>
     
   
@@ -59,7 +59,6 @@ import { useLocalStorage } from '@vueuse/core'
 
 const name = ref('')
 const password = ref('')
-
 const isLoading = ref(false)
 const isShowError = ref(false)
 const isAuth = useLocalStorage('isAuth', false)
@@ -89,7 +88,7 @@ async function handleSubmit() {
 
 
 <style lang="scss">
-.main{
+.main {
   background-color:$login-background;
   width:100%;
   height: 100vh;
@@ -142,7 +141,7 @@ async function handleSubmit() {
   &__err-message{
     margin: 15px;
     color: rgb(255, 255, 255);
-    background-color:$login-err-background;
+    background-color: $login-err-background;
     border: 1px solid $login-err-border;
     border-radius: 5px;
     padding: 20px;

@@ -17,20 +17,30 @@
         <el-button :icon="Search" @click="handleSearch" />
       </template>
     </el-input>
-    <ElIcon 
-      class="header__user-block"
-      :size="20" 
-    >
-      <User />
-    </ElIcon>
+    <section class="header__user-block">
+      <el-button type="info" @click="openWatchList" text>
+        WatchList
+      </el-button>
+      <el-button @click="handleLogout" text>
+        <ElIcon :size="20">
+          <User />
+        </ElIcon>
+      </el-button>
+    </section>
   </div>
 </template>
+
 
 <script setup>
 import { User, Search } from '@element-plus/icons-vue'
 
 const searchMovieStore = useSearchMovieStore()
+const {handleLogout} = useAuth()
 const router = useRouter()
+
+const openWatchList = () => {
+  router.push('/watchlist')
+}
 
 async function handleSearch() {
   const searchMoviesListData = await searchMovieStore.searchMovie(searchMovieStore.searchValue)
@@ -39,6 +49,7 @@ async function handleSearch() {
   searchMovieStore.isLoading = true
 }
 </script>
+
 
 <style lang="scss" scoped>
 $font-stack: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -54,7 +65,9 @@ $font-stack: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
   &__user-block {
+    @include flex(row, space-between, center, 1rem);
     cursor: pointer;
+    width: fit-content;
   }
 }
 </style>

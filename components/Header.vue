@@ -21,7 +21,7 @@
       <el-button type="info" @click="openWatchList" text>
         WatchList
       </el-button>
-      <el-button @click="handleLogout" text>
+      <el-button @click="loginWithTmdb" text>
         <ElIcon :size="20">
           <User />
         </ElIcon>
@@ -34,9 +34,9 @@
 <script setup>
 import { User, Search } from '@element-plus/icons-vue'
 
-const searchMovieStore = useSearchMovieStore()
-const {handleLogout} = useAuth()
 const router = useRouter()
+const searchMovieStore = useSearchMovieStore()
+const { loginWithTmdb } = useAuth()
 
 const openWatchList = () => {
   router.push('/watchlist')

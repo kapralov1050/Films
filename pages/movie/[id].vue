@@ -3,13 +3,11 @@
     <el-header>
         <Header />
     </el-header>
-    <el-main>
+    <el-main v-loading="isLoading">
       <article class="movie-card">
         <NuxtImg
           class="poster"
-          :src="`https://image.tmdb.org/t/p/w500
-          
-          ${movieDetailsStore.selectedMovie.poster_path}`"
+          :src="`https://image.tmdb.org/t/p/w500${movieDetailsStore.selectedMovie.poster_path}`"
           :alt="movieDetailsStore.selectedMovie.title"
           format="webp"
         />
@@ -75,18 +73,19 @@
         <el-scrollbar>
           <section class="scroll-content">
             <div 
-              v-for="item in movieDetailsStore.movieRecommendations.results" 
+              v-for="movie in movieDetailsStore.movieRecommendations.results" 
               class="scroll-item"
             >
-              <NuxtImg
-                :src="`https://image.tmdb.org/t/p/w500${item.poster_path}`"
-                :alt="item.title"
-                width="300px"
-                height="auto"
-                loading="lazy"
-                format="webp"
-              />
-              <h3>{{ item.title }} ({{ dateToYear(item.release_date) }})</h3>
+              <NuxtLink :to="`/movie/${movie.id}`">
+                <NuxtImg
+                  :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
+                  :alt="movie.title"
+                  width="300px"
+                  height="auto"
+                  format="webp"
+                />
+              </NuxtLink>
+              <h3>{{ movie.title }} ({{ dateToYear(movie.release_date) }})</h3>
             </div>
           </section>
         </el-scrollbar>
@@ -100,14 +99,23 @@
 import { StarFilled } from '@element-plus/icons-vue';
 import { dateToYear } from '~/helpers/formatDate';
 
+const isLoading = ref(false)
 const route = useRoute();
 const id = route.params.id;
 
 const movieDetailsStore = UseMovieDetailsStore();
 
 onMounted(async () => {
-  await movieDetailsStore.getMovieDetails(id);
-  await movieDetailsStore.getRecommendations(id);
+  isLoading.value = true
+  try {
+    await movieDetailsStore.getMovieDetails(id);
+    await movieDetailsStore.getRecommendations(id);
+  } catch (error) {
+    console.log(`error while loading movie ${id}:`,error)
+  } finally {
+    isLoading.value = false
+  }
+
 });
 </script>
 
@@ -115,11 +123,13 @@ onMounted(async () => {
 <style scoped lang="scss">
 .el-main {
   @include flex(column, center, center, 0);
+  max-width: 100%;
   padding: 0;
   margin: 0;
 }
 
 .movie-card {
+  align-self: center;
   height: fit-content;
   width: 70%;
   padding: 3rem;
@@ -185,16 +195,18 @@ onMounted(async () => {
   color: white;
   height: auto;
   padding-bottom: 2rem;
+  max-width: 100%;
 
-  &__title {
+    &__title {
     font-size: 2rem;
     margin: 1rem 0 2rem 2rem;
   }
 }
 
 .scroll-content {
-  @include flex(row, flex-start, center, 0);
+  @include flex(row, center, center, 0);
   height: auto;
+  padding: 0 7rem;
   width: fit-content;
 }
 

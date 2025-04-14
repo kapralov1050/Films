@@ -28,3 +28,20 @@ export interface Film {
     page: number;
     totalresults: number;
   }
+
+  export interface userData {
+    avatar: {}
+    id: number
+    iso_639_1: string
+    iso_3166_1: string
+    name: string
+    include_adult: boolean
+    ussername: string
+  }
+
+  export interface WatchListResponse {
+    page: number;
+    results: Film[];
+    total_pages: number;
+    total_results: number;
+  }

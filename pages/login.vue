@@ -38,8 +38,8 @@
         <el-button 
           class="button login-form__button"
           :disabled="!name || !password || isLoading"
-          @click="handleSubmit"
-          @keyup.enter="handleSubmit"
+          @click="loginWithTmdb"
+          @keyup.enter="loginWithTmdb"
         >
           {{ buttonText }}
         </el-button>
@@ -55,35 +55,34 @@
     
   
 <script setup lang="ts">
-import { useLocalStorage } from '@vueuse/core'
-
 const name = ref('')
 const password = ref('')
 const isLoading = ref(false)
 const isShowError = ref(false)
-const isAuth = useLocalStorage('isAuth', false)
-const username = useLocalStorage('username', 'default')
-
-const router = useRouter()
-
 const buttonText = computed(() => isLoading.value ? 'Loading...' : 'Sign in')
+
+
+// const isAuth = useLocalStorage('isAuth', false)
+// const username = useLocalStorage('username', 'default')
+
+// const router = useRouter()
     
-async function handleSubmit() {
-  try{
-    isLoading.value = true
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    name.value.trim() === 'user' && password.value === '1111' ? isAuth.value = true : isShowError.value = true
+// async function handleSubmit() {
+//   try{
+//     isLoading.value = true
+//     await new Promise(resolve => setTimeout(resolve, 1500))
+//     name.value.trim() === 'user' && password.value === '1111' ? isAuth.value = true : isShowError.value = true
     
-    if(isAuth.value){
-      username.value = name.value
-    }
-  } catch(error) {
-      console.log(error)
-  } finally {
-      router.push('/top-movies')
-      isLoading.value = false
-  }
-}
+//     if(isAuth.value){
+//       username.value = name.value
+//     }
+//   } catch(error) {
+//       console.log(error)
+//   } finally {
+//       router.push('/top-movies')
+//       isLoading.value = false
+//   }
+// }
 </script>
 
 

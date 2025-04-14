@@ -5,7 +5,7 @@
     </el-header>
     <el-main class="main">
       <h1 class="title">
-        Popular Movies
+        Popular Movies 
       </h1>
       <ul 
         class="movies-list" 
@@ -14,7 +14,7 @@
       >
         <li 
           class="movies-list__movie-card-container" 
-          v-for="(movie, idx) in moviesStore.selectedMoviesList.results" 
+          v-for="movie in moviesStore.selectedMoviesList.results" 
           :key="movie.id"
         >
           <MovieCard :movie="movie"/>
@@ -60,7 +60,7 @@ onMounted(async () => {
   } finally {
     isLoading.value = false
   }
-})
+  })
 </script>
 
 
@@ -71,6 +71,7 @@ onMounted(async () => {
 }
 
 .main {
+  background-color: none;
   padding: 2rem;
   width: 60%;
   min-height: auto;

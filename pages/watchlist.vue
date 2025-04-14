@@ -12,7 +12,7 @@
       >
         <li 
           class="movies-list__movie-card-container" 
-          v-for="movie in watchlist" 
+          v-for="movie in authStore.watchListMovies" 
           :key="movie.id"
         >
           <MovieCard :movie="movie"/>
@@ -26,11 +26,19 @@
 
 
 <script setup>
-const {getWatchList} = useWatchList()
-const watchlist = ref(getWatchList())
+const authStore = useAuthStore()
+const isLoading = ref(false)
 
 onMounted(async () => {
-  watchlist.value = getWatchList()
+  isLoading.value = true
+  try {
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    authStore.setWatchList()
+  } catch (error) {
+    console.log(error)
+  } finally {
+    isLoading.value = false
+  }
 })
 </script>
 

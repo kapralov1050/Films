@@ -1,14 +1,17 @@
 import type { userData, Film } from "~/types/common"
 
 export const useAuthStore = defineStore('authStore', () => {
-  const sessionCookie = useCookie<string | null>('tmdb_session_id')
-  const sessionId = ref(sessionCookie.value)
+  const sessionId = ref<string | null>(null)
   const userData = ref<userData | null>(null)
   const watchListMovies = ref<Film[] | null>(null)
   const { getWatchListMovies } = useAuth()
 
+  const getSessionCookie = () => useCookie<string | null>('tmdb_session_id')
+
   const setSession = (newSessionId: string) => {
+    const sessionCookie = getSessionCookie()
     sessionCookie.value = newSessionId
+    sessionId.value = newSessionId
   }
 
   const fetchUserData = async () => {
@@ -40,7 +43,7 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   }
 
-  const processPendingActions = async (movieId: number) => {
+  const processPendingWatchlist = async (movieId: number) => {
     const pendingAction = JSON.parse(
       localStorage.getItem('pending_watchlist_action') || '{}');
     if(pendingAction[movieId] !== undefined) {
@@ -57,7 +60,9 @@ export const useAuthStore = defineStore('authStore', () => {
   }
 
   const initAuth = () => {
-    if(sessionId.value) {
+    const sessionCookie = getSessionCookie()
+    if(sessionCookie.value) {
+      sessionId.value = sessionCookie.value
       fetchUserData()
       setWatchList()
     }
@@ -77,9 +82,10 @@ export const useAuthStore = defineStore('authStore', () => {
     userData,
     fetchUserData,
     addToWatchList,
-    processPendingActions,
+    processPendingWatchlist,
     setWatchList,
     watchListMovies,
+    initAuth,
     logout
   }
 })

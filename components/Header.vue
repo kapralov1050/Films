@@ -21,10 +21,8 @@
       <el-button type="info" @click="openWatchList" text>
         WatchList
       </el-button>
-      <el-button @click="loginWithTmdb" text>
-        <ElIcon :size="20">
-          <User />
-        </ElIcon>
+      <el-button @click="handleAuthClick" text>
+        {{ authStore.sessionId ? 'User' : 'login' }}
       </el-button>
     </section>
   </div>
@@ -36,10 +34,19 @@ import { User, Search } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const searchMovieStore = useSearchMovieStore()
+const authStore = useAuthStore()
 const { loginWithTmdb } = useAuth()
 
 const openWatchList = () => {
   router.push('/watchlist')
+}
+
+function handleAuthClick() {
+  if(authStore.sessionId) {
+    router.push('/account')
+  } else {
+    loginWithTmdb()
+  }
 }
 
 async function handleSearch() {

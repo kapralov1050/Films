@@ -12,14 +12,14 @@
       {{ currentRating }} /10
     </span>
     </template>
-    <template v-else>
+    <template v-else v-loading="isLoading">
       <Button @click="toggleRateBlock">
         Rate
       </Button>
       <el-rate 
         v-show="rateBlockVisible"
         v-model="userRating"
-        @change="rateMovie(movieId, userRating)"
+        @change="handleRateMovie"
         :max="10"
         show-score
         score-template="{value} /10"/>
@@ -30,7 +30,6 @@
  
 <script setup lang="ts">
 import { StarFilled } from '@element-plus/icons-vue';
-import { useRate } from '~/composables/UseRate';
 
 const props = defineProps({
   movieId: {
@@ -38,16 +37,49 @@ const props = defineProps({
     required: true
   }
 })
-
-const { getRating, rateMovie, removeRating } = useRate()
+const ratingStore = useRatingStore()
+const authStore = useAuthStore()
+const { sessionId, userData } = storeToRefs(authStore)
+const { getRating, rateMovie, removeRating } = ratingStore
 const rateBlockVisible = ref(false)
 const userRating = ref(0)
+const isLoading = ref(false)
 
-const currentRating = computed(() => getRating(props.movieId))
+const currentRating = ref<number | null>(null)
+watchEffect(() => {
+  currentRating.value = getRating(props.movieId)
+})
+
+const handleRateMovie = async () => {
+  isLoading.value = true
+  try {
+    await rateMovie(props.movieId, userRating.value)
+    await loadRating()
+    rateBlockVisible.value = false
+  } catch (error) {
+    console.log('Rating failed', error)
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+async function loadRating() {
+  try {
+    if(userData.value?.id && sessionId.value) {
+      await ratingStore.getRatedMovies(userData.value.id)
+    }
+  } catch (error) {
+    console.log('error loading rating', error)
+  }
+}
 
 const toggleRateBlock = () => {
   rateBlockVisible.value = !rateBlockVisible.value
 }
+
+onMounted(() => {
+  loadRating()
+})
 </script>
 
 

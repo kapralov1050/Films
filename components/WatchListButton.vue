@@ -33,10 +33,8 @@ const addorRemoveMovie = () => {
   }
 }
 
-
-
 onMounted( async () => {
-  await authStore.processPendingActions(props.movie.id)
+  await authStore.processPendingWatchlist(props.movie.id)
   if(authStore.watchListMovies) {
     isInWatchList.value = authStore.watchListMovies.some( item => item.id === props.movie.id)
   }

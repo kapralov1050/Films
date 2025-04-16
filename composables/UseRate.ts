@@ -1,29 +1,52 @@
-import type { movieRating } from '~/types/common';
+import { useRatingStore } from "~/stores/rating"
+
 
 export const useRate = () => {
-  const ratings = useLocalStorage<movieRating[]>('movie-ratings',[]);
+  const authStore = useAuthStore()
+  const ratingStore = useRatingStore()
 
-  const getRating = (movieId: number) => {
-    return ratings.value.find(item => item.id == movieId)?.rating || null
-  }
-  
-  function rateMovie(movieId: number, rating: number) {
-    const existingIndex = ratings.value.findIndex(item => item.id == movieId)
-    if(existingIndex !== -1) {
-      ratings.value[existingIndex].rating = rating
-    } else {
-      ratings.value.push({id: movieId, rating: rating})
+  async function postRatingToServer(movieId: number, rating: number) {
+    try {
+      await instance.post(`movie/${movieId}/rating`, 
+        { value: rating },
+        {
+          params: {
+            session_id: authStore.sessionId
+          }
+        }
+      )
+    } catch (error) {
+      console.log('Error rating movie:', error)
+      throw error
     }
   }
-  
-  function removeRating(movieId: number) {
-    ratings.value = ratings.value.filter(item => item.id !== movieId);
+
+  async function deleteRatingFromServer(movieId: number) {
+    try {
+      await instance.delete(`movie/${movieId}/rating`, {
+        params: {
+          session_id: authStore.sessionId
+        }
+      })
+    } catch (error) {
+      console.log('Error delete rating movie:', error)
+    }
   }
 
+  const processPendingRating = async (movieId: number) => {
+    const pendingAction = JSON.parse(
+      localStorage.getItem('pending_rating_action') || '{}');
+    if(pendingAction[movieId] !== undefined) {
+      await ratingStore.rateMovie(movieId, pendingAction[movieId])
+      localStorage.removeItem('pending_rating_action')
+    } 
+  }
+  
+
+
   return {
-    getRating,
-    rateMovie,
-    removeRating,
-    ratings
+    postRatingToServer,
+    deleteRatingFromServer,
+    processPendingRating
   }
 }

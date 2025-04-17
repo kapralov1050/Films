@@ -42,8 +42,6 @@ export const useRate = () => {
     } 
   }
   
-
-
   return {
     postRatingToServer,
     deleteRatingFromServer,

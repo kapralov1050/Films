@@ -18,9 +18,6 @@
       </template>
     </el-input>
     <section class="header__user-block">
-      <el-button type="info" @click="openWatchList" text>
-        WatchList
-      </el-button>
       <el-button @click="handleAuthClick" text>
         {{ authStore.sessionId ? 'User' : 'login' }}
       </el-button>
@@ -43,7 +40,7 @@ const openWatchList = () => {
 
 function handleAuthClick() {
   if(authStore.sessionId) {
-    router.push('/account')
+    router.push(`/user/${authStore.userData.username}`)
   } else {
     loginWithTmdb()
   }

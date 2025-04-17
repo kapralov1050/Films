@@ -1,5 +1,5 @@
 <template>
-  <article class="movie-card">
+  <article class="movie-card" >
     <NuxtLink class="movie-card__image" :to="`/movie/${movie.id}`">
       <NuxtImg
         class="movie-card__poster"

@@ -1,10 +1,11 @@
-import type { movieRating } from '~/types/common';
+import type { Film, movieRating } from '~/types/common';
 
 export const useRatingStore = defineStore('ratingStore', () => {
   const authStore = useAuthStore()
   const { loginWithTmdb } = useAuth()
   const { postRatingToServer, deleteRatingFromServer } = useRate()
   const ratings = ref<movieRating[]>([])
+  const ratedMovies = ref<Film[]>([])
 
   async function rateMovie(movieId: number, rating: number) {
     if(!authStore.sessionId) {
@@ -82,6 +83,7 @@ export const useRatingStore = defineStore('ratingStore', () => {
   
   return {
     ratings,
+    ratedMovies,
     rateMovie,
     getRatedMovies,
     removeRating,

@@ -45,3 +45,14 @@ export interface Film {
     total_pages: number;
     total_results: number;
   }
+
+  export interface genres {
+    id: number,
+    name: string
+  }
+
+  export interface languages {
+    iso_639_1: string;
+    english_name: string;
+    name: string
+  }

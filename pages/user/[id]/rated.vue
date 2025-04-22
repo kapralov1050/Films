@@ -57,7 +57,7 @@ onMounted(async () => {
 }
 
 .movies-list {
-  @include flex(column, center, center, 0);
+  @include flex(column, flex-start, center, 0);
   align-self: center;
   min-height: 60vh;
   width: 95%;

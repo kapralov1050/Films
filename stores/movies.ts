@@ -5,16 +5,20 @@ import type { Film, genres, languages,  } from '~/types/common'
 export const useMoviesStore = defineStore('moviesStore', () => {
   const selectedMoviesList = ref<{results: Film[], total_results: number}>({results: [], total_results: 0})
   const currentPage = ref(1)
-  const sortBy = ref('')
   const genres = ref<genres[]>([])
   const languages = ref<languages[]>([])
+  const filtersChanged = ref(false)
   const filtersForm = reactive({
+    sort_by: '',
     genre: [],
     release_date: [
       new Date(1970, 0, 1).toISOString().split('T')[0],
       new Date().toISOString().split('T')[0]        
     ],
     language: 'en-US',
+    vote_average: [0,10],
+    vote_count: 0,
+    runtime: [0, 400],
     })
 
   async function handleSortChange() {
@@ -25,10 +29,17 @@ export const useMoviesStore = defineStore('moviesStore', () => {
           'primary_release_date.gte': filtersForm.release_date[0],
           'primary_release_date.lte': filtersForm.release_date[1],
           language: filtersForm.language,
-          with_genres: filtersForm.genre.join(',')
+          'vote_average.gte': filtersForm.vote_average[0],
+          'vote_average.lte': filtersForm.vote_average[1],
+          'vote_count.gte': filtersForm.vote_count,
+          'with_runtime.gte': filtersForm.runtime[0],
+          'with_runtime.lte': filtersForm.runtime[1],
+          with_genres: filtersForm.genre.join(','),
+          sort_by: filtersForm.sort_by,
         }
       })
       selectedMoviesList.value = response.data
+      filtersChanged.value = false
       console.log(selectedMoviesList.value)
     } catch (error) {
       console.log('Error sort:', error)
@@ -38,7 +49,7 @@ export const useMoviesStore = defineStore('moviesStore', () => {
   const fetchGenres = async () => {
     const cached = localStorage.getItem('tmdb_genres')
     if(cached) {
-      return JSON.parse(cached).genres
+      return JSON.parse(cached)
     }
 
     try {
@@ -54,7 +65,7 @@ export const useMoviesStore = defineStore('moviesStore', () => {
   const fetchLanguages = async () => {
     const cached = localStorage.getItem('tmdb_languages')
     if(cached) {
-      return JSON.parse(cached)
+      return JSON.parse(cached).genres
     }
 
     try {
@@ -78,6 +89,21 @@ export const useMoviesStore = defineStore('moviesStore', () => {
     { value: 'original_title.desc', label:'Title (Z-A)' },
   ]
 
+  const resetForm = () => {
+    Object.assign(filtersForm, {
+      genre: [],
+      release_date: [
+        new Date(1970, 0, 1).toISOString().split('T')[0],
+        new Date().toISOString().split('T')[0]        
+      ],
+      language: 'en-US',
+      vote_average: [0, 10],
+      vote_count: 0,
+      runtime: [0, 400],
+      sort_by: 'popularity.desc',
+    })
+  }
+
   async function getPopularMovieList() {
       try{
           const response = await instance.get('movie/popular', {
@@ -98,12 +124,13 @@ export const useMoviesStore = defineStore('moviesStore', () => {
     selectedMoviesList,
     sortOptions,
     handleSortChange,
-    sortBy,
     genres,
     fetchGenres,
     languages,
     fetchLanguages,
     filtersForm,
+    filtersChanged,
+    resetForm,
     currentPage
   }
 })

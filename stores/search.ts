@@ -1,4 +1,4 @@
-export const useSearchMovieStore = defineStore('searchMovieStore', () => {
+export const useSearchMovieStore = defineStore('searchStore', () => {
 const currentPage = ref(1)
 const isLoading = ref(false)
 const searchValue = ref('')

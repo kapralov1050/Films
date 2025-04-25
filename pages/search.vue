@@ -5,9 +5,9 @@
     </el-header>
     <el-main class="main">
     <h1 class="title">Search Results</h1>
-    <ul class="movies-list" v-loading="searchMovieStore.isLoading">
+    <ul class="movies-list" v-loading="searchStore.isLoading">
       <li 
-        v-for="(movie, idx) in searchMovieStore.searchedMovies.results" 
+        v-for="(movie, idx) in searchStore.searchedMovies.results" 
         :key="movie.id"
         class="movies-list__movie-card-container"
       >
@@ -16,8 +16,8 @@
     </ul>
     <Pagination 
       @update:page="handlePageChange" 
-      :page="searchMovieStore.currentPage" 
-      :totalresults="searchMovieStore.searchedMovies.total_results / 2" class="pagination"
+      :page="searchStore.currentPage" 
+      :totalresults="searchStore.searchedMovies.total_results / 2" class="pagination"
     />
     </el-main>
   </el-container>
@@ -25,16 +25,16 @@
 
 
 <script setup>
-const searchMovieStore = useSearchMovieStore()
+const searchStore = useSearchMovieStore()
 
 const handlePageChange = async (newPage) => {
-  searchMovieStore.currentPage = newPage;
+  searchStore.currentPage = newPage;
 }
 
 const fetchData = async() => {
   try {
-    searchMovieStore.searchedMovies = await searchMovieStore.searchMovie(searchMovieStore.searchValue)
-    console.log(searchMovieStore.searchedMovies)
+    searchStore.searchedMovies = await searchStore.searchMovie(searchStore.searchValue)
+    console.log(searchStore.searchedMovies)
   } catch(error) {
   console.error('Error:', error)
   } finally {
@@ -42,11 +42,11 @@ const fetchData = async() => {
   }
 }
 
-watch(() => searchMovieStore.currentPage, fetchData);
+watch(() => searchStore.currentPage, fetchData);
 
 onMounted(async () => {
     await new Promise(resolve => setTimeout(resolve,1000))
-    searchMovieStore.isLoading = false
+    searchStore.isLoading = false
 })
 </script>
 

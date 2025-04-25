@@ -3,8 +3,8 @@
     <el-header>
         <Header />
     </el-header>
-    <el-main v-loading="isLoading">
-      <article class="movie-card">
+    <el-main >
+      <article class="movie-card" v-loading="isLoading">
         <NuxtImg
           class="poster"
           :src="`https://image.tmdb.org/t/p/w500${movieDetailsStore.selectedMovie.poster_path}`"

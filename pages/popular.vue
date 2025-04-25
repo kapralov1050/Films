@@ -1,37 +1,30 @@
 <template>
-  <el-container>
-    <el-header>
-      <Header />
-    </el-header>
-    <el-main>
-      <h1 class="title">
-        Popular Movies 
-      </h1>
-      <article class="main">
-        <Filters class="filters"/>
-        <section class="content-wrapper">
-          <ul 
-            class="movies-list" 
-            v-loading="isLoading" 
-            element-loading-text="Loading..."
-          >
-            <li 
-              class="movies-list__movie-card-container" 
-              v-for="movie in moviesStore.selectedMoviesList.results" 
-              :key="movie.id"
-            >
-              <MovieCard :movie="movie"/>
-            </li>
-          </ul>
-        </section>
-      </article>
-      <Pagination
-        @update:page="handlePageChange" 
-        :page="moviesStore.currentPage " 
-        :totalresults="moviesStore.selectedMoviesList.total_results" class="pagination"
-      />
-    </el-main>
-  </el-container>
+  <h1 class="title">
+    Popular Movies 
+  </h1>
+  <article class="main">
+    <Filters class="filters"/>
+    <section class="content-wrapper">
+      <ul 
+        class="movies-list" 
+        v-loading="isLoading" 
+        element-loading-text="Loading..."
+      >
+        <li 
+          class="movies-list__movie-card-container" 
+          v-for="movie in moviesStore.selectedMoviesList.results" 
+          :key="movie.id"
+        >
+          <MovieCard :movie="movie"/>
+        </li>
+      </ul>
+    </section>
+  </article>
+  <Pagination
+    @update:page="handlePageChange" 
+    :page="moviesStore.currentPage " 
+    :totalresults="moviesStore.selectedMoviesList.total_results" class="pagination"
+  />
 </template>
 
 
@@ -73,18 +66,6 @@ onMounted(async () => {
 
 
 <style scoped lang="scss">
-.el-header {
-  padding: 0;
-  height: 4rem;
-}
-
-.el-main {
-  padding: 2rem;
-  width: 100%;
-  min-height: auto;
-  @include flex(column, center, flex-start, 0);
-}
-
 .main {
   @include flex(row, space-between, flex-start, 2rem)
 }

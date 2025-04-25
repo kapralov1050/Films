@@ -1,5 +1,4 @@
 import {defineStore} from 'pinia'
-import { compareDates } from '~/helpers/formatDate'
 import type { Film, genres, languages,  } from '~/types/common'
 
 export const useMoviesStore = defineStore('moviesStore', () => {
@@ -65,7 +64,7 @@ export const useMoviesStore = defineStore('moviesStore', () => {
   const fetchLanguages = async () => {
     const cached = localStorage.getItem('tmdb_languages')
     if(cached) {
-      return JSON.parse(cached).genres
+      return JSON.parse(cached)
     }
 
     try {

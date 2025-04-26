@@ -1,8 +1,10 @@
+import type { WatchListResponse } from "~/types/common"
+
 export const useSearchMovieStore = defineStore('searchStore', () => {
 const currentPage = ref(1)
 const isLoading = ref(false)
 const searchValue = ref('')
-const searchedMovies = ref({})
+const searchedMovies = ref<WatchListResponse>()
 
 async function searchMovie(queryInput: string) {
   try {

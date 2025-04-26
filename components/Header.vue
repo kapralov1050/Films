@@ -34,10 +34,6 @@ const searchMovieStore = useSearchMovieStore()
 const authStore = useAuthStore()
 const { loginWithTmdb } = useAuth()
 
-const openWatchList = () => {
-  router.push('/watchlist')
-}
-
 function handleAuthClick() {
   if(authStore.sessionId) {
     router.push(`/user/${authStore.userData.username}`)

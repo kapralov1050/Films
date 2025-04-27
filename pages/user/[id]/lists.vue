@@ -20,6 +20,7 @@
 <script setup>
 const router = useRouter()
 const authStore = useAuthStore()
+
 function handleCreateList() {
   router.push(`/user/${authStore.userData.username}/createList`)
 }

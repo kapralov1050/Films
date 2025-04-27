@@ -12,8 +12,9 @@
 
 
 <script setup>
-import AddMoviesToList from '~/components/AddMoviesToList.vue'
-import CreateList from '~/components/CreateNewList.vue'
+import AddMoviesToListForm from '~/components/AddMoviesToListForm.vue'
+import ChooseImageForm from '~/components/ChooseImageForm.vue'
+import CreateNewListForm from '~/components/CreateNewListForm.vue'
 
 definePageMeta({
     middleware: 'auth'
@@ -21,10 +22,11 @@ definePageMeta({
 
 const listStore = useListStore()
 const activeStep = ref(1)
-const currentStepForm = ref('CreateList')
+const currentStepForm = ref('CreateNewListForm')
 const steps = {
-  CreateList,
-  AddMoviesToList
+  CreateNewListForm,
+  AddMoviesToListForm,
+  ChooseImageForm
 }
 
 const next = () => {
@@ -32,11 +34,12 @@ const next = () => {
     switch(activeStep.value) {
       case 1:
         listStore.createdListInfo.value = listStore.createList()
-        currentStepForm.value = "AddMoviesToList"
+        currentStepForm.value = "AddMoviesToListForm"
         activeStep.value++
         break
       case 2:
-        
+        currentStepForm.value = "ChooseImageForm"
+        activeStep.value++
     }
   }
 }

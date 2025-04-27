@@ -56,3 +56,15 @@ export interface Film {
     english_name: string;
     name: string
   }
+
+  export interface ListDetailsResponse {
+    created_by: string;
+    description: string;
+    favorite_count: number;
+    id: string;
+    items: Film[];
+    item_count: number;
+    iso_639_1: string;
+    name: string;
+    poster_path: string
+  }

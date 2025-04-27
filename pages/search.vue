@@ -7,7 +7,7 @@
     <h1 class="title">Search Results</h1>
     <ul class="movies-list" v-loading="searchStore.isLoading">
       <li 
-        v-for="(movie, idx) in searchStore.searchedMovies.results" 
+        v-for="movie in searchStore.searchedMovies.results" 
         :key="movie.id"
         class="movies-list__movie-card-container"
       >

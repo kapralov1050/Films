@@ -19,7 +19,7 @@
       <el-rate 
         v-show="rateBlockVisible"
         v-model="userRating"
-        @change="handleRateMovie"
+        @input="handleRateMovie"
         :max="10"
         show-score
         score-template="{value} /10"/>

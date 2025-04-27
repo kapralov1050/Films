@@ -1,22 +1,59 @@
 <template>
   <el-form>
     <el-form-item label="AddItems" label-position="left">
-      <el-input v-model="listStore.movieToAdd" @input="debounce(handleInput, 1000)" placeholder="Search for a movie..."/>
+      <el-input v-model="listStore.movieToAdd" @input="deboucedHandleInput" placeholder="Search for a movie..."/>
     </el-form-item>
-    <p> {{ searchStore.searchedMovies ? searchStore.searchedMovies : 'There are no items added to this list.' }}</p>
+    <el-scrollbar max-height="40rem">
+      <ul 
+        element-loading-text="Loading..."
+        class="suggestions" 
+      >
+        <li 
+          class="suggestion-item"
+          v-for="movie in searchSuggestions" 
+          :key="movie.id"
+        >
+          <MiniMovieCard class="suggestion-movie"  :movie="movie"/>
+          <!-- <el-button circle :icon="isAdded ? CircleCheck : CirclePlus" type="info" @click="addMovieToList(movie.id)" :loading="processAdd" />  Доделать логику добавления в лист--> 
+        </li>
+      </ul>
+    </el-scrollbar>
   </el-form>
 </template>
 
 
 <script setup lang='ts'>
+import { CircleCheck, CirclePlus } from '@element-plus/icons-vue'
 import { debounce } from '~/helpers/debounce'
 
 const listStore = useListStore()
 const searchStore = useSearchMovieStore()
+const processAdd = ref(false)
+const isAdded = ref(false)
+const searchSuggestions = computed(() => {
+  if(searchStore.searchedMovies) return searchStore.searchedMovies.results.slice(0, 20)  
+})
 
 async function handleInput() {
   const searchedMoviesToAdd = await searchStore.searchMovie(listStore.movieToAdd)
-  searchStore.searchedMovies = searchedMoviesToAdd.results.slice(0, 20)
+  searchStore.searchedMovies = searchedMoviesToAdd
+}
+
+const deboucedHandleInput = debounce(handleInput, 1000)
+
+async function addMovieToList(movieId: number) {
+  if(!isAdded.value) {
+    processAdd.value = true
+    try {
+      const response = await listStore.addMovieToList(movieId)
+      isAdded.value = true
+      console.log(response)
+    } catch (error) {
+      console.log('Error while add new movie:', error)
+    } finally {
+      processAdd.value = false
+    }
+  }
 }
 </script>
 
@@ -29,7 +66,17 @@ async function handleInput() {
   border-radius: 0.5rem;
 }
 
-.el-form-item {
-  @include flex(column, )
+.suggestions {
+  margin: 1rem 0 0 1rem;
+}
+
+.suggestion-item {
+  @include flex(row, flex-start, center, 0);
+  width: 70%;
+}
+
+.suggestion-movie {
+  margin-top: 1.5rem;
+  padding: 0.5rem;
 }
 </style>

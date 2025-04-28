@@ -1,14 +1,14 @@
-import type { Film, ListDetailsResponse } from "~/types/common"
-
-const authStore = useAuthStore()
+import { type UserLists, type Film, type ListDetailsResponse, type List } from "~/types/common"
 
 export const useListStore = defineStore('listStore', () => {
+  const authStore = useAuthStore()
   const listName = ref('')
   const listDescription = ref('')
   const createdListInfo = ref({})
   const listId = ref<number>()
   const moviesInList = ref<Film[]>([])
   const movieToAdd = ref('')
+  const userLists = ref<List[]>()
 
   async function createList(){
     try {
@@ -62,12 +62,39 @@ export const useListStore = defineStore('listStore', () => {
     }
   }
 
+  async function fetchUserLists() {
+    try {
+      const { data: response } = await instance.get<UserLists>(`/account/${authStore.userData?.id}/lists`)
+      userLists.value = response.results
+      await Promise.all(
+      userLists.value.map(async (list) => {
+        list.poster_path = await getFirstMoviePoster(list.id) || list.poster_path
+        })
+      )
+      console.log(userLists.value)
+      
+      return userLists.value
+    } catch (error) {
+      console.log('error loading userLists',error)
+    }
+  }
+
   async function loadListDetails(listId: number) {
     try {
-      const { data: results } = await instance.get<ListDetailsResponse>(`list/${listId}`)
-      moviesInList.value = results.items
+      const { data: results } = await instance.get<ListDetailsResponse>(`/list/${listId}`)
+      return results.items
     } catch (error) {
       console.log('error loading list details:', error)
+    }
+  }
+
+  const getFirstMoviePoster = async (listId: number): Promise<string> => {
+    try {
+      const movies = await loadListDetails(listId)
+      if(!movies?.length) return 'https://cdn-icons-png.flaticon.com/512/16/16410.png'
+      return `https://image.tmdb.org/t/p/w342${movies[0].poster_path}`
+    } catch (error) {
+      throw error
     }
   }
 
@@ -80,6 +107,9 @@ export const useListStore = defineStore('listStore', () => {
     movieToAdd,
     addMovieToList,
     loadListDetails,
-    moviesInList
+    fetchUserLists,
+    userLists,
+    moviesInList,
+    getFirstMoviePoster
   }
 })

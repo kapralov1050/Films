@@ -6,9 +6,9 @@
     <el-main>
       <section class="info-header">
         <div class="logo">
-        <span>
+          <span>
             {{ username[0] }}
-        </span>
+          </span>
         </div>
         <h1 class="username-title"> {{ username }} </h1>
       </section>
@@ -28,22 +28,26 @@
 
 
 <script setup>
-  const authStore = useAuthStore()
-  const username = authStore.userData.username;
-  const router = useRouter()
-  
-  function handleSelect(key, path) {
-    switch(key) {
-      case "1":
-      router.push(`/user/${username}/rated`)
-      break
-      case "2":
-      router.push(`/user/${username}/watchlist`)
-      break
-      case "3":
-      router.push(`/user/${username}/lists`)
-    }
+const authStore = useAuthStore()
+const username = authStore.userData.username;
+const router = useRouter()
+
+function handleSelect(key) {
+  switch(key) {
+    case "1":
+    router.push(`/user/${username}/rated`)
+    break
+    case "2":
+    router.push(`/user/${username}/watchlist`)
+    break
+    case "3":
+    router.push(`/user/${username}/lists`)
   }
+}
+
+onMounted(async () => {
+  await authStore.fetchUserData()
+})  
 </script>
 
 

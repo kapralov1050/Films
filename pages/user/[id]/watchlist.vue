@@ -19,7 +19,8 @@
 
 <script setup>
 definePageMeta({
-    layout: "userpage"
+  layout: "userpage",
+  middleware: 'auth'
 })
 
 const authStore = useAuthStore()

@@ -66,6 +66,7 @@ defineProps<{movie: Film}>();
     width: auto;
     object-fit: cover;
     border-radius: 10px;
+    filter: drop-shadow(2px 6px 5px #333)
   }
 
   &__head {

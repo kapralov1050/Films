@@ -3,7 +3,7 @@
     <NuxtLink class="movie-card__image" :to="`/movie/${movie.id}`">
       <NuxtImg
         class="movie-card__poster"
-        :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`"
+        :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}` || 'https://cdn-icons-png.flaticon.com/512/16/16410.png'"
         :alt="movie.original_title"
         loading="lazy"
         format="webp"

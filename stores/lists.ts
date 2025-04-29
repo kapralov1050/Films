@@ -6,6 +6,7 @@ export const useListStore = defineStore('listStore', () => {
   const listDescription = ref('')
   const createdListInfo = ref({})
   const listId = ref<number>()
+  const listDetails = ref<ListDetailsResponse>()
   const moviesInList = ref<Film[]>([])
   const movieToAdd = ref('')
   const userLists = ref<List[]>()
@@ -82,7 +83,7 @@ export const useListStore = defineStore('listStore', () => {
   async function loadListDetails(listId: number) {
     try {
       const { data: results } = await instance.get<ListDetailsResponse>(`/list/${listId}`)
-      return results.items
+      return results
     } catch (error) {
       console.log('error loading list details:', error)
     }
@@ -91,9 +92,56 @@ export const useListStore = defineStore('listStore', () => {
   const getFirstMoviePoster = async (listId: number): Promise<string> => {
     try {
       const movies = await loadListDetails(listId)
-      if(!movies?.length) return 'https://cdn-icons-png.flaticon.com/512/16/16410.png'
-      return `https://image.tmdb.org/t/p/w342${movies[0].poster_path}`
+      if(!movies?.items.length) return 'https://cdn-icons-png.flaticon.com/512/16/16410.png'
+      return `https://image.tmdb.org/t/p/w342${movies.items[0].poster_path}`
     } catch (error) {
+      ElMessage.error('Failed to update list')
+      throw error
+    }
+  }
+
+  async function deleteMovieFromList(movieId: number, listId: number) {
+    try {
+      await instance.post(`list/${listId}/remove_item`, 
+        { media_id: movieId },
+        { params: {session_id: authStore.sessionId}}
+      )
+      const updatedList = await loadListDetails(listId)
+      moviesInList.value = updatedList?.items || []
+
+    } catch (error) {
+      ElMessage.error('Failed to remove movie')
+      throw error
+    }
+  }
+
+  async function deleteList(listId: number) {
+    try {
+      await instance.delete(`/list/${listId}`,
+        { params: {session_id: authStore.sessionId}}
+      )
+    } catch (error) {
+      ElMessage.error('Failed to remove list')
+      throw error
+    }
+  }
+
+  async function clearList(listId: number) {
+    try {
+      await instance.post(`/list/${listId}/clear`,
+        null,
+        { params: 
+          {
+            session_id: authStore.sessionId,
+            confirm: true
+          }
+        }
+      )
+
+      const updatedList = await loadListDetails(listId)
+      moviesInList.value = updatedList?.items || []
+    } catch (error) {
+      ElMessage.error('Failed to clear list')
       throw error
     }
   }
@@ -110,6 +158,10 @@ export const useListStore = defineStore('listStore', () => {
     fetchUserLists,
     userLists,
     moviesInList,
-    getFirstMoviePoster
+    listDetails,
+    getFirstMoviePoster,
+    deleteMovieFromList,
+    deleteList,
+    clearList
   }
 })

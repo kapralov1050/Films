@@ -17,3 +17,13 @@ export function compareDates(a: string,b: string): number {
 
   return 0
 }
+
+export function formatDate(dateStr: string) {
+  if(dateStr === 'unknown') return 'unknown'
+  const date = new Date(dateStr);
+  return new Intl.DateTimeFormat('en-US', { 
+    month: 'long', 
+    day: 'numeric', 
+    year: 'numeric' 
+  }).format(date);
+};

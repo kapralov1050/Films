@@ -38,7 +38,8 @@
   }
 
   const handleListSelect = (id: number) => {
-    router.push(`/user/${authStore.userData?.username}/list/${id}`)
+    navigateTo(`/user/${authStore.userData?.username}/list/${id}`)
+    listStore.listId = id
   }
   
   definePageMeta({
@@ -56,12 +57,13 @@
   <style scoped lang="scss">
   .title {
     @include flex(row, space-between, center, 0);
+    padding: 0 1rem;
     font-size: 2rem;
     font-weight: bold;
   }
   
   .user-lists {
-    @include flex(row, space-between, space-between, 2rem);
+    @include flex(row, flex-start, center, 2rem);
     margin-top: 2rem;
     flex-wrap: wrap;
   

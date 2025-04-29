@@ -19,7 +19,7 @@
 
 <script setup>
 definePageMeta({
-  layout: "userpage",
+  layout: 'userpage',
   middleware: 'auth'
 })
 

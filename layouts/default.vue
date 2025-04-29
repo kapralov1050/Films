@@ -16,13 +16,16 @@
 </script>
 
 <style scoped lang="scss">
-.el-header {
+.el-main, .el-header, .el-container {
   padding: 0;
+  margin: 0;
+}
+
+.el-header {
   height: 4rem;
 }
 
 .el-main {
-  padding: 2rem;
   width: 100%;
   min-height: auto;
   @include flex(column, center, flex-start, 0);

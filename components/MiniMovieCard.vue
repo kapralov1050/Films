@@ -3,7 +3,7 @@
     <NuxtLink class="movie-card__image" :to="`/movie/${movie.id}`">
       <NuxtImg
         class="movie-card__poster"
-        :src="`https://image.tmdb.org/t/p/w92${movie.backdrop_path}`"
+        :src="backdrop_url"
         :alt="movie.original_title"
         loading="lazy"
         format="webp"
@@ -33,7 +33,12 @@ import { StarFilled } from '@element-plus/icons-vue';
 import { dateToYear } from '~/helpers/formatDate';
 import type { Film } from '~/types/common';
 
-defineProps<{movie: Film}>();
+const props = defineProps<{movie: Film}>();
+
+const backdrop_url = computed(() => {
+  if(props.movie.backdrop_path) return `https://image.tmdb.org/t/p/w92${props.movie.backdrop_path}`
+  return 'https://cdn-icons-png.flaticon.com/512/16/16410.png'
+})
 </script>
 
 
@@ -43,17 +48,16 @@ defineProps<{movie: Film}>();
   width: inherit;
 
   &__image {
-    position: relative;
-    height: auto;
-    width: auto;
+    display: flex;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 10px;
   }
 
   &__poster {
-    align-self: center;
-    max-height: 16rem;
-    width: 4rem;
+    height: auto;
+    width: 100%;
     object-fit: cover;
-    border-radius: 10px;
   }
 
   &__meta {

@@ -1,6 +1,6 @@
 <template>
   <el-form>
-    <el-form-item label="Add Items" label-position="left">
+    <el-form-item label="Add Movies" label-position="left">
       <el-input v-model="listStore.movieToAdd" @input="deboucedHandleInput" placeholder="Search for a movie..."/>
     </el-form-item>
     <el-scrollbar max-height="40rem">
@@ -39,10 +39,6 @@ const processAdd = ref(false)
 const searchSuggestions = computed(() => {
   if(searchStore.searchedMovies) return searchStore.searchedMovies.results.slice(0, 20)  
 })
-
-const isMovieAdded = (movieId: number) => {
-  return listStore.moviesInList.some(item => item.id === movieId)
-}
 
 async function handleInput() {
   const searchedMoviesToAdd = await searchStore.searchMovie(listStore.movieToAdd)

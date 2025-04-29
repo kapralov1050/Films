@@ -67,7 +67,8 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 .main {
-  @include flex(row, space-between, flex-start, 2rem)
+  @include flex(row, space-between, flex-start, 2rem);
+  padding: 2rem
 }
 
 .filters {
@@ -79,8 +80,7 @@ onMounted(async () => {
 }
 
 .title {
-  padding-left: 1rem;
-  margin-bottom: 2rem;
+  padding: 2rem;
   font-size: 3rem;
 }
 

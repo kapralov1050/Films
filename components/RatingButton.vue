@@ -1,30 +1,32 @@
 <template>
-  <div class="rating-control">
-    <template v-if="currentRating !== null">
-    <el-icon 
-      :size="30"
-      class="rating-control__star"
-      @click="removeRating(movieId)"
-    >
-      <StarFilled color="rgb(50.8, 116.6, 184.5)" />
-    </el-icon>
-    <span class="rating-control__value">
-      {{ currentRating }} /10
-    </span>
-    </template>
-    <template v-else v-loading="isLoading">
+  <section class="rating-control">
+    <div v-if="currentRating !== 0">
+      <el-icon 
+        :size="30"
+        class="rating-control__star"
+        @click="removeRating(movieId)"
+      >
+        <StarFilled color="rgb(50.8, 116.6, 184.5)" />
+      </el-icon>
+      <span class="rating-control__value">
+        {{ currentRating }} /10
+      </span>
+    </div>
+    <div v-else-if="userRating === 0" v-loading="isLoading">
       <Button @click="toggleRateBlock">
         Rate
       </Button>
       <el-rate 
         v-show="rateBlockVisible"
         v-model="userRating"
-        @input="handleRateMovie"
+        @change="handleRateMovie"
         :max="10"
         show-score
-        score-template="{value} /10"/>
-    </template>
-  </div>
+        :loading="isLoading"
+        score-template="{value} /10"
+      />
+    </div>
+  </section>
 </template>
 
  
@@ -44,8 +46,8 @@ const { getRating, rateMovie, removeRating } = ratingStore
 const rateBlockVisible = ref(false)
 const userRating = ref(0)
 const isLoading = ref(false)
+const currentRating = ref<number | null>(0)
 
-const currentRating = ref<number | null>(null)
 watchEffect(() => {
   currentRating.value = getRating(props.movieId)
 })

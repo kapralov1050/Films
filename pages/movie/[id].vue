@@ -1,97 +1,103 @@
 <template>
-  <el-container>
-    <el-header>
-        <Header />
-    </el-header>
-    <el-main >
-      <article class="movie-card" v-loading="isLoading">
-        <NuxtImg
-          class="poster"
-          :src="`https://image.tmdb.org/t/p/w500${movieDetailsStore.selectedMovie.poster_path}`"
-          :alt="movieDetailsStore.selectedMovie.title"
-          format="webp"
-        />
-        <div class="meta">
-          <h1 class="meta__title">
-            {{ movieDetailsStore.selectedMovie.title }}
-            ({{ dateToYear(movieDetailsStore.selectedMovie.release_date) }})
-          </h1>
-          <section class="meta__details">
-            <h2 class="meta__subtitle"> About film </h2>
-            <p> {{ movieDetailsStore.selectedMovie.overview }}</p>
-            <span class="meta__details__inline-list">
-              <h4> Genres: </h4>
-              <ul>
-                <li 
-                  v-for="genre in movieDetailsStore.selectedMovie.genres" 
-                  :key="genre.id"
-                >
-                  {{ genre.name }}
-                </li>
-              </ul>
-            </span>
-            <span class="meta__details__inline-list">
-              <h4> Country: </h4>
-              <ul>
-                <li 
-                  v-for="country in movieDetailsStore.selectedMovie.production_countries" 
-                  :key="country.id"
-                >
-                  {{ country.name }}
-                </li>
-              </ul>
-            </span>
-            <span class="meta__details__inline-list">
-              <h4> Language: </h4>
-              <ul>
-                <li 
-                  v-for="language in movieDetailsStore.selectedMovie.spoken_languages" 
-                  :key="language.id"
-                >
-                  {{ language.name }}
-                </li>
-              </ul>
-            </span>
-          </section>
-        </div>
-        <div class="rating">
-          <p class="rating__average">
-            {{ movieDetailsStore.selectedMovie.vote_average }}
-          </p>
-          <el-icon :size="30" class="star">
-            <StarFilled color="rgb(255, 217, 0)" />
-          </el-icon>
-          <p class="rating__votes">
-            {{ movieDetailsStore.selectedMovie.vote_count }} ratings
-          </p>
-        </div>
-      </article>
-      <article class="recommendations">
-        <h1 class="recommendations__title">
-           Recommendations
-        </h1>
-        <el-scrollbar>
-          <section class="scroll-content">
-            <div 
-              v-for="movie in movieDetailsStore.movieRecommendations.results" 
-              class="scroll-item"
+  <article class="movie-card" v-loading="isLoading">
+    <NuxtImg
+      class="poster"
+      :src="`https://image.tmdb.org/t/p/w500${movieDetailsStore.selectedMovie.poster_path}`"
+      :alt="movieDetailsStore.selectedMovie.title"
+      format="webp"
+    />
+    <div class="meta">
+      <h1 class="meta__title">
+        {{ movieDetailsStore.selectedMovie.title }}
+        ({{ dateToYear(movieDetailsStore.selectedMovie.release_date) }})
+      </h1>
+      <section class="meta__details">
+        <h2 class="meta__subtitle"> About film </h2>
+        <p> {{ movieDetailsStore.selectedMovie.overview }}</p>
+        <div class="meta__details__inline-list">
+          <h4> Genres: </h4>
+          <ul>
+            <li 
+              v-for="genre in movieDetailsStore.selectedMovie.genres" 
+              :key="genre.id"
             >
-              <NuxtLink :to="`/movie/${movie.id}`">
-                <NuxtImg
-                  :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
-                  :alt="movie.title"
-                  width="300px"
-                  height="auto"
-                  format="webp"
-                />
+              {{ genre.name }}
+            </li>
+          </ul>
+        </div>
+        <div class="meta__details__inline-list">
+          <h4> Country: </h4>
+          <ul>
+            <li 
+              v-for="country in movieDetailsStore.selectedMovie.production_countries" 
+              :key="country.id"
+            >
+              {{ country.name }}
+            </li>
+          </ul>
+        </div>
+        <div class="meta__details__inline-list">
+          <h4> Language: </h4>
+          <ul>
+            <li 
+              v-for="language in movieDetailsStore.selectedMovie.spoken_languages" 
+              :key="language.id"
+            >
+              {{ language.name }}
+            </li>
+          </ul>
+        </div>
+        <div class="meta__details__inline-list">
+          <h4> Cast: </h4>
+          <ul>
+            <li 
+              v-for="person in movieDetailsStore.movieCast" 
+              :key="person.id"
+            >
+              <NuxtLink :to="`/person/${person.id}`">
+                {{ person.name }}
               </NuxtLink>
-              <h3>{{ movie.title }} ({{ dateToYear(movie.release_date) }})</h3>
-            </div>
-          </section>
-        </el-scrollbar>
-      </article>
-    </el-main>
-  </el-container>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
+    <div class="rating">
+      <p class="rating__average">
+        {{ movieDetailsStore.selectedMovie.vote_average }}
+      </p>
+      <el-icon :size="30" class="star">
+        <StarFilled color="rgb(255, 217, 0)" />
+      </el-icon>
+      <p class="rating__votes">
+        {{ movieDetailsStore.selectedMovie.vote_count }} ratings
+      </p>
+    </div>
+  </article>
+  <article class="recommendations">
+    <h1 class="recommendations__title">
+        Recommendations
+    </h1>
+    <el-scrollbar>
+      <section class="scroll-content">
+        <div 
+          v-for="movie in movieDetailsStore.movieRecommendations" 
+          class="scroll-item"
+        >
+          <NuxtLink :to="`/movie/${movie.id}`">
+            <NuxtImg
+              :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
+              :alt="movie.title"
+              width="300px"
+              height="auto"
+              format="webp"
+            />
+          </NuxtLink>
+          <h3>{{ movie.title }} ({{ dateToYear(movie.release_date) }})</h3>
+        </div>
+      </section>
+    </el-scrollbar>
+  </article>
 </template>
 
 
@@ -109,25 +115,16 @@ onMounted(async () => {
   isLoading.value = true
   try {
     await movieDetailsStore.getMovieDetails(id);
-    await movieDetailsStore.getRecommendations(id);
   } catch (error) {
     console.log(`error while loading movie ${id}:`,error)
   } finally {
     isLoading.value = false
   }
-
 });
 </script>
 
 
 <style scoped lang="scss">
-.el-main {
-  @include flex(column, center, center, 0);
-  max-width: 100%;
-  padding: 0;
-  margin: 0;
-}
-
 .movie-card {
   align-self: center;
   height: fit-content;
@@ -160,7 +157,7 @@ onMounted(async () => {
   &__details {
 
     &__inline-list {
-      @include flex(row, flex-start, center, 0.5rem);
+      @include flex(row, flex-start, flex-start, 0.5rem);
       padding-top:1rem;
     }
 
@@ -194,8 +191,9 @@ onMounted(async () => {
   background-color: rgb(235, 180.6, 99);
   color: white;
   height: auto;
-  padding-bottom: 2rem;
-  max-width: 100%;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+  width: 100%;
 
     &__title {
     font-size: 2rem;
@@ -204,17 +202,19 @@ onMounted(async () => {
 }
 
 .scroll-content {
-  @include flex(row, center, center, 0);
+  @include flex(row, flex-start, center, 0);
   height: auto;
-  padding: 0 7rem;
+  padding-right: 3rem;
   width: fit-content;
 }
 
 .scroll-item {
-  @include flex(column, center, center, 1rem);
-  margin: 2rem;
+  @include flex(column, center, center, 0);
+  margin: 1.5rem;
   flex-shrink: 0;
-  max-height: 450px;
+  max-height: 30rem;
+  max-width: auto;
   text-align: center;
+  overflow-wrap: anywhere;
 }
 </style>

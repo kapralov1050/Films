@@ -58,7 +58,7 @@ onMounted(async () => {
 }
 
 .el-main {
-  @include flex(column, center, center, 0)
+  @include flex(column, center, center, 0);
 }
 
 .info-header {
@@ -95,8 +95,9 @@ onMounted(async () => {
 }
 
 .page-content {
-  padding-top: 2rem ;
+  padding: 2rem 0 ;
   width: 60vw;
+
 }
 
 </style>

@@ -30,6 +30,7 @@
 
 <script setup>
 const moviesStore = useMoviesStore()
+const authStore = useAuthStore()
 const isLoading = ref(false)
 
 const handlePageChange = async (newPage) => {
@@ -54,6 +55,7 @@ onMounted(async () => {
   try{
     moviesStore.genres = await moviesStore.fetchGenres()
     moviesStore.languages = await moviesStore.fetchLanguages()
+    authStore.getWatchList()
     await new Promise(resolve => setTimeout(resolve, 1000))
     fetchData()
   } catch(error) {

@@ -53,7 +53,6 @@ definePageMeta({
 
 const listStore = useListStore()
 const authStore = useAuthStore()
-const router = useRouter()
 const showAddMoviesModal = ref(false)
 const isDeleting = ref(false)
 const average = computed(() => averageRating(listStore.moviesInList))
@@ -76,7 +75,7 @@ const handleDeleteList = async () => {
     if(listStore.listId) await listStore.deleteList(listStore.listId)
     ElMessage.success('List deleted')
     const username = authStore.userData?.username;
-    router.push(`/user/${username}/lists`)
+    navigateTo(`/user/${username}/lists`)
   } catch (error) {
     console.log(error)
   } finally {

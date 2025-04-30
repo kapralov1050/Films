@@ -30,21 +30,12 @@ export const useRate = () => {
       })
     } catch (error) {
       console.log('Error delete rating movie:', error)
+      throw error
     }
-  }
-
-  const processPendingRating = async (movieId: number) => {
-    const pendingAction = JSON.parse(
-      localStorage.getItem('pending_rating_action') || '{}');
-    if(pendingAction[movieId] !== undefined) {
-      await ratingStore.rateMovie(movieId, pendingAction[movieId])
-      localStorage.removeItem('pending_rating_action')
-    } 
   }
   
   return {
     postRatingToServer,
     deleteRatingFromServer,
-    processPendingRating
   }
 }

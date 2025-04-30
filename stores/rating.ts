@@ -2,46 +2,21 @@ import type { Film, movieRating } from '~/types/common';
 
 export const useRatingStore = defineStore('ratingStore', () => {
   const authStore = useAuthStore()
-  const { loginWithTmdb } = useAuth()
   const { postRatingToServer, deleteRatingFromServer } = useRate()
   const ratings = ref<movieRating[]>([])
   const ratedMovies = ref<Film[]>([])
 
   async function rateMovie(movieId: number, rating: number) {
-    if(!authStore.sessionId) {
-      localStorage.setItem('pending_rating_action', JSON.stringify({
-        [movieId]: rating
-      }))
-      const returnPath = encodeURIComponent(useRoute().path)
-      localStorage.setItem('return_path', returnPath)
-
-      loginWithTmdb()
-      return
-    }
-
-    let existingIndex = -1
-    let previousRating: number | null = null
-
+    let isRated = true
     try {
-      existingIndex = ratings.value.findIndex(item => item.id === movieId)
-
-      previousRating = existingIndex !== -1
-      ? ratings.value[existingIndex].rating : null
-
-      if(existingIndex !== -1) {
-        ratings.value[existingIndex].rating = rating
-      } else {
-        ratings.value.push({id:movieId, rating})
-      }
-
       await postRatingToServer(movieId, rating)
+      return isRated
     } catch (error) {
-      if(previousRating !== null) {
-        ratings.value[existingIndex].rating = previousRating
-      } else {
-        ratings.value = ratings.value.filter(item => item.id !== movieId)
-      }
+      isRated = false
+      console.log(error)
       throw error
+    } finally {
+      return isRated
     }
   }
 
@@ -68,11 +43,19 @@ export const useRatingStore = defineStore('ratingStore', () => {
   }
 
   function removeRating(movieId: number) {
-    if(authStore.sessionId) {
+    let isRemoved = true
+    try {
       ratings.value = ratings.value.filter((item: {id: number, rating: number}) => item.id !== movieId);
       deleteRatingFromServer(movieId)
       console.log('Ratings after removal:', [...ratings.value])
+      return isRemoved
+    } catch (error) {
+      console.log(error)
+      isRemoved = false
+    } finally {
+      return isRemoved
     }
+
   }
 
   const getRating = (id: number) => {
@@ -80,6 +63,10 @@ export const useRatingStore = defineStore('ratingStore', () => {
     return ratedMovie ? ratedMovie.rating : null
   }
 
+  const logout = () => {
+    ratings.value = []
+    ratedMovies.value = []
+  }
   
   return {
     ratings,
@@ -87,6 +74,7 @@ export const useRatingStore = defineStore('ratingStore', () => {
     rateMovie,
     getRatedMovies,
     removeRating,
-    getRating
+    getRating,
+    logout
   }
 })

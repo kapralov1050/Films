@@ -29,7 +29,7 @@ const isLoading = ref(false)
 onMounted(async () => {
   isLoading.value = true
   try {
-    authStore.setWatchList()
+    authStore.getWatchList()
   } catch (error) {
     console.log(error)
   } finally {

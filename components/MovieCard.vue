@@ -22,7 +22,7 @@
             {{ dateToYear(movie.release_date) }}
           </time>
         </div>
-        <WatchListButton :movie="movie"/>
+        <WatchListButton :isInWatchlist="isInWatchList" @handleWatchListClick="addorRemoveMovie" :v-loading="isLoading"/>
       </header>
       <p class="movie-card__overview">
         {{ movie.overview }}
@@ -44,7 +44,37 @@ import { StarFilled } from '@element-plus/icons-vue';
 import { dateToYear } from '~/helpers/formatDate';
 import type { Film } from '~/types/common';
 
-defineProps<{movie: Film}>();
+const props = defineProps<{movie: Film}>();
+
+const authStore = useAuthStore()
+const isInWatchList = ref(false)
+const isLoading = ref(false)
+const { loginWithTmdb } = useAuth()
+
+const addorRemoveMovie = () => {
+  if(authStore.sessionId) {
+    isLoading.value = true
+    isInWatchList.value = !isInWatchList.value
+    authStore.addToWatchList(props.movie.id, isInWatchList.value)
+    isLoading.value = false
+  } else {
+    isLoading.value = true
+    const returnPath = encodeURIComponent(useRoute().path)
+    localStorage.setItem('return_path', returnPath)
+    localStorage.setItem('pending_watchlist_action', JSON.stringify({
+      [props.movie.id]: !isInWatchList.value
+    }))
+    loginWithTmdb()
+    isLoading.value = false
+  }
+}
+
+
+onMounted(() => {
+  if(authStore.watchListMovies) {
+    isInWatchList.value = authStore.watchListMovies.some((movie) => props.movie.id === movie.id) 
+  }
+})
 </script>
 
 

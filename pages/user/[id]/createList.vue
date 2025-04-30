@@ -18,7 +18,6 @@ definePageMeta({
     middleware: 'auth'
 })
 
-const router = useRouter()
 const authStore = useAuthStore()
 const listStore = useListStore()
 const activeStep = ref(1)
@@ -37,7 +36,7 @@ const next = () => {
         activeStep.value++
         break
       case 2: 
-        router.push(`/user/${authStore.userData.username}/lists`)
+        navigateTo(`/user/${authStore.userData.username}/lists`)
         break
     }
   }

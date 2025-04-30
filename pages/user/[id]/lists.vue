@@ -29,12 +29,11 @@
   
   
   <script setup lang="ts">
-  const router = useRouter()
   const authStore = useAuthStore()
   const listStore = useListStore()
   
   function handleCreateList() {
-    router.push(`/user/${authStore.userData?.username}/createList`)
+    navigateTo(`/user/${authStore.userData?.username}/createList`)
   }
 
   const handleListSelect = (id: number) => {

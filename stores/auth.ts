@@ -36,7 +36,7 @@ export const useAuthStore = defineStore('authStore', () => {
       }, {
         params: {session_id: sessionId.value}
       })
-      setWatchList()
+      getWatchList()
       ElMessage(isWatchlist ? 'Added to watchlist' : 'Deleted from watchlist')
     } catch (error) {
         console.log(error)
@@ -52,7 +52,7 @@ export const useAuthStore = defineStore('authStore', () => {
     } 
   }
 
-  const setWatchList = async () => {
+  const getWatchList = async () => {
     if(userData.value?.id) {
     const movies = await getWatchListMovies(userData.value.id)
     watchListMovies.value = movies
@@ -64,14 +64,16 @@ export const useAuthStore = defineStore('authStore', () => {
     if(sessionCookie.value) {
       sessionId.value = sessionCookie.value
       fetchUserData()
-      setWatchList()
+      getWatchList()
     }
   }
 
   const logout = () => {
+    const sessionCookie = getSessionCookie()
+    sessionCookie.value = null
     sessionId.value = null
     userData.value = null
-    localStorage.removeItem('tmdb_session_id')
+    watchListMovies.value = null
   }
 
   initAuth()
@@ -83,7 +85,7 @@ export const useAuthStore = defineStore('authStore', () => {
     fetchUserData,
     addToWatchList,
     processPendingWatchlist,
-    setWatchList,
+    getWatchList,
     watchListMovies,
     initAuth,
     logout

@@ -1,10 +1,10 @@
 <template>
   <section class="rating-control">
-    <div v-if="currentRating !== 0">
+    <div v-if="currentRating !== null">
       <el-icon 
         :size="30"
         class="rating-control__star"
-        @click="removeRating(movieId)"
+        @click="handleRemove"
       >
         <StarFilled color="rgb(50.8, 116.6, 184.5)" />
       </el-icon>
@@ -12,7 +12,7 @@
         {{ currentRating }} /10
       </span>
     </div>
-    <div v-else-if="userRating === 0" v-loading="isLoading">
+    <div v-else v-loading="isLoading">
       <Button @click="toggleRateBlock">
         Rate
       </Button>
@@ -41,22 +41,19 @@ const props = defineProps({
 })
 const ratingStore = useRatingStore()
 const authStore = useAuthStore()
+const { loginWithTmdb } = useAuth()
 const { sessionId, userData } = storeToRefs(authStore)
 const { getRating, rateMovie, removeRating } = ratingStore
 const rateBlockVisible = ref(false)
 const userRating = ref(0)
 const isLoading = ref(false)
-const currentRating = ref<number | null>(0)
-
-watchEffect(() => {
-  currentRating.value = getRating(props.movieId)
-})
+const currentRating = ref<number | null>(null)
 
 const handleRateMovie = async () => {
   isLoading.value = true
   try {
-    await rateMovie(props.movieId, userRating.value)
-    await loadRating()
+    const isRated = await rateMovie(props.movieId, userRating.value)
+    if (isRated) currentRating.value = userRating.value
     rateBlockVisible.value = false
   } catch (error) {
     console.log('Rating failed', error)
@@ -72,15 +69,30 @@ async function loadRating() {
     }
   } catch (error) {
     console.log('error loading rating', error)
+    throw error
   }
 }
 
 const toggleRateBlock = () => {
-  rateBlockVisible.value = !rateBlockVisible.value
+  if(!authStore.sessionId) {
+    loginWithTmdb() 
+  } else {
+    rateBlockVisible.value = !rateBlockVisible.value
+  }
 }
 
-onMounted(() => {
-  loadRating()
+const handleRemove = () => {
+  isLoading.value = true
+  const isRemoved = removeRating(props.movieId)
+  if(isRemoved) currentRating.value = null
+  isLoading.value = false
+}
+
+onMounted( async () => {
+  isLoading.value = true
+  await loadRating()
+  currentRating.value = getRating(props.movieId)
+  isLoading.value = false
 })
 </script>
 

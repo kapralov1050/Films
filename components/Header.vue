@@ -18,34 +18,46 @@
       </template>
     </el-input>
     <section class="header__user-block">
-      <el-button @click="handleAuthClick" text>
-        {{ authStore.sessionId ? 'User' : 'login' }}
-      </el-button>
+      <el-dropdown>
+        <span @click="handleAuthClick" text >
+          {{ authStore.sessionId ? 'User' : 'login' }}
+        </span>
+        <template #dropdown v-if="authStore.sessionId">
+          <el-dropdown-menu>
+            <el-dropdown-item :icon="Plus" @click="navigateTo(`/user/${authStore.userData.username}`)"> Profile </el-dropdown-item>
+            <el-dropdown-item :icon="Plus" @click="handleLogout"> Logout </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </section>
   </div>
 </template>
 
 
 <script setup>
-import { User, Search } from '@element-plus/icons-vue'
+import { Search } from '@element-plus/icons-vue'
 
-const router = useRouter()
 const searchMovieStore = useSearchMovieStore()
 const authStore = useAuthStore()
+const ratingStore = useRatingStore()
 const { loginWithTmdb } = useAuth()
 
 function handleAuthClick() {
-  if(authStore.sessionId) {
-    router.push(`/user/${authStore.userData.username}`)
-  } else {
+  if(!authStore.sessionId) {
     loginWithTmdb()
   }
+}
+
+const handleLogout = () => {
+  authStore.logout()
+  ratingStore.logout()
+  navigateTo('/')
 }
 
 async function handleSearch() {
   const searchMoviesListData = await searchMovieStore.searchMovie(searchMovieStore.searchValue)
   searchMovieStore.searchedMovies = searchMoviesListData
-  router.push('/search')
+  navigateTo('/search')
   searchMovieStore.isLoading = true
 }
 </script>

@@ -17,28 +17,26 @@ export const useAuth= () =>{
 
   const loginWithTmdb = async () => {
     const requestToken =await getRequestToken()
-    window.location.href = `https://www.themoviedb.org/authenticate/${requestToken}?redirect_to=${window.location.origin}/auth-callback`
+    localStorage.setItem('return_path', window.location.pathname)
     localStorage.setItem('tmdb_request_token', requestToken)
+    window.location.href = `https://www.themoviedb.org/authenticate/${requestToken}?redirect_to=${window.location.origin}/`
   }
 
   const handleCallback = async () => {
-    const route = useRoute()
+    try {
+    const requestToken = localStorage.getItem('tmdb_request_token')
+    
+    if(!requestToken) throw new Error('Request token not found!')
 
-    if(route.query.approved) {
-      try {
-      const requestToken = localStorage.getItem('tmdb_request_token')
-      
-      if(!requestToken) throw new Error('Request token not found!')
-  
-      const { data } = await instance.post('/authentication/session/new', {
-        request_token: requestToken
-      })
-      authStore.setSession(data.session_id)
-      await authStore.fetchUserData();
-      localStorage.removeItem('tmdb_request_token')
-      } catch (error) {
-        console.log(error)
-      }
+    const { data } = await instance.post('/authentication/session/new', {
+      request_token: requestToken
+    })
+    authStore.setSession(data.session_id)
+    await authStore.fetchUserData();
+    localStorage.removeItem('tmdb_request_token')
+
+    } catch (error) {
+      console.log(error)
     }
   }
 

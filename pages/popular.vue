@@ -63,7 +63,7 @@ onMounted(async () => {
   } finally {
     isLoading.value = false
   }
-  })
+})
 </script>
 
 

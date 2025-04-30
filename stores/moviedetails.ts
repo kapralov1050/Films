@@ -24,7 +24,7 @@ export const UseMovieDetailsStore = defineStore('MovieDetailsStore', () => {
   async function getPersonDetails(id: string) {
     try {
       const response = await instance.get(`/person/${id}`, {
-        params: { append_to_response: 'movie_credits'}
+        params: { append_to_response: 'movie_credits,images'}
       })
       personDetails.value = response.data
     } catch (error) {

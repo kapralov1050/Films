@@ -54,7 +54,7 @@
               v-for="person in movieDetailsStore.movieCast" 
               :key="person.id"
             >
-              <NuxtLink :to="`/person/${person.id}`">
+              <NuxtLink :to="`/person/${person.id}`" class="person-link">
                 {{ person.name }}
               </NuxtLink>
             </li>
@@ -216,5 +216,13 @@ onMounted(async () => {
   max-width: auto;
   text-align: center;
   overflow-wrap: anywhere;
+}
+
+.person-link {
+  color: black;
+}
+
+.person-link:hover {
+  color: rgb(68, 68, 68);
 }
 </style>

@@ -1,10 +1,6 @@
 <template>
-  <el-container>
-    <el-header>
-    <Header />
-    </el-header>
-    <el-main class="main">
-    <h1 class="title">Search Results</h1>
+  <h1 class="title">Search Results</h1>
+  <article class="main">
     <ul class="movies-list" v-loading="searchStore.isLoading">
       <li 
         v-for="movie in searchStore.searchedMovies.results" 
@@ -19,8 +15,7 @@
       :page="searchStore.currentPage" 
       :totalresults="searchStore.searchedMovies.total_results / 2" class="pagination"
     />
-    </el-main>
-  </el-container>
+  </article>
 </template>
 
 
@@ -46,7 +41,6 @@ watch(() => searchStore.currentPage, fetchData);
 
 onMounted(async () => {
     await new Promise(resolve => setTimeout(resolve,1000))
-    searchStore.isLoading = false
 })
 </script>
 
@@ -66,9 +60,8 @@ onMounted(async () => {
 }
 
 .title {
-  padding-left: 1rem;
+  padding: 2rem;
   font-size: 3rem;
-  margin-bottom: 1rem;
 }
 
 .title::before {
@@ -80,18 +73,19 @@ onMounted(async () => {
 }
 
 .movies-list {
-  @include flex(column, center, center, 0);
+  @include flex(column, center, center, 1.5rem);
   align-self: center;
-  width: 70%;
-  min-height: 60vh;
-
+  min-height: 80vh;
+  width: 95%;
+  
   &__movie-card-container {
-    width: 100%;
+    width: inherit;
     height: fit-content;
     padding: 1rem;
     display: flex;
     align-items: center;
     justify-content: space-around;
+    box-shadow: 0 2px 5px rgb(209, 209, 209);
   }
 }
 

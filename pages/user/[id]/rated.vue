@@ -16,7 +16,6 @@
 </template>
 
 
-
 <script setup>
 definePageMeta({
   layout: 'userpage',
@@ -40,12 +39,10 @@ onMounted(async () => {
 </script>
 
 
-
-
 <style scoped lang="scss">
 .title {
   padding-left: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   font-size: 3rem;
 }
 
@@ -58,7 +55,7 @@ onMounted(async () => {
 }
 
 .movies-list {
-  @include flex(column, flex-start, center, 0);
+  @include flex(column, flex-start, center, 2rem);
   align-self: center;
   min-height: 60vh;
   width: 95%;
@@ -70,6 +67,7 @@ onMounted(async () => {
     display: flex;
     align-items: center;
     justify-content: space-around;
+    box-shadow: 0 2px 5px rgb(209, 209, 209);
   }
 }
 

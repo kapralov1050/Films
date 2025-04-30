@@ -42,6 +42,13 @@
         </h1>
         <h2 class="meta__subtitle"> Biography </h2>
         <p class="meta__bio"> {{ movieDetailsStore.personDetails?.biography }}</p>
+        <ImageView 
+          class="meta__images"
+          v-if="movieDetailsStore.personDetails?.images" 
+          :images="movieDetailsStore.personDetails?.images.profiles" 
+          :is-open="isViewerOpen" 
+          @update:is-open="isViewerOpen = $event"
+        />
       </section>
       <section class="recommendations">
         <h1 class="recommendations__title">
@@ -80,6 +87,7 @@ const movieDetailsStore = UseMovieDetailsStore()
 const route = useRoute();
 const id = route.params.id as string;
 const isLoading = ref(false)
+const isViewerOpen = ref(false)
 
 const personAge = computed(() => {
   if (movieDetailsStore.personDetails?.birthday) {
@@ -138,11 +146,13 @@ onMounted(async () => {
 
 .info {
   flex: 3;
-  max-width: 70rem;
+  max-width: 55rem;
+  height: 100vh;
 }
 
 .meta {
   padding: 0 5rem 0 2rem;
+  margin-bottom: 5rem;
 
   &__title {
     font-size: 3rem;
@@ -156,11 +166,18 @@ onMounted(async () => {
 
   &__bio {
     max-width: 50rem;
-    height: 30rem;
+    height: auto;
+    padding-bottom: 1rem;
+  }
+
+  &__images {
+    padding: 1rem;
+    justify-self: flex-end;
   }
 }
 
 .recommendations {
+  align-self: flex-end;
   height: auto;
   padding: 0 5rem 0 2rem;
   box-sizing: border-box;
@@ -177,7 +194,7 @@ onMounted(async () => {
 }
 
 .scroll-item {
-  @include flex(column, center, center, 0);
+  @include flex(column, center, center, 1rem);
   width: 15rem;
   margin: 1.5rem;
   flex-shrink: 0;

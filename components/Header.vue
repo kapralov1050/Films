@@ -10,11 +10,13 @@
     <el-input 
       class="header__search" 
       v-model="searchMovieStore.searchValue" 
+      @keyup.enter="deboucedHandleSearch"
       placeholder="Search" 
       required
+      clearable
     >
       <template #append>
-        <el-button :icon="Search" @click="handleSearch" />
+        <el-button :icon="Search" @click="deboucedHandleSearch" :disabled="isLoading" :loading="isLoading" />
       </template>
     </el-input>
     <section class="header__user-block">
@@ -24,8 +26,8 @@
         </span>
         <template #dropdown v-if="authStore.sessionId">
           <el-dropdown-menu>
-            <el-dropdown-item :icon="Plus" @click="navigateTo(`/user/${authStore.userData.username}`)"> Profile </el-dropdown-item>
-            <el-dropdown-item :icon="Plus" @click="handleLogout"> Logout </el-dropdown-item>
+            <el-dropdown-item @click="navigateTo(`/user/${authStore.userData.username}`)"> Profile </el-dropdown-item>
+            <el-dropdown-item @click="handleLogout"> Logout </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -36,11 +38,13 @@
 
 <script setup>
 import { Search } from '@element-plus/icons-vue'
+import { debounce } from '~/helpers/debounce'
 
 const searchMovieStore = useSearchMovieStore()
 const authStore = useAuthStore()
 const ratingStore = useRatingStore()
 const { loginWithTmdb } = useAuth()
+const isLoading = ref(false)
 
 function handleAuthClick() {
   if(!authStore.sessionId) {
@@ -55,11 +59,19 @@ const handleLogout = () => {
 }
 
 async function handleSearch() {
-  const searchMoviesListData = await searchMovieStore.searchMovie(searchMovieStore.searchValue)
-  searchMovieStore.searchedMovies = searchMoviesListData
-  navigateTo('/search')
-  searchMovieStore.isLoading = true
+  if (searchMovieStore.searchValue) {
+    isLoading.value = true
+    const searchMoviesListData = await searchMovieStore.searchMovie(searchMovieStore.searchValue)
+    searchMovieStore.searchedMovies = searchMoviesListData
+    searchMovieStore.searchValue = ''
+    navigateTo('/search')
+    isLoading.value = false
+  } else {
+    ElMessage('Search field is empty')
+  }
 }
+
+const deboucedHandleSearch = debounce(handleSearch, 300)
 </script>
 
 

@@ -81,11 +81,20 @@
           :marks="runtimeMarks" 
         />
       </el-form-item>
+      <el-button 
+        round 
+        text 
+        bg 
+        @click="$emit('reset')" 
+      >
+        Clear Form
+      </el-button>
     </el-form>
     <el-button 
+      class="filter-button"
       type="primary"
       :disabled="!filtersChanged"
-      @click="moviesStore.handleSortChange()"
+      @click="$emit('sort')"
     >
       Filter
     </el-button>
@@ -150,7 +159,7 @@ const runtimeMarks = ref({
   margin: 0.3rem;
 }
 
-.el-button {
+.filter-button {
   width: 100%;
   padding: 1.5rem;
   font-size: large;

@@ -12,19 +12,19 @@
           <h1 class="user-title__name"> {{ username }} </h1>
         </div>
         <div class="user-stats">
-          <h2>Stats:</h2>
+          <h2 class="user-stats__title">Stats:</h2>
           <ul class="user-stats__list">
-            <li>
-              <h3>Total Ratings</h3>
-              <p> {{ ratingStore.ratedMovies?.length }} </p>
+            <li class="user-stats__item">
+              <p>Total Ratings</p>
+              <p class="user-stats__value"> {{ ratingStore.ratedMovies?.length }} </p>
             </li>
             <li>
-              <h3>Movies in WatchList</h3>
-              <p> {{ authStore.watchListMovies?.length }} </p>
+              <p>Movies in WatchList</p>
+              <p class="user-stats__value"> {{ authStore.watchListMovies?.length }} </p>
             </li>
             <li>
-              <h3>Most Watched Genres</h3>
-              <p v-for="genre in mostWatchedGenres" :key="genre.id"> {{ genre }} </p>
+              <p>Most Watched Genres</p>
+              <p class="user-stats__value" v-for="genre in mostWatchedGenres" :key="genre.id"> /{{ genre }} </p>
             </li>
           </ul>
         </div>
@@ -94,7 +94,7 @@ const mostWatchedGenres = computed(() => {
 }
 
 .info-header {
-  @include flex(row, flex-start, center, 1rem);
+  @include flex(row, flex-start, center, 4rem);
   width: 100%;
   height: 15vh;
   box-sizing: border-box;
@@ -102,7 +102,7 @@ const mostWatchedGenres = computed(() => {
 }
 
 .user-title {
-  display: flex;
+  @include flex(column, center, center, 0.5rem);
   flex: 1;
 
   &__logo {
@@ -118,26 +118,37 @@ const mostWatchedGenres = computed(() => {
 
   &__name {
     color: rgb(50.8, 116.6, 184.5);
-    font-size: 4rem;
-    margin-left: 2rem;
+    font-size: 2rem;
   }
 }
 
 .user-stats {
   @include flex(column, flex-start, space-around);
   padding: 2rem;
-  flex: 3;
+  flex: 5;
+
+  &__title {
+    padding-bottom: 1.5rem;
+    font-size: 2rem;
+    color:rgb(50.8, 116.6, 184.5);
+  }
 
   &__list {
     @include flex(row, space-between, center, 0)
   }
-}
 
+  &__value {
+    font-size: 3rem;
+    font-weight: bold;
+    display: inline-block;
+    color: rgb(68, 68, 68);
+  }
+}
 
 .menu {
   @include flex(row, center, center, 3rem);
   width: 100vw;
-  background-color: rgb(245, 245, 245);
+  border: 1px solid rgb(211, 211, 211);
   &__option {
     font-size: 1.5rem;
     font-weight: 500;
@@ -147,7 +158,6 @@ const mostWatchedGenres = computed(() => {
 .page-content {
   padding: 2rem 0 ;
   width: 60vw;
-
 }
 
 </style>

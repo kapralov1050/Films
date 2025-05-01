@@ -13,7 +13,7 @@
     <Pagination 
       @update:page="handlePageChange" 
       :page="searchStore.currentPage" 
-      :totalresults="searchStore.searchedMovies.total_results / 2" class="pagination"
+      :totalresults="searchStore.searchedMovies.total_pages" class="pagination"
     />
   </article>
 </template>
@@ -21,6 +21,7 @@
 
 <script setup>
 const searchStore = useSearchMovieStore()
+const moviesStore = useMoviesStore()
 
 const handlePageChange = async (newPage) => {
   searchStore.currentPage = newPage;
@@ -28,6 +29,7 @@ const handlePageChange = async (newPage) => {
 
 const fetchData = async() => {
   try {
+    console.log(searchStore.searchValue)
     searchStore.searchedMovies = await searchStore.searchMovie(searchStore.searchValue)
     console.log(searchStore.searchedMovies)
   } catch(error) {
@@ -40,7 +42,8 @@ const fetchData = async() => {
 watch(() => searchStore.currentPage, fetchData);
 
 onMounted(async () => {
-    await new Promise(resolve => setTimeout(resolve,1000))
+  await new Promise(resolve => setTimeout(resolve,1000))
+  moviesStore.currentPage = 1
 })
 </script>
 

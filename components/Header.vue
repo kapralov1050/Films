@@ -63,7 +63,6 @@ async function handleSearch() {
     isLoading.value = true
     const searchMoviesListData = await searchMovieStore.searchMovie(searchMovieStore.searchValue)
     searchMovieStore.searchedMovies = searchMoviesListData
-    searchMovieStore.searchValue = ''
     navigateTo('/search')
     isLoading.value = false
   } else {

@@ -1,9 +1,13 @@
 <template>
   <h1 class="title">
-    Popular Movies 
+    Popular Movies
   </h1>
   <article class="main">
-    <Filters class="filters"/>
+    <Filters 
+      class="filters" 
+      @reset="moviesStore.resetForm" 
+      @sort="moviesStore.handleSortChange()"
+    />
     <section class="content-wrapper">
       <ul 
         class="movies-list" 
@@ -15,15 +19,16 @@
           v-for="movie in moviesStore.selectedMoviesList.results" 
           :key="movie.id"
         >
-          <MovieCard :movie="movie"/>
+          <MovieCard :movie="movie" />
         </li>
       </ul>
     </section>
   </article>
   <Pagination
     @update:page="handlePageChange" 
-    :page="moviesStore.currentPage " 
-    :totalresults="moviesStore.selectedMoviesList.total_results" class="pagination"
+    :page="moviesStore.currentPage" 
+    :totalresults="moviesStore.selectedMoviesList.total_results" 
+    class="pagination"
   />
 </template>
 

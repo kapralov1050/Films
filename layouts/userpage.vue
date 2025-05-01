@@ -96,7 +96,7 @@ const mostWatchedGenres = computed(() => {
 .info-header {
   @include flex(row, flex-start, center, 4rem);
   width: 100%;
-  height: 15vh;
+  height: 20vh;
   box-sizing: border-box;
   padding-left: 4rem;
 }

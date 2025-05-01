@@ -11,6 +11,15 @@
         Create List 
       </el-button>
     </section>
+    <div class="empty-list" v-if="!listStore.userLists?.length">
+      <el-icon size="40" color="gold">
+        <List />
+      </el-icon>
+      There are no lists.
+      <NuxtLink to="/popular" style="color: black"> 
+        Back to Home
+      </NuxtLink>
+    </div>
     <section class="user-lists">
       <div v-for="list in listStore.userLists" :key="list.id" class="user-lists__item" @click="handleListSelect(list.id)">
         <NuxtImg
@@ -29,6 +38,8 @@
   
   
 <script setup lang="ts">
+import { List } from '@element-plus/icons-vue'
+
 const authStore = useAuthStore()
 const listStore = useListStore()
 
@@ -71,6 +82,12 @@ onMounted(async () => {
   height: 4rem;
   border:  solid gold;
   border-radius: 1rem; 
+}
+
+.empty-list {
+  margin-top: 3rem;
+  align-self: center;
+  @include flex(column, center, center, 1rem);
 }
   
 .user-lists {

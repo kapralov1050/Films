@@ -11,7 +11,7 @@
       class="header__search" 
       v-model="searchMovieStore.searchValue" 
       @keyup.enter="deboucedHandleSearch"
-      placeholder="Search" 
+      placeholder="Search for a movie..." 
       required
       clearable
     >

@@ -26,7 +26,7 @@ export interface movieWatchList {
 
 export interface paginationParams {
   page: number;
-  totalresults: number;
+  totalresults: number ;
 }
 
 export interface userData {

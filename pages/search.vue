@@ -1,9 +1,18 @@
 <template>
   <h1 class="title">Search Results</h1>
   <article class="main">
-    <ul class="movies-list" v-loading="searchStore.isLoading">
+    <div class="empty-list" v-if="!searchStore.searchedMovies?.results.length">
+      <el-icon size="40" color="gold">
+        <List />
+      </el-icon>
+      There are no movies that matched your query.
+      <NuxtLink to="/popular" style="color: black"> 
+        Back to Home
+      </NuxtLink>
+    </div>
+    <ul class="movies-list" v-loading="isLoading">
       <li 
-        v-for="movie in searchStore.searchedMovies.results" 
+        v-for="movie in searchStore.searchedMovies?.results" 
         :key="movie.id"
         class="movies-list__movie-card-container"
       >
@@ -13,21 +22,26 @@
     <Pagination 
       @update:page="handlePageChange" 
       :page="searchStore.currentPage" 
-      :totalresults="searchStore.searchedMovies.total_pages" class="pagination"
+      :totalresults="searchStore.searchedMovies?.total_pages" class="pagination"
+      v-if="searchStore.searchedMovies"
     />
   </article>
 </template>
 
 
-<script setup>
+<script setup lang="ts">
+import { List } from '@element-plus/icons-vue';
+
 const searchStore = useSearchMovieStore()
 const moviesStore = useMoviesStore()
+const isLoading = ref(false)
 
-const handlePageChange = async (newPage) => {
+const handlePageChange = async (newPage: number) => {
   searchStore.currentPage = newPage;
 }
 
 const fetchData = async() => {
+  isLoading.value = true
   try {
     console.log(searchStore.searchValue)
     searchStore.searchedMovies = await searchStore.searchMovie(searchStore.searchValue)
@@ -36,6 +50,7 @@ const fetchData = async() => {
   console.error('Error:', error)
   } finally {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+    isLoading.value = false
   }
 }
 
@@ -90,6 +105,11 @@ onMounted(async () => {
     justify-content: space-around;
     box-shadow: 0 2px 5px rgb(209, 209, 209);
   }
+}
+
+.empty-list {
+  align-self: center;
+  @include flex(column, center, center, 1rem);
 }
 
 .pagination {

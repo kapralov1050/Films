@@ -3,6 +3,7 @@ import type { Film, genres, languages,  } from '~/types/common'
 
 export const useMoviesStore = defineStore('moviesStore', () => {
   const selectedMoviesList = ref<{results: Film[], total_results: number}>({results: [], total_results: 0})
+  const selectedList = ref('popular')
   const currentPage = ref(1)
   const genres = ref<genres[]>([])
   const languages = ref<languages[]>([])
@@ -105,7 +106,7 @@ export const useMoviesStore = defineStore('moviesStore', () => {
 
   async function getPopularMovieList() {
       try{
-          const response = await instance.get('movie/popular', {
+          const response = await instance.get(`movie/${selectedList.value}`, {
             params: {
               language: 'en-US',
               page: currentPage.value
@@ -121,6 +122,7 @@ export const useMoviesStore = defineStore('moviesStore', () => {
   return {
     getPopularMovieList,
     selectedMoviesList,
+    selectedList,
     sortOptions,
     handleSortChange,
     genres,

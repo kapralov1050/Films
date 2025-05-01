@@ -64,7 +64,7 @@
     </div>
     <div class="rating">
       <p class="rating__average">
-        {{ movieDetailsStore.selectedMovie.vote_average }}
+        {{ (movieDetailsStore.selectedMovie.vote_average).toFixed(1) }}
       </p>
       <el-icon :size="30" class="star">
         <StarFilled color="rgb(255, 217, 0)" />

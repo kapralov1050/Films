@@ -10,7 +10,7 @@ definePageMeta({
 })
 
 onMounted(() => { 
-  navigateTo('/popular')
+  navigateTo('/homepage')
 })
 </script>
 

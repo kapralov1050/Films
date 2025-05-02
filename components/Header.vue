@@ -1,11 +1,22 @@
 <template>
   <div class="header">
     <NuxtLink to="/">
-      <img 
-        src="@/assets/images/logo.png" 
-        height="80px" 
-        class="header__logo"
-      >
+      <el-dropdown>
+        <img 
+          src="@/assets/images/logo.png" 
+          height="80px" 
+          class="header__logo"
+          style="outline: none; border: none;"
+        >
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item @click="handleListSelect('popular')"> Popular </el-dropdown-item>
+            <el-dropdown-item @click="handleListSelect('now_playing')"> Now Playing </el-dropdown-item>
+            <el-dropdown-item @click="handleListSelect('top_rated')"> Top Rated </el-dropdown-item>
+            <el-dropdown-item @click="handleListSelect('upcoming')"> Upcoming </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </NuxtLink>
     <el-input 
       class="header__search" 
@@ -21,7 +32,7 @@
     </el-input>
     <section class="header__user-block">
       <el-dropdown>
-        <span @click="handleAuthClick" text >
+        <span @click="handleAuthClick" style="outline: none; border: none;">
           {{ authStore.sessionId ? 'User' : 'login' }}
         </span>
         <template #dropdown v-if="authStore.sessionId">
@@ -41,6 +52,7 @@ import { Search } from '@element-plus/icons-vue'
 import { debounce } from '~/helpers/debounce'
 
 const searchMovieStore = useSearchMovieStore()
+const moviesStore = useMoviesStore()
 const authStore = useAuthStore()
 const ratingStore = useRatingStore()
 const { loginWithTmdb } = useAuth()
@@ -70,6 +82,10 @@ async function handleSearch() {
   }
 }
 
+const handleListSelect = (listName) => {
+  moviesStore.selectedList = listName
+}
+
 const deboucedHandleSearch = debounce(handleSearch, 300)
 </script>
 
@@ -79,7 +95,7 @@ $font-stack: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
 .header {
   height: inherit;
-  padding: 0 25px;
+  padding: 0 2rem;
   @include flex(row, space-between, center, 0);
   border-bottom: 1px solid #dcdfe6;
 
@@ -92,5 +108,11 @@ $font-stack: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     cursor: pointer;
     width: fit-content;
   }
+}
+
+.el-dropdown .header__logo:hover {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 </style>

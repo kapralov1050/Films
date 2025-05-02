@@ -20,6 +20,15 @@ export const useMoviesStore = defineStore('moviesStore', () => {
     vote_count: 0,
     runtime: [0, 400],
     })
+  
+  const selectedListTitle = computed(() => {
+    return selectedList.value
+      .split('_')
+      .map((item) => {
+        return item[0].toUpperCase() + item.slice(1, item.length);
+      })
+      .join(' ');
+  });
 
   async function handleSortChange() {
     try {
@@ -123,6 +132,7 @@ export const useMoviesStore = defineStore('moviesStore', () => {
     getPopularMovieList,
     selectedMoviesList,
     selectedList,
+    selectedListTitle,
     sortOptions,
     handleSortChange,
     genres,

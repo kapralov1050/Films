@@ -5,7 +5,7 @@
       <List />
     </el-icon>
     There are no movies in watchlist.
-    <NuxtLink to="/popular" style="color: black"> 
+    <NuxtLink to="/homepage" style="color: black"> 
       Back to Home
     </NuxtLink>
   </div>

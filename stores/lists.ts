@@ -20,10 +20,12 @@ export const useListStore = defineStore('listStore', () => {
       })
       console.log(response.data)
       listId.value = response.data.list_id
-      ElMessage({
-        message: `List ${listName.value} created`,
-        type: 'success'
-      })
+      if(response.data.success) {
+        ElMessage({
+          message: `List ${listName.value} created`,
+          type: 'success'
+        })
+      }
       return response.data
     } catch (error) {
       console.log('Error while create new list:', error)

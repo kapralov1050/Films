@@ -1,6 +1,6 @@
 <template>
   <h1 class="title">
-    Popular Movies
+    {{ moviesStore.selectedListTitle }}
   </h1>
   <article class="main">
     <Filters 
@@ -53,6 +53,7 @@ const fetchData = async() => {
 }
 
 watch(() => moviesStore.currentPage, fetchData);
+watch(() => moviesStore.selectedList, fetchData);
 
 onMounted(async () => {
   isLoading.value = true

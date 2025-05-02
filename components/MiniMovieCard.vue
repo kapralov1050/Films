@@ -45,7 +45,6 @@ const backdrop_url = computed(() => {
 <style scoped lang='scss'>
 .movie-card {
   @include flex(row, flex-start, flex-start, 0);
-  width: inherit;
 
   &__image {
     display: flex;

@@ -16,8 +16,7 @@
           <MiniMovieCard class="suggestion-movie" :movie="movie"/>
           <el-button 
             circle 
-            :icon="CirclePlus" 
-            type="info" 
+            :icon="Plus" 
             @click="addMovieToList(movie.id)" 
             :loading="processAdd" 
           />
@@ -29,7 +28,7 @@
 
 
 <script setup lang='ts'>
-import { CirclePlus } from '@element-plus/icons-vue'
+import { CirclePlus, Plus } from '@element-plus/icons-vue'
 import { debounce } from '~/helpers/debounce'
 
 const listStore = useListStore()
@@ -82,8 +81,8 @@ onMounted(async () => {
 }
 
 .suggestion-item {
-  @include flex(row, flex-start, center, 0);
-  width: 70%;
+  @include flex(flex, space-between, center, 3rem);
+  width: 35rem;
 }
 
 .suggestion-movie {

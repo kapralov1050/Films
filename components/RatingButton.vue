@@ -50,8 +50,6 @@ const props = defineProps({
 const ratingStore = useRatingStore()
 const authStore = useAuthStore()
 const { loginWithTmdb } = useAuth()
-const { sessionId, userData } = storeToRefs(authStore)
-const { getRating, rateMovie, removeRating } = ratingStore
 const rateBlockVisible = ref(false)
 const userRating = ref(0)
 const isLoading = ref(false)
@@ -60,24 +58,13 @@ const currentRating = ref<number | null>(null)
 const handleRateMovie = async () => {
   isLoading.value = true
   try {
-    const isRated = await rateMovie(props.movieId, userRating.value)
+    const isRated = await ratingStore.rateMovie(props.movieId, userRating.value)
     if (isRated) currentRating.value = userRating.value
     rateBlockVisible.value = false
   } catch (error) {
     console.log('Rating failed', error)
   } finally {
     isLoading.value = false;
-  }
-}
-
-async function loadRating() {
-  try {
-    if(userData.value?.id && sessionId.value) {
-      await ratingStore.getRatedMovies(userData.value.id)
-    }
-  } catch (error) {
-    console.log('error loading rating', error)
-    throw error
   }
 }
 
@@ -91,16 +78,13 @@ const toggleRateBlock = () => {
 
 const handleRemove = () => {
   isLoading.value = true
-  const isRemoved = removeRating(props.movieId)
+  const isRemoved = ratingStore.removeRating(props.movieId)
   if(isRemoved) currentRating.value = null
   isLoading.value = false
 }
 
 onMounted( async () => {
-  isLoading.value = true
-  await loadRating()
-  currentRating.value = getRating(props.movieId)
-  isLoading.value = false
+  currentRating.value = ratingStore.getRating(props.movieId)
 })
 </script>
 

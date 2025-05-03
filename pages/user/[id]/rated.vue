@@ -1,5 +1,4 @@
 <template>
-  <div class="rated-movies-container">
     <h1 class="title">Rated Movies</h1>
     <div 
       class="movies-list-empty" 
@@ -22,14 +21,13 @@
       element-loading-text="Loading..."
     >
       <li 
-        class="movies-list__movie-card-container"
+        class="movies-list__item"
         v-for="movie in ratingStore.ratedMovies"
         :key="movie.id"
       >
         <MovieCard :movie="movie" />
       </li>
     </ul>
-  </div>
 </template>
 
 
@@ -82,10 +80,10 @@ onMounted(async () => {
 .movies-list {
   @include flex(column, flex-start, center, 2rem);
   align-self: center;
-  min-height: 60vh;
+  height: fit-content;
   width: 95%;
   
-  &__movie-card-container {
+  &__item {
     width: inherit;
     height: fit-content;
     padding: 1rem;

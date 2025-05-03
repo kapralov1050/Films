@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <el-header class="header">
     <NuxtLink to="/">
       <el-dropdown>
         <img 
@@ -59,7 +59,7 @@
         </template>
       </el-dropdown>
     </section>
-  </div>
+  </el-header>
 </template>
 
 

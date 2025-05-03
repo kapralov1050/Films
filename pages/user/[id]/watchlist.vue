@@ -43,13 +43,13 @@
 <script setup>
 import { List } from '@element-plus/icons-vue'
 
-definePageMeta({
-  layout: "userpage",
-  middleware: 'auth'
-})
-
 const authStore = useAuthStore()
 const isLoading = ref(false)
+
+definePageMeta({
+  layout: 'userpage',
+  middleware: 'auth'
+})
 
 onMounted(async () => {
   isLoading.value = true
@@ -87,10 +87,11 @@ onMounted(async () => {
 
 .movies-list {
   @include flex(column, flex-start, center, 2rem);
+  align-self: center;
   height: fit-content;
   width: 95%;
   
-  &__movie-card-container {
+  &__item {
     width: inherit;
     height: fit-content;
     padding: 1rem;

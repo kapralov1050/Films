@@ -21,10 +21,6 @@ export const useRatingStore = defineStore('ratingStore', () => {
   }
 
   const getRatedMovies = async (accountId: number) => {
-    if(!authStore.sessionId) {
-      console.log('session Id is not available')
-      return []
-    }
     try {
       const { data } = await instance.get(`account/${accountId}/rated/movies`, {
         params: {

@@ -2,8 +2,10 @@ import { type UserLists, type Film, type ListDetailsResponse, type List } from "
 
 export const useListStore = defineStore('listStore', () => {
   const authStore = useAuthStore()
-  const listName = ref('')
-  const listDescription = ref('')
+  const listForm = reactive({
+    name: '',
+    description: ''
+  })
   const listId = ref<number>()
   const listDetails = ref<ListDetailsResponse>()
   const moviesInList = ref<Film[]>([])
@@ -13,15 +15,15 @@ export const useListStore = defineStore('listStore', () => {
   async function createList(){
     try {
       const response = await instance.post( `list?session_id=${authStore.sessionId}`, {
-        name: listName.value,
-        description: listDescription.value,
+        name: listForm.name,
+        description: listForm.description,
         language: 'en'
       })
       console.log(response.data)
       listId.value = response.data.list_id
       if(response.data.success) {
         ElMessage({
-          message: `List ${listName.value} created`,
+          message: `List ${listForm.name} created`,
           type: 'success'
         })
       }
@@ -148,8 +150,7 @@ export const useListStore = defineStore('listStore', () => {
   }
 
   return {
-    listName,
-    listDescription,
+    listForm,
     listId,
     createList,
     movieToAdd,

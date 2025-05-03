@@ -1,10 +1,10 @@
 <template>
   <el-form>
     <el-form-item label="Name" label-position="left">
-      <el-input v-model="listStore.listName"/>
+      <el-input v-model="listStore.listForm.name"/>
     </el-form-item>
     <el-form-item label="Description" label-position="left">
-      <el-input type="textarea" v-model="listStore.listDescription" />
+      <el-input type="textarea" v-model="listStore.listForm.description" />
     </el-form-item>
   </el-form>
 </template>
@@ -24,6 +24,7 @@ const listStore = useListStore()
 }
 
 .el-form-item {
-  @include flex(column, )
+  display: flex;
+  flex-direction: column;
 }
 </style>

@@ -69,8 +69,8 @@ const handleListSelect = (id: number) => {
 }
 
 definePageMeta({
-    layout: "userpage",
-    middleware: 'auth'
+  layout: 'userpage',
+  middleware: 'auth'
 })
 
 onMounted(async () => {

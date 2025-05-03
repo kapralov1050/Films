@@ -1,8 +1,6 @@
 <template>
   <el-container>
-    <el-header>
-      <Header />
-    </el-header>
+    <Header />
     <el-main>
       <section class="user-header">
         <div class="user-title">
@@ -62,12 +60,14 @@
 </template>
 
 
-<script setup>
+<script setup lang="ts">
+import type { Genre } from '~/types/common'
+
 const authStore = useAuthStore()
 const ratingStore = useRatingStore()
 const username = authStore.userData?.username || 'No data'
 
-function handleSelect(key) {
+function handleSelect(key: string) {
   switch (key) {
     case "1":
       navigateTo(`/user/${username}/rated`)
@@ -80,40 +80,49 @@ function handleSelect(key) {
   }
 }
 
-const mostWatchedGenres = computed(() => {
-  const moviesGenres = ratingStore.ratedMovies.map(movie => movie.genre_ids)
-  const genreCounts = moviesGenres.flat().reduce((acc, genreId) => {
-    if (acc[genreId]) {
-      acc[genreId]++
-    } else {
-      acc[genreId] = 1
-    }
-    return acc
-  }, {})
-  
+const mostWatchedGenres = computed<Genre[]>(() => {
+  if(!ratingStore.ratedMovies?.length) return [];
+
+  const moviesGenres: number[][] = ratingStore.ratedMovies.map(
+    movie => movie.genre_ids
+  );
+
+  const genreCounts: Record<number, number> = moviesGenres
+    .flat()
+    .reduce((acc: Record<number, number>, genreId: number) => {
+      if (acc[genreId]) {
+        acc[genreId]++;
+      } else {
+        acc[genreId] = 1;
+      }
+      return acc;
+    }, {} as Record<number, number>);
+
   const sortedGenres = Object.entries(genreCounts)
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 3)
-  
-  const genresFromStorage = JSON.parse(localStorage.getItem('tmdb_genres'))
+    .slice(0, 3);
+
+  const genresFromStorage = JSON.parse(
+    localStorage.getItem('tmdb_genres') || 'null'
+  );
+
   const topGenres = sortedGenres.map(([genreId, count]) => {
-    const genre = genresFromStorage.find((g) => g.id === Number(genreId))
-    return genre.name
-  })
-  
-  return topGenres
-})
+    const genre = genresFromStorage.find(
+      (g: { name: string; id: number }) => g.id === Number(genreId));
+    return genre.name;
+  });
+
+  return topGenres;
+});
 </script>
 
 
 <style scoped lang="scss">
-.el-main, .el-header, .el-container {
+.el-main, .el-container {
   padding: 0;
   margin: 0;
-}
-
-.el-main {
-  @include flex(column, center, center, 0);
+  display: flex;
+  flex-direction: column;
 }
 
 .user-header {
@@ -181,6 +190,7 @@ const mostWatchedGenres = computed(() => {
 
 .page-content {
   padding: 2rem 0 ;
+  align-self: center;
   width: 60vw;
 }
 </style>

@@ -36,6 +36,7 @@
 <script setup>
 const moviesStore = useMoviesStore()
 const authStore = useAuthStore()
+const ratingStore = useRatingStore()
 const isLoading = ref(false)
 
 const handlePageChange = async (newPage) => {
@@ -57,18 +58,24 @@ watch(() => moviesStore.selectedList, fetchData);
 
 onMounted(async () => {
   isLoading.value = true
-  moviesStore.resetForm
   try{
     moviesStore.genres = await moviesStore.fetchGenres()
     moviesStore.languages = await moviesStore.fetchLanguages()
-    authStore.getWatchList()
-    await new Promise(resolve => setTimeout(resolve, 1000))
     fetchData()
+    if(authStore.userData && authStore.sessionId) {
+      ratingStore.getRatedMovies(authStore.userData.id)
+      authStore.getWatchList()
+    }
+    await new Promise(resolve => setTimeout(resolve, 1000))
   } catch(error) {
     console.error('Error:', error)
   } finally {
     isLoading.value = false
   }
+})
+
+onBeforeUnmount(() => {
+  moviesStore.resetForm
 })
 </script>
 

@@ -1,8 +1,6 @@
 <template>
   <el-container>
-    <el-header>
-      <Header />
-    </el-header>
+    <Header />
     <el-main>
       <slot />
     </el-main>
@@ -16,9 +14,14 @@
 
 
 <style scoped lang="scss">
-.el-main, .el-header, .el-container {
+.el-main, .el-container {
   padding: 0;
   margin: 0;
+}
+
+.el-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .el-header {

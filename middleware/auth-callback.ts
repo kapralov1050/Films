@@ -3,7 +3,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     try {
       const { handleCallback } = useAuth()
       await handleCallback()
-      const returnPath = localStorage.getItem('return_path') || '/'
+      const returnPath = localStorage.getItem('return_path') || '/homepage'
       localStorage.removeItem('return_path')
       return navigateTo(decodeURIComponent(returnPath), { replace: true })
     } catch (error) {

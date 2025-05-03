@@ -22,10 +22,6 @@
 import AddMoviesToListForm from '~/components/AddMoviesToListForm.vue'
 import CreateNewListForm from '~/components/CreateNewListForm.vue'
 
-definePageMeta({
-    middleware: 'auth'
-})
-
 const authStore = useAuthStore()
 const listStore = useListStore()
 const activeStep = ref(1)
@@ -34,6 +30,10 @@ const steps = {
   CreateNewListForm,
   AddMoviesToListForm,
 }
+
+definePageMeta({
+  middleware: 'auth'
+})
 
 const next = () => {
   if(activeStep.value <= 2) {

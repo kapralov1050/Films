@@ -46,7 +46,7 @@ export interface WatchListResponse {
   total_results: number;
 }
 
-export interface genres {
+export interface Genre {
   id: number;
   name: string
 }

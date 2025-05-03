@@ -84,11 +84,6 @@ import { CloseBold, EditPen, Finished } from '@element-plus/icons-vue'
 import { averageRating } from '~/helpers/averagerating'
 import { dateToYear } from '~/helpers/formatDate'
 
-definePageMeta({
-  layout: 'userpage',
-  middleware: 'auth'
-})
-
 const listStore = useListStore()
 const authStore = useAuthStore()
 const showAddMoviesModal = ref(false)

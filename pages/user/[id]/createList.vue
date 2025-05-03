@@ -39,7 +39,7 @@ const next = () => {
   if(activeStep.value <= 2) {
     switch(activeStep.value) {
       case 1:
-        listStore.createdListInfo.value = listStore.createList()
+        listStore.createList()
         currentStepForm.value = "AddMoviesToListForm"
         activeStep.value++
         break

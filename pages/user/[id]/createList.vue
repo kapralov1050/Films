@@ -10,7 +10,7 @@
       size="large" 
       class="progress__nextstep-button" 
       @click="next" 
-      :disabled="!listStore.listName"
+      :disabled="!listStore.listForm.name"
     > 
       {{ activeStep == 1 ? 'Next Step' : 'Done' }} 
     </el-button>

@@ -2,8 +2,7 @@
   <article class="movie-card" v-loading="isLoading">
     <NuxtImg
       class="movie-card__poster"
-      :src="`https://image.tmdb.org/t/p/w500
-      ${movieDetailsStore.selectedMovie.poster_path}`"
+      :src="`https://image.tmdb.org/t/p/w500${movieDetailsStore.selectedMovie.poster_path}`"
       :alt="movieDetailsStore.selectedMovie.title"
       format="webp"
     />

@@ -1,38 +1,54 @@
 <template>
-    <section class="title-block">
-      <h1 class="title"> My Lists </h1>
-      <el-button 
-        @click="handleCreateList()"
-        type="primary" 
-        size="large" 
-        color="#ffd900" 
-        style="color: white; font-weight: bold; font-size: 1.2rem;"
-      > 
-        Create List 
-      </el-button>
-    </section>
-    <div class="empty-list" v-if="!listStore.userLists?.length">
-      <el-icon size="40" color="gold">
-        <List />
-      </el-icon>
-      There are no lists.
-      <NuxtLink to="/homepage" style="color: black"> 
-        Back to Home
-      </NuxtLink>
-    </div>
-    <section class="user-lists">
-      <div v-for="list in listStore.userLists" :key="list.id" class="user-lists__item" @click="handleListSelect(list.id)">
-        <NuxtImg
-          class="user-lists__background"
-          :src="list.poster_path || 'https://cdn-icons-png.flaticon.com/512/16/16410.png'"
-          loading="lazy"
-          format="webp"
-        />
-        <div class="user-lists__info">
-          <h3> {{ list.name }} </h3>
-          <p> {{ list.item_count || 0 }} {{ list.item_count > 1 ? 'items' : 'item' }}</p>
-        </div>
+  <section class="header">
+    <h1 class="header__title">My Lists</h1>
+    <el-button
+      @click="handleCreateList()"
+      type="primary"
+      size="large"
+      color="#ffd900"
+      style="
+        color: white;
+        font-weight: bold;
+        font-size: 1.2rem;
+      "
+    >
+      Create List
+    </el-button>
+  </section>
+  <div 
+    class="movies-list-empty" 
+    v-if="!listStore.userLists?.length"
+  >
+    <el-icon size="40" color="gold">
+      <List />
+    </el-icon>
+    There are no lists.
+    <NuxtLink to="/homepage" style="color: black">
+      Back to Home
+    </NuxtLink>
+  </div>
+  <section class="user-lists">
+    <div
+      v-for="list in listStore.userLists"
+      :key="list.id"
+      class="user-lists__item"
+      @click="handleListSelect(list.id)"
+    >
+      <NuxtImg
+        class="user-lists__background"
+        :src="list.poster_path || 
+          'https://cdn-icons-png.flaticon.com/512/16/16410.png'"
+        loading="lazy"
+        format="webp"
+      />
+      <div class="user-lists__info">
+        <h3>{{ list.name }}</h3>
+        <p>
+          {{ list.item_count || 0 }}
+          {{ list.item_count > 1 ? 'items' : 'item' }}
+        </p>
       </div>
+    </div>
   </section>
 </template>
   
@@ -65,26 +81,26 @@ onMounted(async () => {
   
   
 <style scoped lang="scss">
-.title-block {
+.header {
   display: flex;
   justify-content: space-between;
+
+  &__title {
+    padding-left: 1rem;
+    margin-bottom: 2rem;
+    font-size: 3rem;
+
+    &::before {
+      content: "";
+      margin-right: 1rem;
+      height: 4rem;
+      border:  solid gold;
+      border-radius: 1rem; 
+    }
+  }
 }
 
-.title {
-  padding-left: 1rem;
-  margin-bottom: 2rem;
-  font-size: 3rem;
-}
-
-.title::before {
-  content: "";
-  margin-right: 1rem;
-  height: 4rem;
-  border:  solid gold;
-  border-radius: 1rem; 
-}
-
-.empty-list {
+.movies-list-empty {
   margin-top: 3rem;
   align-self: center;
   @include flex(column, center, center, 1rem);

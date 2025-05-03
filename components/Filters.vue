@@ -13,22 +13,20 @@
         :label="option.label"
       />
     </el-select>
-    <el-form 
-      :model="filtersForm" 
-    >
+    <el-form :model="filtersForm">
       <el-form-item label="Genres" label-position="left">
-          <el-checkbox-group v-model="filtersForm.genre">
-            <el-checkbox-button 
-              v-for="genre in moviesStore.genres" 
-              :key="genre.id" 
-              :value="genre.id"
-            >
-              {{ genre.name }}
-            </el-checkbox-button>
-          </el-checkbox-group>
+        <el-checkbox-group v-model="filtersForm.genre">
+          <el-checkbox-button
+            v-for="genre in moviesStore.genres"
+            :key="genre.id"
+            :value="genre.id"
+          >
+            {{ genre.name }}
+          </el-checkbox-button>
+        </el-checkbox-group>
       </el-form-item>
       <el-form-item label="Release Dates" label-position="left">
-        <el-date-picker 
+        <el-date-picker
           type="daterange"
           v-model="filtersForm.release_date"
           format="YYYY/MM/DD"
@@ -40,15 +38,15 @@
         />
       </el-form-item>
       <el-form-item label="Language" label-position="left">
-        <el-select 
-          v-model="filtersForm.language" 
+        <el-select
+          v-model="filtersForm.language"
           filterable
           placeholder="None Selected"
         >
-          <el-option 
-            v-for="language in moviesStore.languages" 
-            :key="language.english_name" 
-            :label="language.english_name" 
+          <el-option
+            v-for="language in moviesStore.languages"
+            :key="language.english_name"
+            :label="language.english_name"
             :value="language.iso_639_1"
           >
             {{ language.english_name }}
@@ -56,41 +54,43 @@
         </el-select>
       </el-form-item>
       <el-form-item label="User Score" label-position="left">
-        <el-slider 
-          v-model="filtersForm.vote_average" 
-          range show-stops 
-          :max="10" 
-          :marks="scoreMarks" 
+        <el-slider
+          v-model="filtersForm.vote_average"
+          range
+          show-stops
+          :max="10"
+          :marks="scoreMarks"
         />
       </el-form-item>
       <el-form-item label="Minimum User Votes" label-position="left">
-        <el-slider 
-          v-model="filtersForm.vote_count" 
-          show-stops 
-          :step="100" 
-          :max="500" 
-          :marks="votesMarks" 
+        <el-slider
+          v-model="filtersForm.vote_count"
+          show-stops
+          :step="100"
+          :max="500"
+          :marks="votesMarks"
         />
       </el-form-item>
       <el-form-item label="Runtime" label-position="left">
-        <el-slider 
-          v-model="filtersForm.runtime" 
-          range show-stops 
-          :step="15" 
-          :max="400" 
-          :marks="runtimeMarks" 
+        <el-slider
+          v-model="filtersForm.runtime"
+          range
+          show-stops
+          :step="15"
+          :max="400"
+          :marks="runtimeMarks"
         />
       </el-form-item>
-      <el-button 
-        round 
-        text 
-        bg 
-        @click="$emit('reset')" 
+      <el-button
+        round
+        text
+        bg
+        @click="$emit('reset')"
       >
         Clear Form
       </el-button>
     </el-form>
-    <el-button 
+    <el-button
       class="filter-button"
       type="primary"
       :disabled="!filtersChanged"
@@ -102,14 +102,16 @@
 </template>
 
 
-<script setup>
+<script setup lang="ts">
 const moviesStore = useMoviesStore()
 const { filtersForm, filtersChanged } = storeToRefs(moviesStore)
 
-watch(() => moviesStore.filtersForm, () => {
+watch(
+  () => moviesStore.filtersForm,
+  () => {
     filtersChanged.value = true
   },
-  { deep: true,}
+  { deep: true }
 )
 
 const scoreMarks = ref({

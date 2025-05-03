@@ -1,29 +1,43 @@
 <template>
-  <h1 class="title">WatchList</h1>
-  <div class="empty-list" v-if="!authStore.watchListMovies.length">
-    <el-icon size="40" color="gold">
-      <List />
-    </el-icon>
-    There are no movies in watchlist.
-    <NuxtLink to="/homepage" style="color: black">
-      Back to Home 
-    </NuxtLink>
-  </div>
-  <ul 
-    class="movies-list" 
-    v-loading="isLoading" 
-    element-loading-text="Loading..."
-  >
-    <li 
-      class="movies-list__movie-card-container" 
-      v-for="movie in authStore.watchListMovies" 
-      :key="movie.id"
+  <div class="watchlist-page">
+    <h1 class="title">WatchList</h1>
+    <div 
+      v-if="!authStore.watchListMovies.length" 
+      class="movies-list-empty"
     >
-      <MovieCard :movie="movie"/>
-    </li>
-  </ul>
+      <el-icon 
+        size="40" 
+        color="gold"
+      >
+        <List />
+      </el-icon>
+      <p>There are no movies in your watchlist.</p>
+      <NuxtLink 
+        to="/homepage" 
+        class="home-link"
+      >
+        Back to Home
+      </NuxtLink>
+    </div>
+    <ul 
+      v-else
+      class="movies-list" 
+      v-loading="isLoading"
+      element-loading-text="Loading..."
+    >
+      <li 
+        v-for="movie in authStore.watchListMovies"
+        :key="movie.id"
+        class="movies-list__item"
+      >
+        <MovieCard 
+          :movie="movie"
+          @remove="handleRemoveFromWatchlist(movie.id)"
+        />
+      </li>
+    </ul>
+  </div>
 </template>
-
 
 
 <script setup>
@@ -50,24 +64,22 @@ onMounted(async () => {
 </script>
 
 
-
-
 <style scoped lang="scss">
 .title {
   padding-left: 1rem;
   margin-bottom: 2rem;
   font-size: 3rem;
+
+  &::before {
+    content: "";
+    margin-right: 1rem;
+    height: 4rem;
+    border:  solid gold;
+    border-radius: 1rem; 
+  }
 }
 
-.title::before {
-  content: "";
-  margin-right: 1rem;
-  height: 4rem;
-  border:  solid gold;
-  border-radius: 1rem; 
-}
-
-.empty-list {
+.movies-list-empty {
   margin-top: 3rem;
   align-self: center;
   @include flex(column, center, center, 1rem);
@@ -87,10 +99,5 @@ onMounted(async () => {
     justify-content: space-around;
     box-shadow: 0 2px 5px rgb(209, 209, 209);
   }
-}
-
-.pagination {
-  align-self: center;
-  margin: 2rem;
 }
 </style>

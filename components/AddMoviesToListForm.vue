@@ -1,19 +1,26 @@
 <template>
   <el-form>
     <el-form-item label="Add Movies" label-position="left">
-      <el-input v-model="listStore.movieToAdd" @input="deboucedHandleInput" placeholder="Search for a movie..."/>
+      <el-input 
+        v-model="listStore.movieToAdd" 
+        @input="deboucedHandleInput" 
+        placeholder="Search for a movie..."
+      />
     </el-form-item>
     <el-scrollbar max-height="40rem">
       <ul 
         element-loading-text="Loading..."
-        class="suggestions" 
+        class="suggestions-list" 
       >
         <li 
-          class="suggestion-item"
+          class="suggestion-list__item"
           v-for="movie in searchSuggestions" 
           :key="movie.id"
         >
-          <MiniMovieCard class="suggestion-movie" :movie="movie"/>
+          <MiniMovieCard 
+            class="suggestion-list__movie" 
+            :movie="movie"
+          />
           <el-button 
             circle 
             :icon="Plus" 
@@ -28,7 +35,7 @@
 
 
 <script setup lang='ts'>
-import { CirclePlus, Plus } from '@element-plus/icons-vue'
+import { Plus } from '@element-plus/icons-vue'
 import { debounce } from '~/helpers/debounce'
 
 const listStore = useListStore()
@@ -36,7 +43,8 @@ const searchStore = useSearchMovieStore()
 const processAdd = ref(false)
 
 const searchSuggestions = computed(() => {
-  if(searchStore.searchedMovies) return searchStore.searchedMovies.results.slice(0, 20)  
+  if (searchStore.searchedMovies) 
+    return searchStore.searchedMovies.results.slice(0, 20)  
 })
 
 async function handleInput() {
@@ -47,7 +55,7 @@ async function handleInput() {
 const deboucedHandleInput = debounce(handleInput, 1000)
 
 async function addMovieToList(movieId: number) {
-  if(processAdd.value) return
+  if (processAdd.value) return
 
   processAdd.value = true
   try {
@@ -63,7 +71,7 @@ async function addMovieToList(movieId: number) {
 }
 
 onMounted(async () => {
-  if(listStore.listId) await listStore.loadListDetails(listStore.listId)
+  if (listStore.listId) await listStore.loadListDetails(listStore.listId)
 })
 </script>
 
@@ -76,17 +84,17 @@ onMounted(async () => {
   border-radius: 0.5rem;
 }
 
-.suggestions {
+.suggestions-list {
   margin: 1rem 0 0 1rem;
-}
 
-.suggestion-item {
-  @include flex(flex, space-between, center, 3rem);
-  width: 35rem;
-}
+  &__item {
+    @include flex(flex, space-between, center, 3rem);
+    width: 35rem;
+  }
 
-.suggestion-movie {
-  margin-top: 1.5rem;
-  padding: 0.5rem;
+  &__movie {
+    margin-top: 1.5rem;
+    padding: 0.5rem;
+  }
 }
 </style>

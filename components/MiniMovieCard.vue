@@ -36,8 +36,11 @@ import type { Film } from '~/types/common';
 const props = defineProps<{movie: Film}>();
 
 const backdrop_url = computed(() => {
-  if(props.movie.backdrop_path) return `https://image.tmdb.org/t/p/w92${props.movie.backdrop_path}`
-  return 'https://cdn-icons-png.flaticon.com/512/16/16410.png'
+  if(props.movie.backdrop_path) {
+    return `https://image.tmdb.org/t/p/w92${props.movie.backdrop_path}`
+  } else {
+    return 'https://cdn-icons-png.flaticon.com/512/16/16410.png'
+  }
 })
 </script>
 

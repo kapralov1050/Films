@@ -54,8 +54,8 @@ export const useAuthStore = defineStore('authStore', () => {
 
   const getWatchList = async () => {
     if(userData.value?.id) {
-    const movies = await getWatchListMovies(userData.value.id)
-    watchListMovies.value = movies
+      const movies = await getWatchListMovies(userData.value.id)
+      watchListMovies.value = movies
     } 
   }
 

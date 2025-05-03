@@ -1,39 +1,57 @@
 <template>
   <el-container>
     <el-header>
-    <Header />
+      <Header />
     </el-header>
     <el-main>
-      <section class="info-header">
+      <section class="user-header">
         <div class="user-title">
           <div class="user-title__logo">
             {{ username[0] }}
           </div>
-          <h1 class="user-title__name"> {{ username }} </h1>
+          <h1 class="user-title__name">
+            {{ username }}
+          </h1>
         </div>
         <div class="user-stats">
           <h2 class="user-stats__title">Stats:</h2>
           <ul class="user-stats__list">
             <li class="user-stats__item">
               <p>Total Ratings</p>
-              <p class="user-stats__value"> {{ ratingStore.ratedMovies?.length }} </p>
+              <p class="user-stats__value">
+                {{ ratingStore.ratedMovies?.length }}
+              </p>
             </li>
-            <li>
+            <li class="user-stats__item">
               <p>Movies in WatchList</p>
-              <p class="user-stats__value"> {{ authStore.watchListMovies?.length }} </p>
+              <p class="user-stats__value">
+                {{ authStore.watchListMovies?.length }}
+              </p>
             </li>
-            <li>
+            <li class="user-stats__item">
               <p>Most Watched Genres</p>
-              <p class="user-stats__value" v-for="genre in mostWatchedGenres" :key="genre.id"> /{{ genre }} </p>
+              <p 
+                class="user-stats__value" 
+                v-for="genre in mostWatchedGenres" 
+                :key="genre.id"
+              >
+                /{{ genre }}
+              </p>
             </li>
           </ul>
         </div>
       </section>
       <section>
         <el-menu class="menu" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1" class="menu__option"> Rated Films </el-menu-item>
-        <el-menu-item index="2" class="menu__option"> WatchList </el-menu-item>
-        <el-menu-item index="3" class="menu__option"> Lists </el-menu-item>
+          <el-menu-item index="1" class="menu__item">
+            Rated Films
+          </el-menu-item>
+          <el-menu-item index="2" class="menu__item">
+            WatchList
+          </el-menu-item>
+          <el-menu-item index="3" class="menu__item">
+            Lists
+          </el-menu-item>
         </el-menu>
       </section>
       <section class="page-content">
@@ -47,37 +65,42 @@
 <script setup>
 const authStore = useAuthStore()
 const ratingStore = useRatingStore()
-const username = authStore.userData.username;
+const username = authStore.userData?.username || 'No data'
 
 function handleSelect(key) {
-  switch(key) {
+  switch (key) {
     case "1":
-    navigateTo(`/user/${username}/rated`)
-    break
+      navigateTo(`/user/${username}/rated`)
+      break
     case "2":
-    navigateTo(`/user/${username}/watchlist`)
-    break
+      navigateTo(`/user/${username}/watchlist`)
+      break
     case "3":
-    navigateTo(`/user/${username}/lists`)
+      navigateTo(`/user/${username}/lists`)
   }
 }
 
 const mostWatchedGenres = computed(() => {
   const moviesGenres = ratingStore.ratedMovies.map(movie => movie.genre_ids)
   const genreCounts = moviesGenres.flat().reduce((acc, genreId) => {
-    if(acc[genreId]) {
+    if (acc[genreId]) {
       acc[genreId]++
     } else {
       acc[genreId] = 1
     }
     return acc
   }, {})
-  const sortedGenres = Object.entries(genreCounts).sort((a,b) => b[1] - a[1]).slice(0,3)
+  
+  const sortedGenres = Object.entries(genreCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+  
   const genresFromStorage = JSON.parse(localStorage.getItem('tmdb_genres'))
   const topGenres = sortedGenres.map(([genreId, count]) => {
     const genre = genresFromStorage.find((g) => g.id === Number(genreId))
     return genre.name
   })
+  
   return topGenres
 })
 </script>
@@ -93,7 +116,7 @@ const mostWatchedGenres = computed(() => {
   @include flex(column, center, center, 0);
 }
 
-.info-header {
+.user-header {
   @include flex(row, flex-start, center, 4rem);
   width: 100%;
   height: 20vh;
@@ -149,7 +172,8 @@ const mostWatchedGenres = computed(() => {
   @include flex(row, center, center, 3rem);
   width: 100vw;
   border: 1px solid rgb(211, 211, 211);
-  &__option {
+
+  &__item {
     font-size: 1.5rem;
     font-weight: 500;
   }
@@ -159,5 +183,4 @@ const mostWatchedGenres = computed(() => {
   padding: 2rem 0 ;
   width: 60vw;
 }
-
 </style>

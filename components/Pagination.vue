@@ -5,17 +5,14 @@
   >
     <li 
       class="pagination__item" 
-      @click="() => {
-        currentPage--;
-        handleClick(currentPage);
-      }" 
+      @click="handlePrevClick"
       v-if="currentPage > 1"
     >
       <el-icon><ArrowLeftBold /></el-icon>
     </li>
     <li 
       class="pagination__item" 
-      :class="{ 'active': currentPage === 1 }" 
+      :class="{ 'pagination__item--active': currentPage === 1 }" 
       @click="handleClick(1)"
     >
       1
@@ -23,19 +20,16 @@
     <li 
       v-if="farFromStart" 
       class="pagination__item" 
-      @click="() => {
-        currentPage -= 5;
-        handleClick(currentPage);
-      }" 
+      @click="handleJumpBack"
       :disabled="currentPage === 1"
     >
       ...
     </li>
-    <ul style="display: flex">
+    <ul class="pagination__pages-list">
       <li 
         v-for="item in showedPages" 
         class="pagination__item" 
-        :class="{ 'active': item === currentPage }" 
+        :class="{ 'pagination__item--active': item === currentPage }" 
         @click.self="handleClick(item)"
       >
         {{ item }}
@@ -44,27 +38,21 @@
     <li 
       v-if="farFromEnd" 
       class="pagination__item" 
-      @click="() => {
-        currentPage += 3;
-        handleClick(currentPage);
-      }" 
+      @click="handleJumpForward"
       :disabled="currentPage >= totalPages"
     >
       ...
     </li>
     <li 
       class="pagination__item" 
-      :class="{ 'active': currentPage === totalPages }" 
+      :class="{ 'pagination__item--active': currentPage === totalPages }" 
       @click="handleClick(totalPages)"
     >
       {{ totalPages }}
     </li>
     <li 
       class="pagination__item" 
-      @click="() => {
-        currentPage++;
-        handleClick(currentPage);
-      }" 
+      @click="handleNextCLick"
       v-if="currentPage < totalPages"
     >
       <el-icon><ArrowRightBold /></el-icon>
@@ -93,7 +81,26 @@ const showedPages = computed(() => Array.from({length: to.value - from.value}, (
 function handleClick(newPage: number) {
   currentPage.value = newPage
   emit('update:page', newPage);
-  console.log(currentPage.value)
+}
+
+function handlePrevClick()  {
+  currentPage.value--
+  emit('update:page', currentPage.value);
+}
+
+function handleNextCLick() {
+  currentPage.value++
+  emit('update:page', currentPage.value);
+}
+
+function handleJumpBack() {
+  currentPage.value = Math.max(1, currentPage.value - 5)
+  emit('update:page', currentPage.value);
+}
+
+function handleJumpForward() {
+  currentPage.value = Math.min(totalPages.value , currentPage.value + 5)
+  emit('update:page', currentPage.value);
 }
 </script>
 
@@ -109,18 +116,22 @@ function handleClick(newPage: number) {
   &__item {
     padding: 1rem;
     cursor: pointer;
-  }
-  
-  &__item:hover {
-    background-color: rgb(84, 151, 252);
-    border-radius: 1rem;
-    cursor: pointer;
-  }
-}
 
-.active {
-  color: rgb(0, 0, 0);
-  background-color: rgb(231, 231, 231);
-  border-radius: 1rem;
+    &:hover {
+      background-color: rgb(84, 151, 252);
+      border-radius: 1rem;
+      cursor: pointer;
+    }
+
+    &--active {
+      color: rgb(0, 0, 0);
+      background-color: rgb(231, 231, 231);
+      border-radius: 1rem;
+    }
+  }
+
+  &__pages-list {
+    display: flex;
+  }  
 }
 </style>

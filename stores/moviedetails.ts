@@ -34,7 +34,7 @@ export const UseMovieDetailsStore = defineStore('MovieDetailsStore', () => {
   }
 
   const formatDuration = (duration: number) => {
-      return duration ? `${Math.floor(duration / 60)}h ${duration % 60}m` : 'N/A'
+    return duration ? `${Math.floor(duration / 60)}h ${duration % 60}m` : 'N/A'
   }
 
   return {

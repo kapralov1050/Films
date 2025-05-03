@@ -1,21 +1,21 @@
 <template>
-  <h1 class="title">
+  <h1 class="movies-page__title">
     {{ moviesStore.selectedListTitle }}
   </h1>
-  <article class="main">
+  <article class="movies-page">
     <Filters 
-      class="filters" 
+      class="movies-page__filters" 
       @reset="moviesStore.resetForm" 
       @sort="moviesStore.handleSortChange()"
     />
-    <section class="content-wrapper">
+    <section class="movies-page__content">
       <ul 
-        class="movies-list" 
+        class="movies-page__list" 
         v-loading="isLoading" 
         element-loading-text="Loading..."
       >
         <li 
-          class="movies-list__movie-card-container" 
+          class="movies-page__item" 
           v-for="movie in moviesStore.selectedMoviesList.results" 
           :key="movie.id"
         >
@@ -28,7 +28,7 @@
     @update:page="handlePageChange" 
     :page="moviesStore.currentPage" 
     :totalresults="moviesStore.selectedMoviesList.total_results" 
-    class="pagination"
+    class="movies-page__pagination"
   />
 </template>
 
@@ -74,39 +74,39 @@ onMounted(async () => {
 
 
 <style scoped lang="scss">
-.main {
+.movies-page {
   @include flex(row, space-between, flex-start, 2rem);
-  padding: 2rem
-}
-
-.filters {
-  flex: 1;
-}
-
-.content-wrapper {
-  flex: 5;
-}
-
-.title {
   padding: 2rem;
-  font-size: 3rem;
-}
 
-.title::before {
-  content: "";
-  margin-right: 1rem;
-  height: 4rem;
-  border:  solid gold;
-  border-radius: 1rem; 
-}
+  &__title {
+    padding: 2rem;
+    font-size: 3rem;
 
-.movies-list {
-  @include flex(column, center, center, 1.5rem);
-  align-self: center;
-  min-height: 80vh;
-  width: 95%;
-  
-  &__movie-card-container {
+    &::before {
+      content: "";
+      margin-right: 1rem;
+      height: 4rem;
+      border: solid gold;
+      border-radius: 1rem; 
+    }
+  }
+
+  &__filters {
+    flex: 1;
+  }
+
+  &__content {
+    flex: 5;
+  }
+
+  &__list {
+    @include flex(column, center, center, 1.5rem);
+    align-self: center;
+    min-height: 80vh;
+    width: 95%;
+  }
+
+  &__item {
     width: inherit;
     height: fit-content;
     padding: 1rem;
@@ -115,10 +115,10 @@ onMounted(async () => {
     justify-content: space-around;
     box-shadow: 0 2px 5px rgb(209, 209, 209);
   }
-}
 
-.pagination {
-  align-self: center;
-  margin: 2rem;
+  &__pagination {
+    align-self: center;
+    margin: 2rem;
+  }
 }
 </style>

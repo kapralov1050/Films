@@ -1,20 +1,23 @@
 <template>
   <article class="movie-card" v-loading="isLoading">
     <NuxtImg
-      class="poster"
-      :src="`https://image.tmdb.org/t/p/w500${movieDetailsStore.selectedMovie.poster_path}`"
+      class="movie-card__poster"
+      :src="`https://image.tmdb.org/t/p/w500
+      ${movieDetailsStore.selectedMovie.poster_path}`"
       :alt="movieDetailsStore.selectedMovie.title"
       format="webp"
     />
-    <div class="meta">
-      <h1 class="meta__title">
+    <div class="movie-card__meta">
+      <h1 class="movie-card__meta-title">
         {{ movieDetailsStore.selectedMovie.title }}
         ({{ dateToYear(movieDetailsStore.selectedMovie.release_date) }})
       </h1>
-      <section class="meta__details">
-        <h2 class="meta__subtitle"> About film </h2>
+      <section class="movie-card__details">
+        <h2 class="movie-card__details-subtitle">
+           About Film 
+        </h2>
         <p> {{ movieDetailsStore.selectedMovie.overview }}</p>
-        <div class="meta__details__inline-list">
+        <div class="movie-card__inline-list">
           <h4> Genres: </h4>
           <ul>
             <li 
@@ -25,7 +28,7 @@
             </li>
           </ul>
         </div>
-        <div class="meta__details__inline-list">
+        <div class="movie-card__inline-list">
           <h4> Country: </h4>
           <ul>
             <li 
@@ -36,7 +39,7 @@
             </li>
           </ul>
         </div>
-        <div class="meta__details__inline-list">
+        <div class="movie-card__inline-list">
           <h4> Language: </h4>
           <ul>
             <li 
@@ -47,14 +50,19 @@
             </li>
           </ul>
         </div>
-        <div class="meta__details__inline-list">
-          <h4> Cast: </h4>
+        <div class="movie-card__inline-list">
+          <h4>
+            Cast: 
+          </h4>
           <ul>
             <li 
               v-for="person in movieDetailsStore.movieCast" 
               :key="person.id"
             >
-              <NuxtLink :to="`/person/${person.id}`" class="person-link">
+              <NuxtLink 
+                :to="`/person/${person.id}`" 
+                class="movie-card__person-link"
+              >
                 {{ person.name }}
               </NuxtLink>
             </li>
@@ -62,27 +70,27 @@
         </div>
       </section>
     </div>
-    <div class="rating">
-      <p class="rating__average">
-        {{ (movieDetailsStore.selectedMovie.vote_average).toFixed(1) }}
+    <div class="movie-card__rating">
+      <p class="movie-card__rating__average">
+        {{ movieDetailsStore.selectedMovie.vote_average }}
       </p>
       <el-icon :size="30" class="star">
         <StarFilled color="rgb(255, 217, 0)" />
       </el-icon>
-      <p class="rating__votes">
+      <p class="movie-card__rating__votes">
         {{ movieDetailsStore.selectedMovie.vote_count }} ratings
       </p>
     </div>
   </article>
   <article class="recommendations">
     <h1 class="recommendations__title">
-        Recommendations
+      Recommendations
     </h1>
     <el-scrollbar>
-      <section class="scroll-content">
+      <section class="recommendations__scroll-content">
         <div 
           v-for="movie in movieDetailsStore.movieRecommendations" 
-          class="scroll-item"
+          class="recommendations__item"
         >
           <NuxtLink :to="`/movie/${movie.id}`">
             <NuxtImg
@@ -131,59 +139,66 @@ onMounted(async () => {
   width: 70%;
   padding: 3rem;
   @include flex(row, flex-start, flex-start, 0);
-}
 
-.poster {
-  max-height: 600px;
-  height: 40rem;
-  border-radius: 5px;
-  width: auto;
-}
+  &__poster {
+    max-height: 600px;
+    height: 40rem;
+    border-radius: 5px;
+    width: auto;
+  }
 
-.meta {
-  padding: 0 5rem 0 2rem;
-  flex:3;
+  &__meta {
+    padding: 0 5rem 0 2rem;
+    flex: 3;
+  }
 
-  &__title {
+  &__meta-title {
     font-size: 3rem;
     margin-bottom: 1.5rem;
   }
-  
-  &__subtitle {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
 
   &__details {
-
-    &__inline-list {
-      @include flex(row, flex-start, flex-start, 0.5rem);
-      padding-top:1rem;
-    }
-
-    &__inline-list li{
-      display: inline-block;
-      padding-right: 0.5rem;
-    }
-
-    &__inline-list li:not(:last-child)::after {
-      content: ",";
+    &-subtitle {
+      font-size: 2rem;
+      margin-bottom: 1rem;
     }
   }
-}
 
-.rating {
-  flex: 1;
-  font-size: 2.5rem;
+  &__inline-list {
+    @include flex(row, flex-start, flex-start, 0.5rem);
+    padding-top: 1rem;
 
-  &__average {
+    li {
+      display: inline-block;
+      padding-right: 0.5rem;
+
+      &:not(:last-child)::after {
+        content: ",";
+      }
+    }
+  }
+
+  &__rating {
+    flex: 1;
+    font-size: 2.5rem;
+  }
+
+  &__rating__average {
     font-weight: bold;
     display: inline-block;
   }
 
-  &__votes {
+  &__rating__votes {
     font-size: 1.5rem;
     color: gray;
+  }
+
+  &__person-link {
+    color: black;
+
+    &:hover {
+      color: rgb(68, 68, 68);
+    }
   }
 }
 
@@ -195,34 +210,26 @@ onMounted(async () => {
   box-sizing: border-box;
   width: 100%;
 
-    &__title {
+  &__title {
     font-size: 2rem;
     margin: 1rem 0 2rem 2rem;
   }
-}
 
-.scroll-content {
-  @include flex(row, flex-start, center, 0);
-  height: auto;
-  padding-right: 3rem;
-  width: fit-content;
-}
+  &__scroll-content {
+    @include flex(row, flex-start, center, 0);
+    height: auto;
+    padding-right: 3rem;
+    width: fit-content;
+  }
 
-.scroll-item {
-  @include flex(column, center, center, 0);
-  margin: 1.5rem;
-  flex-shrink: 0;
-  max-height: 30rem;
-  max-width: auto;
-  text-align: center;
-  overflow-wrap: anywhere;
-}
-
-.person-link {
-  color: black;
-}
-
-.person-link:hover {
-  color: rgb(68, 68, 68);
+  &__item {
+    @include flex(column, center, center, 0);
+    margin: 1.5rem;
+    flex-shrink: 0;
+    max-height: 30rem;
+    max-width: auto;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
 }
 </style>

@@ -1,11 +1,19 @@
 <template>
-  <article class="list-progress">
+  <article class="progress">
     <el-steps :active="activeStep" finish-status="success">
       <el-step title="Step 1: List Details" />
       <el-step title="Step 2: Add Items" />
     </el-steps>
     <component :is="steps[currentStepForm]" />
-    <el-button type="primary" size="large" class="nextstep-button" @click="next" :disabled="!listStore.listName"> {{ activeStep == 1 ? 'Next Step' : 'Done' }} </el-button>
+    <el-button 
+      type="primary" 
+      size="large" 
+      class="progress__nextstep-button" 
+      @click="next" 
+      :disabled="!listStore.listName"
+    > 
+      {{ activeStep == 1 ? 'Next Step' : 'Done' }} 
+    </el-button>
   </article>
 </template>
 
@@ -45,14 +53,14 @@ const next = () => {
 
 
 <style scoped lang="scss">
-.list-progress {
+.progress {
   width: 70%;
   align-self: center;
-}
 
-.nextstep-button {
-  margin-top: 12px;
-  font-weight: bold;
-  font-size: 1.2rem;
+  &__nextstep-button {
+    margin-top: 12px;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
 }
 </style>

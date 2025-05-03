@@ -1,6 +1,9 @@
 <template>
   <section class="rating-control">
-    <div class="rating-control__item" v-if="currentRating !== null">
+    <div 
+      class="rating-control__item" 
+      v-if="currentRating !== null"
+    >
       <el-icon 
         :size="30"
         class="rating-control__star"
@@ -12,7 +15,11 @@
         {{ currentRating }} /10
       </span>
     </div>
-    <div class="rating-control__item" v-else v-loading="isLoading">
+    <div 
+      class="rating-control__item" 
+      v-else 
+      v-loading="isLoading"
+    >
       <Button @click="toggleRateBlock">
         Rate
       </Button>
@@ -39,6 +46,7 @@ const props = defineProps({
     required: true
   }
 })
+
 const ratingStore = useRatingStore()
 const authStore = useAuthStore()
 const { loginWithTmdb } = useAuth()

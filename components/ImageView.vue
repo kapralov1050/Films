@@ -1,6 +1,11 @@
 <template>
   <div class="grid gap-3">
-    <el-button class="view-button" text :icon="Picture" @click="$emit('update:is-open', true)">
+    <el-button 
+      class="view-button" 
+      text 
+      :icon="Picture" 
+      @click="$emit('update:is-open', true)"
+    >
       Images
     </el-button>
     <el-image-viewer
@@ -25,7 +30,6 @@ const props = defineProps<{
 }>()
 
 const srcList = computed(() => props.images.map(image => `https://image.tmdb.org/t/p/w500${image.file_path}`))
-
 
 onMounted(() => {
   console.log(srcList)

@@ -3,7 +3,6 @@ import { useRatingStore } from "~/stores/rating"
 
 export const useRate = () => {
   const authStore = useAuthStore()
-  const ratingStore = useRatingStore()
 
   async function postRatingToServer(movieId: number, rating: number) {
     try {

@@ -1,27 +1,35 @@
 <template>
-  <h1 class="title">Rated Movies</h1>
-  <div class="empty-list" v-if="!ratingStore.ratedMovies.length">
-    <el-icon size="40" color="gold">
-      <List />
-    </el-icon>
-    There are no movies in watchlist.
-    <NuxtLink to="/homepage" style="color: black"> 
-      Back to Home
-    </NuxtLink>
-  </div>
-  <ul 
-    class="movies-list" 
-    v-loading="isLoading" 
-    element-loading-text="Loading..."
-  >
-    <li 
-      class="movies-list__movie-card-container" 
-      v-for="movie in ratingStore.ratedMovies" 
-      :key="movie.id"
+  <div class="rated-movies-container">
+    <h1 class="title">Rated Movies</h1>
+    <div 
+      class="movies-list-empty" 
+      v-if="!ratingStore.ratedMovies.length"
     >
-      <MovieCard :movie="movie"/>
-    </li>
-  </ul>
+      <el-icon size="40" color="gold">
+        <List />
+      </el-icon>
+      There are no rated movies.
+      <NuxtLink 
+        to="/homepage" 
+        style="color: black"
+      >
+        Back to Home
+      </NuxtLink>
+    </div>
+    <ul 
+      class="movies-list" 
+      v-loading="isLoading"
+      element-loading-text="Loading..."
+    >
+      <li 
+        class="movies-list__movie-card-container"
+        v-for="movie in ratingStore.ratedMovies"
+        :key="movie.id"
+      >
+        <MovieCard :movie="movie" />
+      </li>
+    </ul>
+  </div>
 </template>
 
 
@@ -55,17 +63,17 @@ onMounted(async () => {
   padding-left: 1rem;
   margin-bottom: 2rem;
   font-size: 3rem;
+
+  &::before {
+    content: "";
+    margin-right: 1rem;
+    height: 4rem;
+    border:  solid gold;
+    border-radius: 1rem; 
+  }
 }
 
-.title::before {
-  content: "";
-  margin-right: 1rem;
-  height: 4rem;
-  border:  solid gold;
-  border-radius: 1rem; 
-}
-
-.empty-list {
+.movies-list-empty {
   margin-top: 3rem;
   align-self: center;
   @include flex(column, center, center, 1rem);

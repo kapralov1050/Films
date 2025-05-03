@@ -22,13 +22,20 @@
             {{ dateToYear(movie.release_date) }}
           </time>
         </div>
-        <WatchListButton :isInWatchlist="isInWatchList" @handleWatchListClick="addorRemoveMovie" :v-loading="isLoading"/>
+        <WatchListButton 
+          :isInWatchlist="isInWatchList" 
+          @handleWatchListClick="addorRemoveMovie" 
+          :v-loading="isLoading"
+        />
       </header>
       <p class="movie-card__overview">
         {{ movie.overview }}
       </p>
       <section class="movie-card__rating">
-        <el-icon :size="30" color="rgb(255, 217, 0)">
+        <el-icon 
+        :size="30" 
+        color="rgb(255, 217, 0)"
+        >
           <StarFilled />
         </el-icon>
         {{ movie.vote_average.toFixed(1) }}
@@ -66,7 +73,6 @@ const addorRemoveMovie = () => {
     isLoading.value = false
   }
 }
-
 
 onMounted(() => {
   if(authStore.watchListMovies) {

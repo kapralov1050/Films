@@ -20,8 +20,3 @@ onMounted(async () => {
   navigateTo(`/user/${username}/rated`)
 })  
 </script>
-  
-  
-<style scoped lang="scss">
-
-</style>

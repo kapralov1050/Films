@@ -2,7 +2,7 @@
   <el-form>
     <el-form-item label="Add Movies" label-position="left">
       <el-input 
-        v-model="listStore.movieToAdd" 
+        v-model="listStore.movieToAddToList" 
         @input="deboucedHandleInput" 
         placeholder="Search for a movie..."
       />
@@ -25,7 +25,8 @@
             circle 
             :icon="Plus" 
             @click="addMovieToList(movie.id)" 
-            :loading="processAdd" 
+            :loading="isInAddingState" 
+            :disabled="isInAddingState"
           />
         </li>
       </ul>
@@ -40,7 +41,7 @@ import { debounce } from '~/helpers/debounce'
 
 const listStore = useListStore()
 const searchStore = useSearchMovieStore()
-const processAdd = ref(false)
+const isInAddingState = ref(false)
 
 const searchSuggestions = computed(() => {
   if (searchStore.searchedMovies) 
@@ -48,31 +49,25 @@ const searchSuggestions = computed(() => {
 })
 
 async function handleInput() {
-  const searchedMoviesToAdd = await searchStore.searchMovie(listStore.movieToAdd)
+  const searchedMoviesToAdd = await searchStore.searchMovie(listStore.movieToAddToList)
   searchStore.searchedMovies = searchedMoviesToAdd
 }
 
 const deboucedHandleInput = debounce(handleInput, 1000)
 
 async function addMovieToList(movieId: number) {
-  if (processAdd.value) return
-
-  processAdd.value = true
+  isInAddingState.value = true
   try {
     const response = await listStore.addMovieToList(movieId)
-    listStore.movieToAdd = ''
+    listStore.movieToAddToList = ''
     searchStore.searchedMovies = null
     console.log(response)
   } catch (error) {
     console.log('Error while add new movie:', error)
   } finally {
-    processAdd.value = false
+    isInAddingState.value = false
   }
 }
-
-onMounted(async () => {
-  if (listStore.listId) await listStore.loadListDetails(listStore.listId)
-})
 </script>
 
 

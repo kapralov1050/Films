@@ -1,9 +1,9 @@
-import type { userData, Film } from "~/types/common"
+import type { userData, Movie } from "~/types/common"
 
 export const useAuthStore = defineStore('authStore', () => {
   const sessionId = ref<string | null>(null)
   const userData = ref<userData | null>(null)
-  const watchListMovies = ref<Film[] | null>(null)
+  const watchListMovies = ref<Movie[] | null>(null)
   const { getWatchListMovies } = useAuth()
 
   const getSessionCookie = () => useCookie<string | null>('tmdb_session_id')

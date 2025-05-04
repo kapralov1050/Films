@@ -1,4 +1,4 @@
-export interface Film {
+export interface Movie {
   adult: boolean;
   backdrop_path: string;
   genre_ids: number[];
@@ -59,9 +59,16 @@ export interface userData {
 
 export interface WatchListResponse {
   page: number;
-  results: Film[];
+  results: Movie[];
   total_pages: number;
   total_results: number;
+}
+
+export interface UserLists {
+  page: number;
+  results: List[];
+  total_pages: number;
+  total_results: number
 }
 
 export interface Genre {
@@ -69,7 +76,7 @@ export interface Genre {
   name: string
 }
 
-export interface languages {
+export interface language {
   iso_639_1: string;
   english_name: string;
   name: string
@@ -80,18 +87,11 @@ export interface ListDetailsResponse {
   description: string;
   favorite_count: number;
   id: string;
-  items: Film[];
+  items: Movie[];
   item_count: number;
   iso_639_1: string;
   name: string;
   poster_path: string
-}
-
-export interface UserLists {
-  page: number;
-  results: List[];
-  total_pages: number;
-  total_results: number
 }
 
 export interface List {
@@ -102,7 +102,7 @@ export interface List {
   iso_639_1: string;
   list_type: string;
   name: string;
-  poster_path: string | null
+  poster_path: string | null;
 }
 
 export interface movieCredits {
@@ -134,7 +134,9 @@ export interface PersonDetails {
   deathday: string | null;
   gender: number | 0;
   homepage: string | null;
-  images: {profiles: PersonImages[]};
+  images: {
+    profiles: PersonImage[]
+  };
   id: number;
   imdb_id: string | null;
   known_for_department: string;
@@ -170,7 +172,7 @@ export interface MovieCredit {
   vote_count: number;
 }
 
-export interface PersonImages {
+export interface PersonImage {
   aspect_ratio: number;
   file_path: string;
   height: number;

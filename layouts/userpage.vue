@@ -130,7 +130,7 @@ const mostWatchedGenres = computed<Genre[]>(() => {
   width: 100%;
   height: 20vh;
   box-sizing: border-box;
-  padding-left: 4rem;
+  padding: 0 4rem;
 }
 
 .user-title {

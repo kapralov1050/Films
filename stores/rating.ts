@@ -1,14 +1,14 @@
-import type { Film, movieRating } from '~/types/common';
+import type { Movie, movieRating } from '~/types/common';
 
 export const useRatingStore = defineStore('ratingStore', () => {
   const authStore = useAuthStore()
-  const { postRatingToServer, deleteRatingFromServer } = useRate()
+  const { postRating, deleteRatingFromServer } = useRate()
   const ratings = ref<movieRating[]>([])
-  const ratedMovies = ref<Film[]>([])
+  const ratedMovies = ref<Movie[]>([])
 
   async function rateMovie(movieId: number, rating: number) {
     try {
-      const response = await postRatingToServer(movieId, rating)
+      const response = await postRating(movieId, rating)
       return response.data.status_code === 1 ? true : false
     } catch (error) {
       console.log(error)
@@ -23,6 +23,7 @@ export const useRatingStore = defineStore('ratingStore', () => {
           session_id: authStore.sessionId
         }
       })
+      console.log(data.results)
       ratings.value = data.results.map((movie: any) => ({
         id: movie.id,
         rating: movie.rating

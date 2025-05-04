@@ -6,7 +6,7 @@ import { type RatingResponse } from "~/types/common"
 export const useRate = () => {
   const authStore = useAuthStore()
 
-  async function postRatingToServer(movieId: number, rating: number): Promise<AxiosResponse<RatingResponse>> {
+  async function postRating(movieId: number, rating: number): Promise<AxiosResponse<RatingResponse>> {
     try {
       const response = await instance.post(`movie/${movieId}/rating`, 
         { value: rating },
@@ -16,6 +16,7 @@ export const useRate = () => {
           }
         }
       )
+      console.log(response)
       return response
     } catch (error) {
       console.log('Error rating movie:', error)
@@ -37,7 +38,7 @@ export const useRate = () => {
   }
   
   return {
-    postRatingToServer,
+    postRating,
     deleteRatingFromServer,
   }
 }

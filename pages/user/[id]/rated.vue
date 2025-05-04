@@ -5,10 +5,13 @@
       class="movies-list-empty" 
       v-if="!ratingStore.ratedMovies.length"
     >
-      <el-icon size="40" color="gold">
+      <el-icon 
+        size="40" 
+        color="gold"
+      >
         <List />
       </el-icon>
-      There are no rated movies.
+      <p>There are no movies in your watchlist.</p>
       <NuxtLink 
         to="/homepage" 
         style="color: black"
@@ -16,7 +19,8 @@
         Back to Home
       </NuxtLink>
     </div>
-    <ul 
+    <ul
+      v-else
       class="movies-list" 
       v-loading="isLoading"
       element-loading-text="Loading..."

@@ -10,10 +10,13 @@
         >
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="handleListSelect('popular')">Popular</el-dropdown-item>
-            <el-dropdown-item @click="handleListSelect('now_playing')">Now Playing</el-dropdown-item>
-            <el-dropdown-item @click="handleListSelect('top_rated')">Top Rated</el-dropdown-item>
-            <el-dropdown-item @click="handleListSelect('upcoming')">Upcoming</el-dropdown-item>
+            <el-dropdown-item 
+              v-for="(item, index) in menuItems" 
+              :key="index"  
+              @click="selectList(item)"
+            >
+              {{ formatTitle(item) }}
+            </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -38,7 +41,7 @@
     <section class="header__user-block">
       <el-dropdown>
         <span 
-          @click="handleAuthClick" 
+          @click="handleLogin" 
           style="outline: none; border: none;"
         >
           {{ authStore.sessionId ? 'User' : 'login' }}
@@ -66,6 +69,7 @@
 <script setup lang="ts">
 import { Search } from '@element-plus/icons-vue'
 import { debounce } from '~/helpers/debounce'
+import { formatTitle } from '~/helpers/formatTitle'
 
 const searchMovieStore = useSearchMovieStore()
 const moviesStore = useMoviesStore()
@@ -74,7 +78,14 @@ const ratingStore = useRatingStore()
 const { loginWithTmdb } = useAuth()
 const isLoading = ref(false)
 
-function handleAuthClick() {
+const menuItems = [
+  'popular',
+  'now_playing',
+  'top_rated',
+  'upcoming'
+]
+
+function handleLogin() {
   if (!authStore.sessionId) {
     loginWithTmdb()
   }
@@ -98,11 +109,13 @@ async function handleSearch() {
   }
 }
 
-const handleListSelect = (listName: string) => {
+const selectList = (listName: string) => {
   moviesStore.selectedList = listName
 }
 
 const deboucedHandleSearch = debounce(handleSearch, 300)
+
+
 </script>
 
 

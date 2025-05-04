@@ -60,10 +60,13 @@ onMounted(async () => {
   try{
     moviesStore.genres = await moviesStore.fetchGenres()
     moviesStore.languages = await moviesStore.fetchLanguages()
-    fetchData()
+    await fetchData()
+    await authStore.fetchUserData()
     if(authStore.userData && authStore.sessionId) {
-      ratingStore.getRatedMovies(authStore.userData.id)
+      await Promise.all ([
+      ratingStore.getRatedMovies(authStore.userData.id),
       authStore.getWatchList()
+      ])
     }
     await new Promise(resolve => setTimeout(resolve, 1000))
   } catch(error) {

@@ -1,10 +1,10 @@
 import {defineStore} from 'pinia'
-import { type Film, type PersonDetails, type PersonInCast } from '~/types/common'
+import { type Movie, type PersonDetails, type PersonInCast } from '~/types/common'
 
 export const UseMovieDetailsStore = defineStore('MovieDetailsStore', () => {
-  const selectedMovie = ref<Film>()
+  const selectedMovie = ref<Movie>()
   const movieCast = ref<PersonInCast[]>()
-  const movieRecommendations = ref<Film[]>()
+  const movieRecommendations = ref<Movie[]>()
   const personDetails = ref<PersonDetails>()
 
   async function getMovieDetails(id:string) {

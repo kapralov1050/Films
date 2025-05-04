@@ -5,7 +5,7 @@
   >
     <li 
       class="pagination__item" 
-      @click="handlePrevClick"
+      @click="goToPrevPage"
       v-if="currentPage > 1"
     >
       <el-icon><ArrowLeftBold /></el-icon>
@@ -13,14 +13,14 @@
     <li 
       class="pagination__item" 
       :class="{ 'pagination__item--active': currentPage === 1 }" 
-      @click="handleClick(1)"
+      @click="selectPage(1)"
     >
       1
     </li>
     <li 
       v-if="farFromStart" 
       class="pagination__item" 
-      @click="handleJumpBack"
+      @click="skipBack"
       :disabled="currentPage === 1"
     >
       ...
@@ -30,7 +30,7 @@
         v-for="item in showedPages" 
         class="pagination__item" 
         :class="{ 'pagination__item--active': item === currentPage }" 
-        @click.self="handleClick(item)"
+        @click.self="selectPage(item)"
       >
         {{ item }}
       </li>
@@ -38,7 +38,7 @@
     <li 
       v-if="farFromEnd" 
       class="pagination__item" 
-      @click="handleJumpForward"
+      @click="skipAhead"
       :disabled="currentPage >= totalPages"
     >
       ...
@@ -46,13 +46,13 @@
     <li 
       class="pagination__item" 
       :class="{ 'pagination__item--active': currentPage === totalPages }" 
-      @click="handleClick(totalPages)"
+      @click="selectPage(totalPages)"
     >
       {{ totalPages }}
     </li>
     <li 
       class="pagination__item" 
-      @click="handleNextCLick"
+      @click="goToNextPage"
       v-if="currentPage < totalPages"
     >
       <el-icon><ArrowRightBold /></el-icon>
@@ -78,27 +78,27 @@ const farFromEnd = computed(() => currentPage.value + 2 < totalPages.value)
 const farFromStart = computed(() => currentPage.value > 4)
 const showedPages = computed(() => Array.from({length: to.value - from.value}, ( __, index) => from.value + index))
 
-function handleClick(newPage: number) {
+function selectPage(newPage: number) {
   currentPage.value = newPage
   emit('update:page', newPage);
 }
 
-function handlePrevClick()  {
+function goToPrevPage()  {
   currentPage.value--
   emit('update:page', currentPage.value);
 }
 
-function handleNextCLick() {
+function goToNextPage() {
   currentPage.value++
   emit('update:page', currentPage.value);
 }
 
-function handleJumpBack() {
+function skipBack() {
   currentPage.value = Math.max(1, currentPage.value - 5)
   emit('update:page', currentPage.value);
 }
 
-function handleJumpForward() {
+function skipAhead() {
   currentPage.value = Math.min(totalPages.value , currentPage.value + 5)
   emit('update:page', currentPage.value);
 }

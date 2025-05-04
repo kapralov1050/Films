@@ -1,5 +1,5 @@
 import type { AxiosResponse } from "axios"
-import type { Film, WatchListResponse } from "~/types/common"
+import type { Movie, WatchListResponse } from "~/types/common"
 
 export const useAuth= () =>{
 
@@ -40,7 +40,7 @@ export const useAuth= () =>{
     }
   }
 
-  const getWatchListMovies = async (accountId: number): Promise <Film[]> => {
+  const getWatchListMovies = async (accountId: number): Promise <Movie[]> => {
     try {
       const response: AxiosResponse <WatchListResponse> = await instance.get(`account/${accountId}/watchlist/movies`, {
         params: { session_id: authStore.sessionId }

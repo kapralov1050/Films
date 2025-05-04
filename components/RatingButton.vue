@@ -3,14 +3,21 @@
     <div 
       class="rating-control__item" 
       v-if="currentRating !== null"
-    >
-      <el-icon 
-        :size="30"
-        class="rating-control__star"
-        @click="handleRemove"
+    > 
+      <el-button 
+        @click="handleRemoveRating" 
+        text 
+        size="small" 
+        circle 
+        :disabled="isLoading"
       >
-        <StarFilled color="rgb(50.8, 116.6, 184.5)" />
-      </el-icon>
+        <el-icon 
+          :size="30"
+          class="rating-control__star"
+        >
+          <StarFilled color="rgb(50.8, 116.6, 184.5)" />
+        </el-icon>
+      </el-button>
       <span class="rating-control__value">
         {{ currentRating }} /10
       </span>
@@ -20,9 +27,17 @@
       v-else 
       v-loading="isLoading"
     >
-      <Button @click="toggleRateBlock">
+      <el-button 
+        class="rating-control__rate-button"
+        @click="toggleRateBlock"
+        type="info" 
+        text 
+        :icon="Star" 
+        :disabled="isLoading"
+        round
+      >
         Rate
-      </Button>
+      </el-button>
       <el-rate 
         v-show="rateBlockVisible"
         v-model="userRating"
@@ -38,7 +53,7 @@
 
  
 <script setup lang="ts">
-import { StarFilled } from '@element-plus/icons-vue';
+import { Star, StarFilled } from '@element-plus/icons-vue';
 
 const props = defineProps({
   movieId: {
@@ -53,13 +68,18 @@ const { loginWithTmdb } = useAuth()
 const rateBlockVisible = ref(false)
 const userRating = ref(0)
 const isLoading = ref(false)
-const currentRating = ref<number | null>(null)
+const currentRating = computed<number | null>(() => {
+  return ratingStore.getRating(props.movieId)
+})
 
 const handleRateMovie = async () => {
   isLoading.value = true
   try {
-    const isRated = await ratingStore.rateMovie(props.movieId, userRating.value)
-    if (isRated) currentRating.value = userRating.value
+    if(!authStore.userData) return
+    const movieWasRated = await ratingStore.rateMovie(props.movieId, userRating.value)
+    if(movieWasRated) {
+      await ratingStore.getRatedMovies(authStore.userData.id)
+    }
     rateBlockVisible.value = false
   } catch (error) {
     console.log('Rating failed', error)
@@ -76,16 +96,12 @@ const toggleRateBlock = () => {
   }
 }
 
-const handleRemove = () => {
+const handleRemoveRating = async () => {
   isLoading.value = true
-  const isRemoved = ratingStore.removeRating(props.movieId)
-  if(isRemoved) currentRating.value = null
+  await new Promise(resolve => setTimeout(resolve, 1000))
+  ratingStore.removeRating(props.movieId)
   isLoading.value = false
 }
-
-onMounted( async () => {
-  currentRating.value = ratingStore.getRating(props.movieId)
-})
 </script>
 
 
@@ -101,6 +117,11 @@ onMounted( async () => {
 
   &__item {
     @include flex(row, center, center, 0)
+  }
+
+  &__rate-button {
+    font-size: 1rem;
+    color: rgb(0, 98, 211);
   }
 }
 </style>

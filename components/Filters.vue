@@ -115,30 +115,30 @@ watch(
   { deep: true }
 )
 
-const scoreMarks = ref({
+const scoreMarks = {
   0: '0',
   2: '2',
   4: '4',
   6: '6',
   8: '8',
   10: '10'
-})
+}
 
-const votesMarks = ref({
+const votesMarks = {
   0: '0',
   100: '100',
   200: '200',
   300: '300',
   400: '400',
   500: '500'
-})
+}
 
-const runtimeMarks = ref({
+const runtimeMarks = {
   0: '0',
   120: '120',
   240: '240',
   360: '360',
-})
+}
 </script>
 
 

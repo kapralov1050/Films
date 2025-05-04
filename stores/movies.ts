@@ -1,12 +1,12 @@
 import {defineStore} from 'pinia'
-import type { Film, Genre, languages,  } from '~/types/common'
+import type { Movie, Genre, Language } from '~/types/common'
 
 export const useMoviesStore = defineStore('moviesStore', () => {
-  const selectedMoviesList = ref<{results: Film[], total_results: number}>({results: [], total_results: 0})
+  const selectedMoviesList = ref<{results: Movie[], total_results: number}>({results: [], total_results: 0})
   const selectedList = ref('popular')
   const currentPage = ref(1)
   const genres = ref<Genre[]>([])
-  const languages = ref<languages[]>([])
+  const languages = ref<Language[]>([])
   const filtersForm = reactive({
     sort_by: '',
     genre: [],

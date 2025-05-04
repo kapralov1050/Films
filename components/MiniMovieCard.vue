@@ -31,9 +31,9 @@
 <script setup lang='ts'>
 import { StarFilled } from '@element-plus/icons-vue';
 import { formatDateToYear } from '~/helpers/formatDate';
-import type { Film } from '~/types/common';
+import type { Movie } from '~/types/common';
 
-const props = defineProps<{movie: Film}>();
+const props = defineProps<{movie: Movie}>();
 
 const backdrop_url = computed(() => {
   if(props.movie.backdrop_path) {

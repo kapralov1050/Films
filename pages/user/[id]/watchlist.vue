@@ -1,9 +1,9 @@
 <template>
-  <div class="watchlist-page">
+  <div>
     <h1 class="title">WatchList</h1>
     <div 
-      v-if="!authStore.watchListMovies.length" 
       class="movies-list-empty"
+      v-if="!authStore.watchListMovies.length" 
     >
       <el-icon 
         size="40" 
@@ -14,7 +14,7 @@
       <p>There are no movies in your watchlist.</p>
       <NuxtLink 
         to="/homepage" 
-        class="home-link"
+        style="color: black"
       >
         Back to Home
       </NuxtLink>
@@ -26,14 +26,11 @@
       element-loading-text="Loading..."
     >
       <li 
+        class="movies-list__item"
         v-for="movie in authStore.watchListMovies"
         :key="movie.id"
-        class="movies-list__item"
       >
-        <MovieCard 
-          :movie="movie"
-          @remove="handleRemoveFromWatchlist(movie.id)"
-        />
+        <MovieCard :movie="movie" />
       </li>
     </ul>
   </div>

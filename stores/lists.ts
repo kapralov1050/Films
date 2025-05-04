@@ -1,4 +1,4 @@
-import { type UserLists, type Film, type ListDetailsResponse, type List } from "~/types/common"
+import { type UserLists, type Movie, type ListDetailsResponse, type List } from "~/types/common"
 
 export const useListStore = defineStore('listStore', () => {
   const authStore = useAuthStore()
@@ -8,8 +8,8 @@ export const useListStore = defineStore('listStore', () => {
   })
   const listId = ref<number>()
   const listDetails = ref<ListDetailsResponse>()
-  const moviesInList = ref<Film[]>([])
-  const movieToAdd = ref('')
+  const moviesInList = ref<Movie[]>([])
+  const movieToAddToList = ref('')
   const userLists = ref<List[]>()
 
   async function createList(){
@@ -148,7 +148,7 @@ export const useListStore = defineStore('listStore', () => {
     listForm,
     listId,
     createList,
-    movieToAdd,
+    movieToAddToList,
     addMovieToList,
     loadListDetails,
     fetchUserLists,

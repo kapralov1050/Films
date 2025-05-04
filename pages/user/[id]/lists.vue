@@ -2,7 +2,7 @@
   <section class="header">
     <h1 class="header__title">My Lists</h1>
     <el-button
-      @click="handleCreateList()"
+      @click="createList()"
       type="primary"
       size="large"
       color="#ffd900"
@@ -32,7 +32,7 @@
       v-for="list in listStore.userLists"
       :key="list.id"
       class="user-lists__item"
-      @click="handleListSelect(list.id)"
+      @click="selectList(list.id)"
     >
       <NuxtImg
         class="user-lists__background"
@@ -59,11 +59,11 @@ import { List } from '@element-plus/icons-vue'
 const authStore = useAuthStore()
 const listStore = useListStore()
 
-function handleCreateList() {
+function createList() {
   navigateTo(`/user/${authStore.userData?.username}/createList`)
 }
 
-const handleListSelect = (id: number) => {
+const selectList = (id: number) => {
   navigateTo(`/user/${authStore.userData?.username}/list/${id}`)
   listStore.listId = id
 }

@@ -9,7 +9,7 @@
           round 
           :icon="CloseBold" 
           type="primary" 
-          @click="handleDeleteList"
+          @click="deleteList"
         >
           Delete List
         </el-button>
@@ -17,7 +17,7 @@
           round 
           :icon="Finished" 
           type="primary" 
-          @click="handleClearList"
+          @click="clearList"
         >
           Clear List
         </el-button>
@@ -31,7 +31,7 @@
         </el-button>
         <el-dialog 
           v-model="showAddMoviesModal" 
-          @close="handleCloseModal"
+          @close="closeModal"
         >
           <template #header>
             <h1>Editing List</h1>
@@ -70,7 +70,7 @@
           text 
           circle 
           :icon="CloseBold" 
-          @click="handleMovieRemove(movie.id)" 
+          @click="removeMovie(movie.id)" 
           :disabled="isDeleting" 
         />
       </li>
@@ -95,7 +95,7 @@ const showAddMoviesModal = ref(false)
 const isDeleting = ref(false)
 const average = computed(() => averageRating(listStore.moviesInList))
 
-const handleMovieRemove = async (movieId: number) => {
+const removeMovie = async (movieId: number) => {
   isDeleting.value = true
   try {
     if(listStore.listId) await listStore.deleteMovieFromList(movieId, listStore.listId)
@@ -107,7 +107,7 @@ const handleMovieRemove = async (movieId: number) => {
   }
 }
 
-const handleDeleteList = async () => {
+const deleteList = async () => {
   isDeleting.value = true
   try {
     if(listStore.listId) await listStore.deleteList(listStore.listId)
@@ -121,7 +121,7 @@ const handleDeleteList = async () => {
   }
 }
 
-const handleClearList = async () => {
+const clearList = async () => {
   try {
     if(listStore.listId) await listStore.clearList(listStore.listId)
     ElMessage.success('List was successfully cleared')
@@ -130,12 +130,12 @@ const handleClearList = async () => {
   }
 }
 
-const handleCloseModal = async () => {
+const closeModal = async () => {
   try {
     if(listStore.listId) {
     const response = await listStore.loadListDetails(listStore.listId)
     if (response) {
-      listStore.moviesInList = response?.items
+      listStore.moviesInList = response.items
       }
     }
   } catch (error) {

@@ -1,5 +1,5 @@
 <template>
-  <el-button @click="$emit('handleWatchListClick')" text circle>
+  <el-button @click="$emit('handleWatchListChange')" text circle>
     <el-icon :size="25">
       <CollectionTag 
         :color="props.isInWatchlist ? 'rgb(255, 217, 0)' : 'rgb(0, 0, 0)'"

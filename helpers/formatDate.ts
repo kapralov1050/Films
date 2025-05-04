@@ -1,7 +1,7 @@
-export function dateToYear(dateString: string) {
+export function formatDateToYear(dateString: string) {
   const date = new Date(dateString)
   const year = date.getFullYear()
-
+  
   return year
 }
 

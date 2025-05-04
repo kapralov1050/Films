@@ -93,7 +93,7 @@
     <el-button
       class="filter-button"
       type="primary"
-      :disabled="!filtersChanged"
+      :disabled="!isFiltersChanged"
       @click="$emit('sort')"
     >
       Filter
@@ -104,12 +104,13 @@
 
 <script setup lang="ts">
 const moviesStore = useMoviesStore()
-const { filtersForm, filtersChanged } = storeToRefs(moviesStore)
+const { filtersForm } = storeToRefs(moviesStore)
+const isFiltersChanged = ref(false)
 
 watch(
   () => moviesStore.filtersForm,
   () => {
-    filtersChanged.value = true
+    isFiltersChanged.value = true
   },
   { deep: true }
 )

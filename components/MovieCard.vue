@@ -19,7 +19,7 @@
             class="movie-card__year" 
             :datetime="movie.release_date"
           >
-            {{ dateToYear(movie.release_date) }}
+            {{ formatDateToYear(movie.release_date) }}
           </time>
         </div>
         <WatchListButton 
@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import { StarFilled } from '@element-plus/icons-vue';
-import { dateToYear } from '~/helpers/formatDate';
+import { formatDateToYear } from '~/helpers/formatDate';
 import type { Film } from '~/types/common';
 
 const props = defineProps<{movie: Film}>();

@@ -6,6 +6,9 @@ export interface Film {
   original_language: string;
   original_title: string;
   overview: string;
+  production_countries?: Country[];
+  spoken_languages?: Language[];
+  genres?: Genre[];
   popularity: number;
   poster_path: string;
   release_date: string;
@@ -15,9 +18,24 @@ export interface Film {
   vote_count: number;
 }
 
+export interface Language {
+  name: string;
+  id: number;
+}
+
+export interface Country {
+  name: string;
+  id: number;
+}
+
 export interface movieRating {
   id: number;
   rating: number;
+}
+
+export interface RatingResponse {
+  status_code: number;
+  status_message: string;
 }
 
 export interface movieWatchList {
@@ -26,7 +44,7 @@ export interface movieWatchList {
 
 export interface paginationParams {
   page: number;
-  totalresults: number ;
+  totalResults: number ;
 }
 
 export interface userData {
@@ -160,4 +178,10 @@ export interface PersonImages {
   vote_average: number;
   vote_count: number;
   width: number;
+}
+
+export enum Gender {
+  Unknown = 0,
+  Female = 1,
+  Male = 2
 }

@@ -39,11 +39,10 @@ export const useListStore = defineStore('listStore', () => {
       userLists.value = response.results
       await Promise.all(
       userLists.value.map(async (list) => {
-        list.poster_path = await getFirstMoviePoster(list.id) || list.poster_path
+        const movies = await loadListDetails(list.id)
+        if(movies)  list.poster_path = getFirstMoviePoster(movies)
         })
-      )
-      console.log(userLists.value)
-      
+      )  
       return userLists.value
     } catch (error) {
       console.log('error loading userLists',error)
@@ -73,42 +72,38 @@ export const useListStore = defineStore('listStore', () => {
         }
       )
 
-      const updatedList = await loadListDetails(listId)
-      moviesInList.value = updatedList?.items || []
+      moviesInList.value = []
     } catch (error) {
       ElMessage.error('Failed to clear list')
       throw error
     }
   }
 
-  const getFirstMoviePoster = async (listId: number): Promise<string> => {
-    try {
-      const movies = await loadListDetails(listId)
-      if(!movies?.items.length) return 'https://cdn-icons-png.flaticon.com/512/16/16410.png'
-      return `https://image.tmdb.org/t/p/w342${movies.items[0].poster_path}`
-    } catch (error) {
-      ElMessage.error('Failed to update list')
-      throw error
-    }
+  const getFirstMoviePoster =  (movies: ListDetailsResponse): string => {
+      return movies.items.length
+      ? `https://image.tmdb.org/t/p/w342${movies.items[0].poster_path}`
+      : 'https://cdn-icons-png.flaticon.com/512/16/16410.png'
   }
 
   async function addMovieToList(movieId: number) {
     if(listId.value) {
-      await loadListDetails(listId.value)
       if(!moviesInList.value.some(item => item.id === movieId)) {
         try {
-          const response = await instance.post(`list/${listId.value}/add_item`,
-            { media_id: movieId },
+          await instance.post(`list/${listId.value}/add_item`,
+            { 
+              media_id: movieId 
+            },
             {
-              params: {session_id: authStore.sessionId}
+              params: {
+                session_id: authStore.sessionId
+              }
             }
           )
-          await loadListDetails(listId.value)
+          
           ElMessage({
             message: 'Movie added to list',
             type: 'success'
           })
-          return response.data
         } catch (error) {
           console.log('Error while add new movie:', error)
           throw error
@@ -121,7 +116,6 @@ export const useListStore = defineStore('listStore', () => {
         })
         throw new Error('Movie already in list')
       }
-
     }
   }
 
@@ -131,6 +125,7 @@ export const useListStore = defineStore('listStore', () => {
       return results
     } catch (error) {
       console.log('error loading list details:', error)
+      throw error
     }
   }
 

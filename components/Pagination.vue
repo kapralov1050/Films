@@ -70,7 +70,7 @@ const emit = defineEmits(['update:page']);
 
 const currentPage = ref(props.page)
 const totalPages = computed(() => {
-  return props.totalresults >= 500 ? 500 : props.totalresults
+  return props.totalResults >= 500 ? 500 : props.totalResults
 })
 const from = computed(() => Math.max(2, currentPage.value - 2))
 const to = computed(() => Math.min(totalPages.value, currentPage.value + 3))

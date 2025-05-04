@@ -1,12 +1,14 @@
+import type { AxiosResponse } from "axios"
 import { useRatingStore } from "~/stores/rating"
+import { type RatingResponse } from "~/types/common"
 
 
 export const useRate = () => {
   const authStore = useAuthStore()
 
-  async function postRatingToServer(movieId: number, rating: number) {
+  async function postRatingToServer(movieId: number, rating: number): Promise<AxiosResponse<RatingResponse>> {
     try {
-      await instance.post(`movie/${movieId}/rating`, 
+      const response = await instance.post(`movie/${movieId}/rating`, 
         { value: rating },
         {
           params: {
@@ -14,6 +16,7 @@ export const useRate = () => {
           }
         }
       )
+      return response
     } catch (error) {
       console.log('Error rating movie:', error)
       throw error

@@ -7,16 +7,12 @@ export const useRatingStore = defineStore('ratingStore', () => {
   const ratedMovies = ref<Film[]>([])
 
   async function rateMovie(movieId: number, rating: number) {
-    let isRated = true
     try {
-      await postRatingToServer(movieId, rating)
-      return isRated
+      const response = await postRatingToServer(movieId, rating)
+      return response.data.status_code === 1 ? true : false
     } catch (error) {
-      isRated = false
       console.log(error)
       throw error
-    } finally {
-      return isRated
     }
   }
 

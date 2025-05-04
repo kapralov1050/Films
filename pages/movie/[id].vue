@@ -2,25 +2,25 @@
   <article class="movie-card" v-loading="isLoading">
     <NuxtImg
       class="movie-card__poster"
-      :src="`https://image.tmdb.org/t/p/w500${movieDetailsStore.selectedMovie.poster_path}`"
-      :alt="movieDetailsStore.selectedMovie.title"
+      :src="`https://image.tmdb.org/t/p/w500${movieDetailsStore.selectedMovie?.poster_path}`"
+      :alt="movieDetailsStore.selectedMovie?.title"
       format="webp"
     />
     <div class="movie-card__meta">
       <h1 class="movie-card__meta-title">
-        {{ movieDetailsStore.selectedMovie.title }}
-        ({{ dateToYear(movieDetailsStore.selectedMovie.release_date) }})
+        {{ movieDetailsStore.selectedMovie?.title }}
+        ({{ formatDateToYear(movieDetailsStore.selectedMovie?.release_date || '0') }})
       </h1>
       <section class="movie-card__details">
         <h2 class="movie-card__details-subtitle">
            About Film 
         </h2>
-        <p> {{ movieDetailsStore.selectedMovie.overview }}</p>
+        <p> {{ movieDetailsStore.selectedMovie?.overview }}</p>
         <div class="movie-card__inline-list">
           <h4> Genres: </h4>
           <ul>
             <li 
-              v-for="genre in movieDetailsStore.selectedMovie.genres" 
+              v-for="genre in movieDetailsStore.selectedMovie?.genres" 
               :key="genre.id"
             >
               {{ genre.name }}
@@ -31,7 +31,7 @@
           <h4> Country: </h4>
           <ul>
             <li 
-              v-for="country in movieDetailsStore.selectedMovie.production_countries" 
+              v-for="country in movieDetailsStore.selectedMovie?.production_countries" 
               :key="country.id"
             >
               {{ country.name }}
@@ -42,7 +42,7 @@
           <h4> Language: </h4>
           <ul>
             <li 
-              v-for="language in movieDetailsStore.selectedMovie.spoken_languages" 
+              v-for="language in movieDetailsStore.selectedMovie?.spoken_languages" 
               :key="language.id"
             >
               {{ language.name }}
@@ -71,13 +71,13 @@
     </div>
     <div class="movie-card__rating">
       <p class="movie-card__rating__average">
-        {{ movieDetailsStore.selectedMovie.vote_average }}
+        {{ movieDetailsStore.selectedMovie?.vote_average }}
       </p>
       <el-icon :size="30" class="star">
         <StarFilled color="rgb(255, 217, 0)" />
       </el-icon>
       <p class="movie-card__rating__votes">
-        {{ movieDetailsStore.selectedMovie.vote_count }} ratings
+        {{ movieDetailsStore.selectedMovie?.vote_count }} ratings
       </p>
     </div>
   </article>
@@ -108,13 +108,13 @@
 </template>
 
 
-<script setup>
+<script setup lang="ts">
 import { StarFilled } from '@element-plus/icons-vue';
-import { dateToYear } from '~/helpers/formatDate';
+import { formatDateToYear } from '~/helpers/formatDate';
 
 const isLoading = ref(false)
 const route = useRoute();
-const id = route.params.id;
+const id = route.params.id as string;
 
 const movieDetailsStore = UseMovieDetailsStore();
 

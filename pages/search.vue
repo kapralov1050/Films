@@ -35,7 +35,7 @@
       <Pagination
         v-if="searchStore.searchedMovies"
         :page="searchStore.currentPage"
-        :totalresults="searchStore.searchedMovies.total_pages"
+        :totalResults="searchStore.searchedMovies.total_pages"
         @update:page="handlePageChange"
         class="pagination"
       />

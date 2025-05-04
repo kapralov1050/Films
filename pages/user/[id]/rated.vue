@@ -1,4 +1,5 @@
 <template>
+  <div>
     <h1 class="title">Rated Movies</h1>
     <div 
       class="movies-list-empty" 
@@ -28,6 +29,7 @@
         <MovieCard :movie="movie" />
       </li>
     </ul>
+  </div>
 </template>
 
 
@@ -92,10 +94,5 @@ onMounted(async () => {
     justify-content: space-around;
     box-shadow: 0 2px 5px rgb(209, 209, 209);
   }
-}
-
-.pagination {
-  align-self: center;
-  margin: 2rem;
 }
 </style>

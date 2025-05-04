@@ -8,7 +8,7 @@
         format="webp"
       />
       <h2>Personal Info</h2>
-      <div>
+      <div v-if="movieDetailsStore.personDetails?.known_for_department">
         <h3>Known For:</h3>
         <p>{{ movieDetailsStore.personDetails?.known_for_department }}</p>
       </div>
@@ -16,14 +16,14 @@
         <h3>Gender:</h3>
         <p>{{ Gender[movieDetailsStore.personDetails?.gender || 0] }}</p>
       </div>
-      <div>
+      <div v-if="movieDetailsStore.personDetails?.birthday">
         <h3>Birthday:</h3>
         <p>
           {{ formatDate(movieDetailsStore.personDetails?.birthday || 'unknown') }}
           ({{ personAge }} years old)
         </p>
       </div>
-      <div>
+      <div v-if="movieDetailsStore.personDetails?.place_of_birth">
         <h3>Place of Birth:</h3>
         <p>{{ movieDetailsStore.personDetails?.place_of_birth }}</p>
       </div>
@@ -74,7 +74,7 @@
                 />
               </NuxtLink>
               <h3>
-                {{ movie.title }} ({{ dateToYear(movie.release_date) }})
+                {{ movie.title }} ({{ formatDateToYear(movie.release_date) }})
               </h3>
             </div>
           </section>
@@ -86,7 +86,9 @@
 
 
 <script setup lang='ts'>
-import { dateToYear, formatDate } from '~/helpers/formatDate';
+import { formatDateToYear } from '~/helpers/formatDate';
+import { Gender } from '~/types/common';
+import dayjs from 'dayjs'
 
 const movieDetailsStore = UseMovieDetailsStore()
 const route = useRoute();
@@ -95,29 +97,28 @@ const isLoading = ref(false)
 const isViewerOpen = ref(false)
 
 const personAge = computed(() => {
-  if (movieDetailsStore.personDetails?.birthday) {
-    const currentDate = new Date()
-    const birthDate = new Date(movieDetailsStore.personDetails?.birthday)
-    let years = currentDate.getFullYear() - birthDate.getFullYear()
-    const monthDiff = currentDate.getMonth() - birthDate.getMonth()
-    if (monthDiff < 0 || (monthDiff === 0 && currentDate.getDate() < birthDate.getDate())) {
-      years--;
-    }
-    return years
-  }
-})
+  const today = dayjs()
+  const birthday = dayjs(movieDetailsStore.personDetails?.birthday)
+  const age = today.diff(birthday,'year')
+  return age
+ })
 
-enum Gender {
-  Unknown = 0,
-  Female = 1,
-  Male = 2
-}
+async function getPersonDetails(id: string) {
+    try {
+      const response = await instance.get(`/person/${id}`, {
+        params: { append_to_response: 'movie_credits,images'}
+      })
+      return response.data
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
+  }
 
 onMounted(async () => {
   isLoading.value = true
   try {
-    await movieDetailsStore.getPersonDetails(id)
-    console.log(movieDetailsStore.personDetails)
+    movieDetailsStore.personDetails = await getPersonDetails(id)
   } catch (error) {
     console.log(`error while loading person details ${id}:`,error)
   } finally {

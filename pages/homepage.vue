@@ -27,7 +27,7 @@
   <Pagination
     @update:page="handlePageChange" 
     :page="moviesStore.currentPage" 
-    :totalresults="moviesStore.selectedMoviesList.total_results" 
+    :totalResults="moviesStore.selectedMoviesList.total_results" 
     class="movies-page__pagination"
   />
 </template>
@@ -53,8 +53,7 @@ const fetchData = async() => {
   }
 }
 
-watch(() => moviesStore.currentPage, fetchData);
-watch(() => moviesStore.selectedList, fetchData);
+watch(() => [moviesStore.currentPage, moviesStore.selectedList], fetchData);
 
 onMounted(async () => {
   isLoading.value = true

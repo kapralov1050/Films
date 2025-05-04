@@ -63,7 +63,7 @@
             :datetime="movie.release_date" 
             class="list-page__movie-year"
           >
-            {{ dateToYear(movie.release_date) }}
+            {{ formatDateToYear(movie.release_date) }}
           </time>
         </div>
         <el-button 
@@ -82,7 +82,12 @@
 <script setup lang='ts'>
 import { CloseBold, EditPen, Finished } from '@element-plus/icons-vue'
 import { averageRating } from '~/helpers/averagerating'
-import { dateToYear } from '~/helpers/formatDate'
+import { formatDateToYear } from '~/helpers/formatDate'
+
+definePageMeta({
+  layout: 'userpage',
+  middleware: 'auth'
+})
 
 const listStore = useListStore()
 const authStore = useAuthStore()
@@ -142,7 +147,7 @@ onMounted(async () => {
   if(listStore.listId) {
     const response = await listStore.loadListDetails(listStore.listId)
     if (response) {
-      listStore.moviesInList = response?.items
+      listStore.moviesInList = response.items
       listStore.listDetails = response
     }
   }

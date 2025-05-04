@@ -74,7 +74,6 @@ definePageMeta({
 })
 
 onMounted(async () => {
-  if(authStore.userData?.id) 
   await listStore.fetchUserLists()
 })
 </script>

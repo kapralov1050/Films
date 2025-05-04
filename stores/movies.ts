@@ -1,13 +1,12 @@
 import {defineStore} from 'pinia'
-import type { Film, genres, languages,  } from '~/types/common'
+import type { Film, Genre, languages,  } from '~/types/common'
 
 export const useMoviesStore = defineStore('moviesStore', () => {
   const selectedMoviesList = ref<{results: Film[], total_results: number}>({results: [], total_results: 0})
   const selectedList = ref('popular')
   const currentPage = ref(1)
-  const genres = ref<genres[]>([])
+  const genres = ref<Genre[]>([])
   const languages = ref<languages[]>([])
-  const filtersChanged = ref(false)
   const filtersForm = reactive({
     sort_by: '',
     genre: [],
@@ -48,7 +47,6 @@ export const useMoviesStore = defineStore('moviesStore', () => {
         }
       })
       selectedMoviesList.value = response.data
-      filtersChanged.value = false
       console.log(selectedMoviesList.value)
     } catch (error) {
       console.log('Error sort:', error)
@@ -140,7 +138,6 @@ export const useMoviesStore = defineStore('moviesStore', () => {
     languages,
     fetchLanguages,
     filtersForm,
-    filtersChanged,
     resetForm,
     currentPage
   }

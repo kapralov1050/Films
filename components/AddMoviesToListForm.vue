@@ -61,9 +61,8 @@ async function addMovieToList(movieId: number) {
     const response = await listStore.addMovieToList(movieId)
     listStore.movieToAddToList = ''
     searchStore.searchedMovies = null
-    console.log(response)
   } catch (error) {
-    console.log('Error while add new movie:', error)
+    console.error('Error while add new movie:', error)
   } finally {
     isInAddingState.value = false
   }

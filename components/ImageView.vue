@@ -22,18 +22,14 @@
 
 <script setup lang='ts'>
 import { Picture } from '@element-plus/icons-vue';
-import type { PersonImages } from '~/types/common';
+import type { PersonImage } from '~/types/common';
 
 const props = defineProps<{
-  images: PersonImages[]
+  images: PersonImage[]
   isOpen: boolean
 }>()
 
 const srcList = computed(() => props.images.map(image => `https://image.tmdb.org/t/p/w500${image.file_path}`))
-
-onMounted(() => {
-  console.log(srcList)
-})
 </script>
 
 

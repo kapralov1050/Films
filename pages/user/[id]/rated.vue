@@ -37,7 +37,7 @@
 </template>
 
 
-<script setup>
+<script setup lang="ts">
 import { List } from '@element-plus/icons-vue'
 
 definePageMeta({
@@ -46,15 +46,17 @@ definePageMeta({
 })
 
 const ratingStore = useRatingStore()
+const authStore = useAuthStore()
 const isLoading = ref(false)
 
 onMounted(async () => {
   isLoading.value = true
   try {
-    ratingStore.ratedMovies = await ratingStore.getRatedMovies()
-    console.log(ratingStore.ratedMovies)
+    if (authStore.userData?.id) {
+      ratingStore.ratedMovies = await ratingStore.getRatedMovies(authStore.userData.id)
+    }
   } catch (error) {
-    console.log(error)
+    console.error('error while loading rated movies',error)
   } finally {
     isLoading.value = false
   }

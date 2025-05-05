@@ -101,7 +101,7 @@ const removeMovie = async (movieId: number) => {
     if(listStore.listId) await listStore.deleteMovieFromList(movieId, listStore.listId)
     ElMessage.success('Movie removed from list')
   } catch (error) {
-    console.log(error)
+    console.error('error while removing rating', error)
   } finally {
     isDeleting.value = false
   }
@@ -115,7 +115,7 @@ const deleteList = async () => {
     const username = authStore.userData?.username;
     navigateTo(`/user/${username}/lists`)
   } catch (error) {
-    console.log(error)
+    console.error('error while deleting list', error)
   } finally {
     isDeleting.value = false
   }
@@ -126,7 +126,7 @@ const clearList = async () => {
     if(listStore.listId) await listStore.clearList(listStore.listId)
     ElMessage.success('List was successfully cleared')
   } catch(error) {
-    console.log(error)
+    console.error('error while clear list', error)
   }
 }
 
@@ -139,7 +139,7 @@ const closeModal = async () => {
       }
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 

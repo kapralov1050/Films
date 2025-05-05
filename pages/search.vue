@@ -58,9 +58,7 @@ const handlePageChange = async (newPage: number) => {
 const fetchData = async() => {
   isLoading.value = true
   try {
-    console.log(searchStore.searchValue)
     searchStore.searchedMovies = await searchStore.searchMovie(searchStore.searchValue)
-    console.log(searchStore.searchedMovies)
   } catch(error) {
   console.error('Error:', error)
   } finally {

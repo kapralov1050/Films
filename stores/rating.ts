@@ -2,17 +2,20 @@ import type { Movie, movieRating } from '~/types/common';
 
 export const useRatingStore = defineStore('ratingStore', () => {
   const authStore = useAuthStore()
-  const { postRating, deleteRatingFromServer } = useRate()
+  const { postRating, clearRating } = useRate()
   const ratings = ref<movieRating[]>([])
   const ratedMovies = ref<Movie[]>([])
 
   async function rateMovie(movieId: number, rating: number) {
     try {
       const response = await postRating(movieId, rating)
+      if (response.data.status_code === 1 && authStore.userData?.id) {
+        await getRatedMovies(authStore.userData.id)
+      }
       return response.data.status_code === 1 ? true : false
     } catch (error) {
-      console.log(error)
       throw error
+      console.error(error)
     }
   }
 
@@ -23,42 +26,31 @@ export const useRatingStore = defineStore('ratingStore', () => {
           session_id: authStore.sessionId
         }
       })
-      console.log(data.results)
       ratings.value = data.results.map((movie: any) => ({
         id: movie.id,
         rating: movie.rating
       }))
       return data.results
     } catch (error) {
-      console.log(error)
+      console.error(error)
       return [];
     } 
   }
 
-  function removeRating(movieId: number) {
-    let isRemoved = true
+  async function removeRating(movieId: number) {
     try {
       ratings.value = ratings.value.filter((item: {id: number, rating: number}) => item.id !== movieId);
-      deleteRatingFromServer(movieId)
-      console.log('Ratings after removal:', [...ratings.value])
-      return isRemoved
+      const response = await clearRating(movieId)
+      if (response.data.status_code === 13) return true
     } catch (error) {
-      console.log(error)
-      isRemoved = false
-    } finally {
-      return isRemoved
+      console.error(error)
+      return false
     }
-
   }
 
-  const getRating = (id: number) => {
+  const getRating = (id: number, userRating: number) => {
     const ratedMovie = ratings.value.find(item => item.id === id)
-    return ratedMovie ? ratedMovie.rating : null
-  }
-
-  const logout = () => {
-    ratings.value = []
-    ratedMovies.value = []
+    return ratedMovie?.rating ? ratedMovie.rating : userRating > 0 ? userRating : null
   }
   
   return {
@@ -68,6 +60,5 @@ export const useRatingStore = defineStore('ratingStore', () => {
     getRatedMovies,
     removeRating,
     getRating,
-    logout
   }
 })

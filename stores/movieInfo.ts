@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia'
 import { type Movie, type PersonDetails, type PersonInCast } from '~/types/common'
 
-export const UseMovieDetailsStore = defineStore('MovieDetailsStore', () => {
+export const useMovieDetailsStore = defineStore('MovieDetailsStore', () => {
   const selectedMovie = ref<Movie>()
   const movieCast = ref<PersonInCast[]>()
   const movieRecommendations = ref<Movie[]>()
@@ -16,7 +16,7 @@ export const UseMovieDetailsStore = defineStore('MovieDetailsStore', () => {
         movieRecommendations.value = response.data.recommendations.results
         movieCast.value = response.data.credits.cast
       } catch (error) {
-        console.log(error)
+        console.error('error while loading movie details', error)
         throw error
       } 
   }

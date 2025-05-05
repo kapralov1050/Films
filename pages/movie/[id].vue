@@ -2,7 +2,7 @@
   <article class="movie-card" v-loading="isLoading">
     <NuxtImg
       class="movie-card__poster"
-      :src="`https://image.tmdb.org/t/p/w500${movieDetailsStore.selectedMovie?.poster_path}`"
+      :src="moviePoster_url"
       :alt="movieDetailsStore.selectedMovie?.title"
       format="webp"
     />
@@ -100,7 +100,9 @@
               format="webp"
             />
           </NuxtLink>
-          <h3>{{ movie.title }} ({{ dateToYear(movie.release_date) }})</h3>
+          <h3>
+            {{ movie.title }} ({{ formatDateToYear(movie.release_date) }})
+          </h3>
         </div>
       </section>
     </el-scrollbar>
@@ -112,18 +114,26 @@
 import { StarFilled } from '@element-plus/icons-vue';
 import { formatDateToYear } from '~/helpers/formatDate';
 
+const movieDetailsStore = useMovieDetailsStore();
+
 const isLoading = ref(false)
 const route = useRoute();
 const id = route.params.id as string;
 
-const movieDetailsStore = UseMovieDetailsStore();
+const moviePoster_url = computed(() => {
+  if(movieDetailsStore.selectedMovie?.poster_path) {
+    return `https://image.tmdb.org/t/p/w500${movieDetailsStore.selectedMovie?.poster_path}`
+  } else {
+    return 'https://cdn-icons-png.flaticon.com/512/16/16410.png'
+  }
+})
 
 onMounted(async () => {
   isLoading.value = true
   try {
     await movieDetailsStore.getMovieDetails(id);
   } catch (error) {
-    console.log(`error while loading movie ${id}:`,error)
+    console.error(`error while loading movie ${id}:`,error)
   } finally {
     isLoading.value = false
   }
@@ -140,10 +150,9 @@ onMounted(async () => {
   @include flex(row, flex-start, flex-start, 0);
 
   &__poster {
-    max-height: 600px;
     height: 40rem;
-    border-radius: 5px;
-    width: auto;
+    object-fit: contain;
+    width: 30rem;
   }
 
   &__meta {
@@ -211,7 +220,7 @@ onMounted(async () => {
 
   &__title {
     font-size: 2rem;
-    margin: 1rem 0 2rem 2rem;
+    margin: 0.5rem 0 1rem 2rem;
   }
 
   &__scroll-content {
@@ -222,13 +231,14 @@ onMounted(async () => {
   }
 
   &__item {
-    @include flex(column, center, center, 0);
+    @include flex(column, center, center, 1rem);
     margin: 1.5rem;
     flex-shrink: 0;
     max-height: 30rem;
     max-width: auto;
     text-align: center;
     overflow-wrap: anywhere;
+    filter: drop-shadow(2px 3px 5px #616161)
   }
 }
 </style>

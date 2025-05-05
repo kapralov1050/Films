@@ -1,6 +1,3 @@
-import type { AxiosResponse } from "axios"
-import type { Movie, WatchListResponse } from "~/types/common"
-
 export const useAuth= () =>{
 
   const authStore = useAuthStore()
@@ -10,7 +7,7 @@ export const useAuth= () =>{
         const res = await instance.get('/authentication/token/new')
         return res.data.request_token
     } catch (error) {
-        console.log('Ошибка при получении токена', error)
+        console.error('Ошибка при получении токена', error)
         return createError({statusCode: 500, statusMessage:'ошибка при получении токена'})
     }
   }
@@ -36,26 +33,13 @@ export const useAuth= () =>{
     localStorage.removeItem('tmdb_request_token')
 
     } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const getWatchListMovies = async (accountId: number): Promise <Movie[]> => {
-    try {
-      const response: AxiosResponse <WatchListResponse> = await instance.get(`account/${accountId}/watchlist/movies`, {
-        params: { session_id: authStore.sessionId }
-      })
-      return response.data.results
-    } catch (error) {
-      console.log('Failed to load watchlist:',error)
-      return [];
+      console.error(error)
     }
   }
 
   return {
     getRequestToken, 
     handleCallback,
-    getWatchListMovies,
     loginWithTmdb
   }
 }

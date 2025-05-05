@@ -47,9 +47,8 @@ export const useMoviesStore = defineStore('moviesStore', () => {
         }
       })
       selectedMoviesList.value = response.data
-      console.log(selectedMoviesList.value)
     } catch (error) {
-      console.log('Error sort:', error)
+      console.error('Error sort:', error)
     }
   }
 
@@ -65,7 +64,7 @@ export const useMoviesStore = defineStore('moviesStore', () => {
       localStorage.setItem('tmdb_genres', JSON.stringify(genres))
       return genres
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
@@ -81,7 +80,7 @@ export const useMoviesStore = defineStore('moviesStore', () => {
       localStorage.setItem('tmdb_languages', JSON.stringify(languages))
       return languages
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
@@ -122,7 +121,7 @@ export const useMoviesStore = defineStore('moviesStore', () => {
           const data = response.data
           return data
         } catch (error) {
-          console.log(error)
+          console.error(error)
         }
   }
 

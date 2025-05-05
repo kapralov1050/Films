@@ -1,40 +1,42 @@
 <template>
   <article class="person-card" v-loading="isLoading">
-    <div class="person-card__short-info">
+    <div class="person-card__bio">
       <NuxtImg
         class="person-card__poster"
-        :src="`https://image.tmdb.org/t/p/w500${movieDetailsStore.personDetails?.profile_path}`"
+        :src="moviePoster_url"
         :alt="movieDetailsStore.personDetails?.name"
         format="webp"
       />
-      <h2>Personal Info</h2>
-      <div v-if="movieDetailsStore.personDetails?.known_for_department">
-        <h3>Known For:</h3>
-        <p>{{ movieDetailsStore.personDetails?.known_for_department }}</p>
-      </div>
-      <div>
-        <h3>Gender:</h3>
-        <p>{{ Gender[movieDetailsStore.personDetails?.gender || 0] }}</p>
-      </div>
-      <div v-if="movieDetailsStore.personDetails?.birthday">
-        <h3>Birthday:</h3>
-        <p>
-          {{ formatDate(movieDetailsStore.personDetails?.birthday || 'unknown') }}
-          ({{ personAge }} years old)
-        </p>
-      </div>
-      <div v-if="movieDetailsStore.personDetails?.place_of_birth">
-        <h3>Place of Birth:</h3>
-        <p>{{ movieDetailsStore.personDetails?.place_of_birth }}</p>
-      </div>
-      <div v-if="movieDetailsStore.personDetails?.also_known_as.length">
-        <h3>Also known as:</h3>
-        <p 
-          v-for="(name, index) in movieDetailsStore.personDetails?.also_known_as"
-          :key="index"
-        >
-          {{ name }}
-        </p>
+      <div class="person-card__short-info">
+        <h2>Personal Info</h2>
+        <div v-if="movieDetailsStore.personDetails?.known_for_department">
+          <h3>Known For:</h3>
+          <p>{{ movieDetailsStore.personDetails?.known_for_department }}</p>
+        </div>
+        <div>
+          <h3>Gender:</h3>
+          <p>{{ Gender[movieDetailsStore.personDetails?.gender || 0] }}</p>
+        </div>
+        <div v-if="movieDetailsStore.personDetails?.birthday">
+          <h3>Birthday:</h3>
+          <p>
+            {{ formatDateToYear(movieDetailsStore.personDetails?.birthday || 'unknown') }}
+            ({{ personAge }} years old)
+          </p>
+        </div>
+        <div v-if="movieDetailsStore.personDetails?.place_of_birth">
+          <h3>Place of Birth:</h3>
+          <p>{{ movieDetailsStore.personDetails?.place_of_birth }}</p>
+        </div>
+        <div v-if="movieDetailsStore.personDetails?.also_known_as.length">
+          <h3>Also known as:</h3>
+          <p 
+            v-for="(name, index) in movieDetailsStore.personDetails?.also_known_as"
+            :key="index"
+          >
+            {{ name }}
+          </p>
+        </div>
       </div>
     </div>
     <div class="person-card__info">
@@ -103,6 +105,14 @@ const personAge = computed(() => {
   return age
  })
 
+ const moviePoster_url = computed(() => {
+  if(movieDetailsStore.personDetails?.profile_path) {
+    return `https://image.tmdb.org/t/p/w500${movieDetailsStore.personDetails?.profile_path}`
+  } else {
+    return 'https://cdn-icons-png.flaticon.com/512/16/16410.png'
+  }
+})
+
 async function getPersonDetails(id: string) {
     try {
       const response = await instance.get(`/person/${id}`, {
@@ -110,7 +120,7 @@ async function getPersonDetails(id: string) {
       })
       return response.data
     } catch (error) {
-      console.log(error)
+      console.error('error while loading person information',error)
       throw error
     }
   }
@@ -120,11 +130,14 @@ onMounted(async () => {
   try {
     movieDetailsStore.personDetails = await getPersonDetails(id)
   } catch (error) {
-    console.log(`error while loading person details ${id}:`,error)
+    console.error(`error while loading person details ${id}:`,error)
   } finally {
     isLoading.value = false
   }
+})
 
+onUnmounted(() => {
+  movieDetailsStore.personDetails = undefined
 })
 </script>
 
@@ -137,15 +150,19 @@ onMounted(async () => {
   padding: 3rem;
   @include flex(row, flex-start, flex-start, 0);
 
-  &__short-info {
+  &__bio {
     @include flex(column, flex-start, flex-start, 2rem);
   }
 
+  &__short-info {
+    @include flex(column, center, flex-start, 2rem);
+    padding-left: 2rem;
+  }
+
   &__poster {
-    max-height: 600px;
     height: 40rem;
-    border-radius: 5px;
-    width: auto;
+    object-fit: contain;
+    width: 30rem;
   }
 
   &__info {
@@ -186,6 +203,8 @@ onMounted(async () => {
     padding: 0 5rem 0 2rem;
     box-sizing: border-box;
     width: auto;
+    border: 1px solid gold;
+    border-radius: 2rem;
   }
 
   &__scroll-content {

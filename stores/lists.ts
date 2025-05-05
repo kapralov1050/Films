@@ -19,7 +19,6 @@ export const useListStore = defineStore('listStore', () => {
         description: listForm.description,
         language: 'en'
       })
-      console.log(response.data)
       listId.value = response.data.list_id
       if(response.data.success) {
         ElMessage({
@@ -29,7 +28,7 @@ export const useListStore = defineStore('listStore', () => {
       }
       return response.data
     } catch (error) {
-      console.log('Error while create new list:', error)
+      console.error('Error while create new list:', error)
     }
   }
 
@@ -45,7 +44,7 @@ export const useListStore = defineStore('listStore', () => {
       )  
       return userLists.value
     } catch (error) {
-      console.log('error loading userLists',error)
+      console.error('error loading userLists',error)
     }
   }
 
@@ -105,7 +104,7 @@ export const useListStore = defineStore('listStore', () => {
             type: 'success'
           })
         } catch (error) {
-          console.log('Error while add new movie:', error)
+          console.error('Error while add new movie:', error)
           throw error
         }
 
@@ -124,7 +123,7 @@ export const useListStore = defineStore('listStore', () => {
       const { data: results } = await instance.get<ListDetailsResponse>(`/list/${listId}`)
       return results
     } catch (error) {
-      console.log('error loading list details:', error)
+      console.error('error loading list details:', error)
       throw error
     }
   }

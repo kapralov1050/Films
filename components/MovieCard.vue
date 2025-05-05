@@ -3,7 +3,7 @@
     <NuxtLink class="movie-card__image" :to="`/movie/${movie.id}`">
       <NuxtImg
         class="movie-card__poster"
-        :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}` || 'https://cdn-icons-png.flaticon.com/512/16/16410.png'"
+        :src="moviePoster_url"
         :alt="movie.original_title"
         loading="lazy"
         format="webp"
@@ -24,7 +24,7 @@
         </div>
         <WatchListButton 
           :isInWatchlist="isInWatchList" 
-          @handleWatchListChange="addorRemoveMovie" 
+          @handleWatchListChange="toggleInWatchListStatus" 
           :v-loading="isLoading"
         />
       </header>
@@ -33,8 +33,8 @@
       </p>
       <section class="movie-card__rating">
         <el-icon 
-        :size="30" 
-        color="rgb(255, 217, 0)"
+          :size="30" 
+          color="rgb(255, 217, 0)"
         >
           <StarFilled />
         </el-icon>
@@ -51,18 +51,29 @@ import { StarFilled } from '@element-plus/icons-vue';
 import { formatDateToYear } from '~/helpers/formatDate';
 import type { Movie } from '~/types/common';
 
-const props = defineProps<{movie: Movie}>();
-
 const authStore = useAuthStore()
-const isInWatchList = ref(false)
-const isLoading = ref(false)
+const watchlistStore = useWatchlistStore()
 const { loginWithTmdb } = useAuth()
 
-const addorRemoveMovie = () => {
+const props = defineProps<{movie: Movie}>();
+
+const isInWatchList = computed(() => {
+  return watchlistStore.watchListMovies?.some((movie) => props.movie.id === movie.id) || false
+})
+const isLoading = ref(false)
+
+const moviePoster_url = computed(() => {
+  if(props.movie.poster_path) {
+    return `https://image.tmdb.org/t/p/w342${props.movie.poster_path}`
+  } else {
+    return 'https://cdn-icons-png.flaticon.com/512/16/16410.png'
+  }
+})
+
+const toggleInWatchListStatus = () => {
   if(authStore.sessionId) {
     isLoading.value = true
-    isInWatchList.value = !isInWatchList.value
-    authStore.addToWatchList(props.movie.id, isInWatchList.value)
+    watchlistStore.addToWatchList(props.movie.id, !isInWatchList.value)
     isLoading.value = false
   } else {
     isLoading.value = true
@@ -73,18 +84,13 @@ const addorRemoveMovie = () => {
     isLoading.value = false
   }
 }
-
-onMounted(() => {
-  if(authStore.watchListMovies) {
-    isInWatchList.value = authStore.watchListMovies.some((movie) => props.movie.id === movie.id) 
-  }
-})
 </script>
 
 
 <style scoped lang="scss">
 .movie-card {
   @include flex(row, space-between, flex-start, 0);
+  box-sizing: border-box;
   width: inherit;
   height: 16rem;
 
@@ -96,11 +102,10 @@ onMounted(() => {
 
   &__poster {
     align-self: center;
-    max-height: 16rem;
-    width: auto;
-    object-fit: cover;
-    border-radius: 10px;
-    filter: drop-shadow(2px 6px 5px #333)
+    height: 16rem;
+    width: 12rem;
+    object-fit:contain;
+    filter: drop-shadow(2px 3px 5px #333)
   }
 
   &__head {

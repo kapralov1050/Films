@@ -23,7 +23,7 @@
             <li class="user-stats__item">
               <p>Movies in WatchList</p>
               <p class="user-stats__value">
-                {{ authStore.watchListMovies?.length }}
+                {{ watchlistStore.watchListMovies?.length }}
               </p>
             </li>
             <li class="user-stats__item">
@@ -65,6 +65,7 @@ import type { Genre } from '~/types/common'
 
 const authStore = useAuthStore()
 const ratingStore = useRatingStore()
+const watchlistStore = useWatchlistStore()
 const username = authStore.userData?.username || 'No data'
 
 function handleSelect(key: string) {
@@ -125,6 +126,10 @@ const mostWatchedGenres = computed<Genre[]>(() => {
   flex-direction: column;
 }
 
+.el-header {
+  height: 4rem;
+}
+
 .user-header {
   @include flex(row, flex-start, center, 4rem);
   width: 100%;
@@ -179,7 +184,7 @@ const mostWatchedGenres = computed<Genre[]>(() => {
 
 .menu {
   @include flex(row, center, center, 3rem);
-  width: 100vw;
+  width: inherit;
   border: 1px solid rgb(211, 211, 211);
 
   &__item {

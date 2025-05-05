@@ -75,6 +75,7 @@ const searchMovieStore = useSearchMovieStore()
 const moviesStore = useMoviesStore()
 const authStore = useAuthStore()
 const ratingStore = useRatingStore()
+const route = useRoute()
 const { loginWithTmdb } = useAuth()
 const isLoading = ref(false)
 
@@ -92,9 +93,9 @@ function handleLogin() {
 }
 
 const handleLogout = () => {
-  authStore.logout()
-  ratingStore.logout()
-  navigateTo('/')
+  authStore.$reset()
+  ratingStore.$reset()
+  navigateTo('/homepage')
 }
 
 async function handleSearch() {
@@ -111,6 +112,10 @@ async function handleSearch() {
 
 const selectList = (listName: string) => {
   moviesStore.selectedList = listName
+  const currentRoute = route.path
+  if (currentRoute !== "/homepage") {
+    navigateTo('/')
+  }
 }
 
 const deboucedHandleSearch = debounce(handleSearch, 300)

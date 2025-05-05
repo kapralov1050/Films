@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       localStorage.removeItem('return_path')
       return navigateTo(decodeURIComponent(returnPath), { replace: true })
     } catch (error) {
-      console.log('Auth callback error:', error)
+      console.error('Auth callback error:', error)
     }
   }
 })

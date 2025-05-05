@@ -3,9 +3,10 @@
     <div 
       class="rating-control__item" 
       v-if="currentRating !== null"
+      v-loading="isLoading"
     > 
       <el-button 
-        @click="handleRemoveRating" 
+        @click="handleRatingRemove" 
         text 
         size="small" 
         circle 
@@ -29,7 +30,7 @@
     >
       <el-button 
         class="rating-control__rate-button"
-        @click="toggleRateBlock"
+        @click="toggleRate"
         type="info" 
         text 
         :icon="Star" 
@@ -39,9 +40,9 @@
         Rate
       </el-button>
       <el-rate 
-        v-show="rateBlockVisible"
+        v-show="isRateButtonVisible"
         v-model="userRating"
-        @change="handleRateMovie"
+        @change="handleMovieRate"
         :max="10"
         show-score
         :loading="isLoading"
@@ -65,41 +66,53 @@ const props = defineProps({
 const ratingStore = useRatingStore()
 const authStore = useAuthStore()
 const { loginWithTmdb } = useAuth()
-const rateBlockVisible = ref(false)
+
+const isRateButtonVisible = ref(false)
 const userRating = ref(0)
 const isLoading = ref(false)
+
 const currentRating = computed<number | null>(() => {
-  return ratingStore.getRating(props.movieId)
+  return ratingStore.getRating(props.movieId, userRating.value)
 })
 
-const handleRateMovie = async () => {
+const handleMovieRate = async () => {
   isLoading.value = true
+  
   try {
     if(!authStore.userData) return
     const movieWasRated = await ratingStore.rateMovie(props.movieId, userRating.value)
+    console.log(movieWasRated)
+
     if(movieWasRated) {
-      await ratingStore.getRatedMovies(authStore.userData.id)
+      ElMessage.success('Movie was rated successfuly')
+    } else {
+      userRating.value = 0
+      ElMessage.error('Failed rate attempt')
     }
-    rateBlockVisible.value = false
   } catch (error) {
-    console.log('Rating failed', error)
-  } finally {
-    isLoading.value = false;
+    console.log('error while rate movie', error)
+    userRating.value = 0
   }
+
+  isRateButtonVisible.value = false
+  isLoading.value = false;
 }
 
-const toggleRateBlock = () => {
+const toggleRate = () => {
   if(!authStore.sessionId) {
     loginWithTmdb() 
   } else {
-    rateBlockVisible.value = !rateBlockVisible.value
+    isRateButtonVisible.value = !isRateButtonVisible.value
   }
 }
 
-const handleRemoveRating = async () => {
+const handleRatingRemove = async () => {
   isLoading.value = true
-  await new Promise(resolve => setTimeout(resolve, 1000))
-  ratingStore.removeRating(props.movieId)
+  const isRemoved = await ratingStore.removeRating(props.movieId)
+  if (isRemoved) {
+    ElMessage.success('Rating has been deleted')
+    userRating.value = 0
+  }
   isLoading.value = false
 }
 </script>

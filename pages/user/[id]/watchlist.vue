@@ -3,7 +3,7 @@
     <h1 class="title">WatchList</h1>
     <div 
       class="movies-list-empty"
-      v-if="!authStore.watchListMovies.length" 
+      v-if="!watchlistStore.watchListMovies.length" 
     >
       <el-icon 
         size="40" 
@@ -27,7 +27,7 @@
     >
       <li 
         class="movies-list__item"
-        v-for="movie in authStore.watchListMovies"
+        v-for="movie in watchlistStore.watchListMovies"
         :key="movie.id"
       >
         <MovieCard :movie="movie" />
@@ -41,6 +41,7 @@
 import { List } from '@element-plus/icons-vue'
 
 const authStore = useAuthStore()
+const watchlistStore = useWatchlistStore()
 const isLoading = ref(false)
 
 definePageMeta({
@@ -51,9 +52,9 @@ definePageMeta({
 onMounted(async () => {
   isLoading.value = true
   try {
-    authStore.getWatchList()
+    watchlistStore.getWatchList()
   } catch (error) {
-    console.log(error)
+    console.error('error while loading watchlist', error)
   } finally {
     isLoading.value = false
   }

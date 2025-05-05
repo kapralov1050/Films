@@ -3,7 +3,7 @@
     <NuxtLink class="movie-card__image" :to="`/movie/${movie.id}`">
       <NuxtImg
         class="movie-card__poster"
-        :src="backdrop_url"
+        :src="moviePoster_url"
         :alt="movie.original_title"
         loading="lazy"
         format="webp"
@@ -35,7 +35,7 @@ import type { Movie } from '~/types/common';
 
 const props = defineProps<{movie: Movie}>();
 
-const backdrop_url = computed(() => {
+const moviePoster_url = computed(() => {
   if(props.movie.backdrop_path) {
     return `https://image.tmdb.org/t/p/w92${props.movie.backdrop_path}`
   } else {

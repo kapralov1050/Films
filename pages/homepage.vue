@@ -37,6 +37,8 @@
 const moviesStore = useMoviesStore()
 const authStore = useAuthStore()
 const ratingStore = useRatingStore()
+const watchlistStore = useWatchlistStore()
+
 const isLoading = ref(false)
 
 const handlePageChange = async (newPage) => {
@@ -65,7 +67,7 @@ onMounted(async () => {
     if(authStore.userData && authStore.sessionId) {
       await Promise.all ([
       ratingStore.getRatedMovies(authStore.userData.id),
-      authStore.getWatchList()
+      watchlistStore.getWatchList()
       ])
     }
     await new Promise(resolve => setTimeout(resolve, 1000))

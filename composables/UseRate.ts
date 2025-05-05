@@ -1,5 +1,4 @@
 import type { AxiosResponse } from "axios"
-import { useRatingStore } from "~/stores/rating"
 import { type RatingResponse } from "~/types/common"
 
 
@@ -14,31 +13,31 @@ export const useRate = () => {
           params: {
             session_id: authStore.sessionId
           }
-        }
-      )
-      console.log(response)
+        })
       return response
     } catch (error) {
-      console.log('Error rating movie:', error)
+      console.error('Error rating movie:', error)
       throw error
     }
   }
 
-  async function deleteRatingFromServer(movieId: number) {
+  async function clearRating(movieId: number):
+  Promise<AxiosResponse<RatingResponse>> {
     try {
-      await instance.delete(`movie/${movieId}/rating`, {
+      const response = await instance.delete(`movie/${movieId}/rating`, {
         params: {
           session_id: authStore.sessionId
         }
       })
+      return response
     } catch (error) {
-      console.log('Error delete rating movie:', error)
+      console.error('Error delete rating movie:', error)
       throw error
     }
   }
   
   return {
     postRating,
-    deleteRatingFromServer,
+    clearRating,
   }
 }

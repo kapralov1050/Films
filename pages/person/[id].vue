@@ -92,7 +92,7 @@ import { formatDateToYear } from '~/helpers/formatDate';
 import { Gender } from '~/types/common';
 import dayjs from 'dayjs'
 
-const movieDetailsStore = UseMovieDetailsStore()
+const movieDetailsStore = useMovieDetailsStore()
 const route = useRoute();
 const id = route.params.id as string;
 const isLoading = ref(false)

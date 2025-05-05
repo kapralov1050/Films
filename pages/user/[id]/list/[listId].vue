@@ -56,7 +56,12 @@
       >
         <div class="list-page__movie-info">
           <h1>
-            {{ movie.original_title }} 
+            <NuxtLink 
+              :to="`/movie/${movie.id}`" 
+              style="color: gold"
+            >
+              {{ movie.original_title }}
+            </NuxtLink>
             (rating: {{ movie.vote_average.toFixed(1) }})
           </h1>
           <time 
@@ -173,7 +178,7 @@ onMounted(async () => {
     @include flex(row, space-between, center, 1rem);
     width: 100%;
     padding: 2rem 1rem;
-    margin: 1.5rem 0 3rem 0;
+    margin: 1.5rem 0 2rem 0;
     color: rgb(50.8, 116.6, 184.5);
     flex-wrap: wrap;
     border: 1px solid rgb(255, 217, 0);

@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import type { Movie, Genre, Language } from '~/types/common'
+import type { Movie, Genre, Language, MovieFilterParams } from '~/types/common'
 
 export const useMoviesStore = defineStore('moviesStore', () => {
   const selectedMoviesList = ref<{results: Movie[], total_results: number}>({results: [], total_results: 0})
@@ -8,10 +8,10 @@ export const useMoviesStore = defineStore('moviesStore', () => {
   const genres = ref<Genre[]>([])
   const languages = ref<Language[]>([])
   const filtersForm = reactive({
-    sort_by: '',
-    genre: [],
+    sort_by: 'popularity.desc',
+    genres: [],
     release_date: [
-      new Date(1970, 0, 1).toISOString().split('T')[0],
+      '',
       new Date().toISOString().split('T')[0]        
     ],
     language: 'en-US',
@@ -32,17 +32,18 @@ export const useMoviesStore = defineStore('moviesStore', () => {
   async function handleSortChange() {
     try {
       const response = await instance.get('https://api.themoviedb.org/3/discover/movie', {
-        params: {
+        params: <MovieFilterParams> {
           page: currentPage.value,
-          'primary_release_date.gte': filtersForm.release_date[0],
-          'primary_release_date.lte': filtersForm.release_date[1],
+          'release_date.gte': filtersForm.release_date[0],
+          'release_date.lte': filtersForm.release_date[1],
+          show_me: 'everything',
           language: filtersForm.language,
           'vote_average.gte': filtersForm.vote_average[0],
           'vote_average.lte': filtersForm.vote_average[1],
           'vote_count.gte': filtersForm.vote_count,
           'with_runtime.gte': filtersForm.runtime[0],
           'with_runtime.lte': filtersForm.runtime[1],
-          with_genres: filtersForm.genre.join(','),
+          with_genres: filtersForm.genres.join(','),
           sort_by: filtersForm.sort_by,
         }
       })

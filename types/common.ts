@@ -18,6 +18,38 @@ export interface Movie {
   vote_count: number;
 }
 
+export interface MovieFilterParams {
+  "air_date.gte"?: string;
+  "air_date.lte"?: string;
+  certification?: string;
+  certification_country?: string;
+  debug?: boolean | string;
+  "first_air_date.gte"?: string;
+  "first_air_date.lte"?: string;
+  page?: number;
+  "primary_release_date.gte"?: string;
+  "primary_release_date.lte"?: string;
+  region?: string;
+  "release_date.gte"?: string;
+  "release_date.lte"?: string;
+  show_me?: string;
+  sort_by?: string;
+  "vote_average.gte"?: number;
+  "vote_average.lte"?: number;
+  "vote_count.gte"?: number;
+  watch_region?: string;
+  with_genres?: string | string[]; 
+  with_keywords?: string;
+  with_networks?: string;
+  with_origin_country?: string;
+  with_original_language?: string;
+  with_watch_monetization_types?: string;
+  with_watch_providers?: string;
+  with_release_type?: string;
+  "with_runtime.gte"?: number;
+  "with_runtime.lte"?: number;
+}
+
 export interface Language {
   name: string;
   id: number;

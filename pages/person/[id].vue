@@ -3,7 +3,7 @@
     <div class="person-card__bio">
       <NuxtImg
         class="person-card__poster"
-        :src="moviePoster_url"
+        :src="personPoster_url"
         :alt="movieDetailsStore.personDetails?.name"
         format="webp"
       />
@@ -105,7 +105,7 @@ const personAge = computed(() => {
   return age
  })
 
- const moviePoster_url = computed(() => {
+ const personPoster_url = computed(() => {
   if(movieDetailsStore.personDetails?.profile_path) {
     return `https://image.tmdb.org/t/p/w500${movieDetailsStore.personDetails?.profile_path}`
   } else {

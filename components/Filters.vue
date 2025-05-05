@@ -15,7 +15,7 @@
     </el-select>
     <el-form :model="filtersForm">
       <el-form-item label="Genres" label-position="left">
-        <el-checkbox-group v-model="filtersForm.genre">
+        <el-checkbox-group v-model="filtersForm.genres">
           <el-checkbox-button
             v-for="genre in moviesStore.genres"
             :key="genre.id"

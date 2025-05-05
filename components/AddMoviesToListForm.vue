@@ -7,18 +7,18 @@
         placeholder="Search for a movie..."
       />
     </el-form-item>
-    <el-scrollbar max-height="40rem">
+    <el-scrollbar max-height="30rem">
       <ul 
         element-loading-text="Loading..."
         class="suggestions-list" 
       >
         <li 
-          class="suggestion-list__item"
+          class="suggestions-list__item"
           v-for="movie in searchSuggestions" 
           :key="movie.id"
         >
           <MiniMovieCard 
-            class="suggestion-list__movie" 
+            class="suggestions-list__movie" 
             :movie="movie"
           />
           <el-button 
@@ -80,10 +80,12 @@ async function addMovieToList(movieId: number) {
 
 .suggestions-list {
   margin: 1rem 0 0 1rem;
+  width: inherit;
 
   &__item {
-    @include flex(flex, space-between, center, 3rem);
-    width: 35rem;
+    @include flex(row, space-between, center, 0);
+    width: inherit;
+    padding-right: 2rem;
   }
 
   &__movie {

@@ -31,7 +31,7 @@ export const useAuth= () =>{
     authStore.setSession(data.session_id)
     await authStore.fetchUserData();
     localStorage.removeItem('tmdb_request_token')
-
+    ElMessage.success('Login successful')
     } catch (error) {
       console.error(error)
     }

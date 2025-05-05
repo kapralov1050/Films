@@ -46,36 +46,36 @@ const handlePageChange = async (newPage) => {
 };
 
 const fetchData = async() => {
+  isLoading.value = true
   try {
     moviesStore.selectedMoviesList = await moviesStore.getPopularMovieList()
+    await new Promise(resolve => setTimeout(resolve, 1000))
   } catch(error) {
   console.error('Error:', error)
   } finally {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+    isLoading.value = false
   }
 }
 
 watch(() => [moviesStore.currentPage, moviesStore.selectedList], fetchData);
 
 onMounted(async () => {
-  isLoading.value = true
   try{
     moviesStore.genres = await moviesStore.fetchGenres()
     moviesStore.languages = await moviesStore.fetchLanguages()
     await fetchData()
-    await authStore.fetchUserData()
-    if(authStore.userData && authStore.sessionId) {
+    if(authStore.sessionId) {
       await Promise.all ([
-      ratingStore.getRatedMovies(authStore.userData.id),
-      watchlistStore.getWatchList()
+        authStore.fetchUserData(),
+        ratingStore.getRatedMovies(authStore.userData.id),
+        watchlistStore.getWatchList()
       ])
     }
     await new Promise(resolve => setTimeout(resolve, 1000))
   } catch(error) {
     console.error('Error:', error)
-  } finally {
-    isLoading.value = false
-  }
+  } 
 })
 
 onBeforeUnmount(() => {
@@ -113,7 +113,7 @@ onBeforeUnmount(() => {
   &__list {
     @include flex(column, center, center, 1.5rem);
     align-self: center;
-    min-height: 80vh;
+    min-height: 60vh;
     width: 95%;
   }
 

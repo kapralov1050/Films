@@ -3,7 +3,6 @@ import type { userData, Movie } from "~/types/common"
 export const useAuthStore = defineStore('authStore', () => {
   const sessionId = ref<string | null>(null)
   const userData = ref<userData | null>(null)
-  const watchlistStore = useWatchlistStore()
 
   const getSessionCookie = () => useCookie<string | null>('tmdb_session_id')
 
@@ -21,7 +20,7 @@ export const useAuthStore = defineStore('authStore', () => {
       })
       userData.value = data
     } catch (error) {
-      console.error('userData loadingerror', error)
+      console.error('userData loading error', error)
       return null
     }
   }
@@ -31,13 +30,13 @@ export const useAuthStore = defineStore('authStore', () => {
     if(sessionCookie.value) {
       sessionId.value = sessionCookie.value
       fetchUserData()
-      watchlistStore.getWatchList()
     }
   }
 
   initAuth()
 
   return {
+    getSessionCookie,
     sessionId,
     setSession,
     userData,

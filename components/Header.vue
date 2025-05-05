@@ -72,11 +72,13 @@ import { debounce } from '~/helpers/debounce'
 import { formatTitle } from '~/helpers/formatTitle'
 
 const searchMovieStore = useSearchMovieStore()
+const watchlistStore = useWatchlistStore()
 const moviesStore = useMoviesStore()
 const authStore = useAuthStore()
 const ratingStore = useRatingStore()
 const route = useRoute()
 const { loginWithTmdb } = useAuth()
+
 const isLoading = ref(false)
 
 const menuItems = [
@@ -93,9 +95,15 @@ function handleLogin() {
 }
 
 const handleLogout = () => {
-  authStore.$reset()
-  ratingStore.$reset()
-  navigateTo('/homepage')
+  authStore.sessionId = null
+  authStore.userData = null
+  watchlistStore.watchListMovies = null
+  ratingStore.ratings = []
+  ratingStore.ratedMovies = []
+  const sessionCookie = authStore.getSessionCookie()
+  sessionCookie.value = null
+  ElMessage.success('You have been logged out')
+  navigateTo('/')
 }
 
 async function handleSearch() {

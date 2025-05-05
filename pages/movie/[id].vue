@@ -93,7 +93,7 @@
         >
           <NuxtLink :to="`/movie/${movie.id}`">
             <NuxtImg
-              :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
+              :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}` || 'https://cdn-icons-png.flaticon.com/512/16/16410.png'"
               :alt="movie.title"
               width="300px"
               height="auto"
@@ -231,11 +231,11 @@ onMounted(async () => {
   }
 
   &__item {
-    @include flex(column, center, center, 1rem);
+    @include flex(column, flex-start, center, 1rem);
     margin: 1.5rem;
     flex-shrink: 0;
-    max-height: 30rem;
-    max-width: auto;
+    max-height: 32rem;
+    max-width: 20rem;
     text-align: center;
     overflow-wrap: anywhere;
     filter: drop-shadow(2px 3px 5px #616161)

@@ -33,7 +33,12 @@
 </template>
 
 
-<script setup>
+<script setup lang="ts">
+
+useHead({
+  title: 'Homepage'
+})
+
 const moviesStore = useMoviesStore()
 const authStore = useAuthStore()
 const ratingStore = useRatingStore()
@@ -41,7 +46,7 @@ const watchlistStore = useWatchlistStore()
 
 const isLoading = ref(false)
 
-const handlePageChange = async (newPage) => {
+const handlePageChange = async (newPage: number) => {
   moviesStore.currentPage = newPage;
 };
 
@@ -68,7 +73,7 @@ onMounted(async () => {
     if(authStore.sessionId) {
       await Promise.all ([
         authStore.fetchUserData(),
-        ratingStore.getRatedMovies(authStore.userData.id),
+        ratingStore.getRatedMovies(),
         watchlistStore.getWatchList()
       ])
     }

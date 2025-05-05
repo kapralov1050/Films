@@ -91,13 +91,16 @@ import { formatDateToYear } from '~/helpers/formatDate'
 
 definePageMeta({
   layout: 'userpage',
-  middleware: 'auth'
+  middleware: 'auth',
+  title: 'ListDetails'
 })
 
 const listStore = useListStore()
 const authStore = useAuthStore()
+
 const showAddMoviesModal = ref(false)
 const isDeleting = ref(false)
+
 const average = computed(() => averageRating(listStore.moviesInList))
 
 const removeMovie = async (movieId: number) => {

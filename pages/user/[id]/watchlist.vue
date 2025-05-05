@@ -3,7 +3,7 @@
     <h1 class="title">WatchList</h1>
     <div 
       class="movies-list-empty"
-      v-if="!watchlistStore.watchListMovies.length" 
+      v-if="!watchlistStore.watchListMovies?.length" 
     >
       <el-icon 
         size="40" 
@@ -37,16 +37,17 @@
 </template>
 
 
-<script setup>
+<script setup lang="ts">
 import { List } from '@element-plus/icons-vue'
 
-const authStore = useAuthStore()
 const watchlistStore = useWatchlistStore()
+
 const isLoading = ref(false)
 
 definePageMeta({
   layout: 'userpage',
-  middleware: 'auth'
+  middleware: 'auth',
+  title: 'Watchlist'
 })
 
 onMounted(async () => {

@@ -59,7 +59,10 @@
               :key="person.id"
             >
               <NuxtLink 
-                :to="`/person/${person.id}`" 
+                :to="{
+                      path: `/person/${person.id}`,
+                      query: { name: person.name }
+                    }" 
                 class="movie-card__person-link"
               >
                 {{ person.name }}
@@ -91,9 +94,16 @@
           v-for="movie in movieDetailsStore.movieRecommendations" 
           class="recommendations__item"
         >
-          <NuxtLink :to="`/movie/${movie.id}`">
+          <NuxtLink 
+            :to="{
+              path: `/movie/${movie.id}`,
+              query: { name: movie.title }
+            }"
+          >
             <NuxtImg
-              :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}` || 'https://cdn-icons-png.flaticon.com/512/16/16410.png'"
+              :src="movie.poster_path ? `
+              https://image.tmdb.org/t/p/w500${movie.poster_path}` 
+              : 'https://cdn-icons-png.flaticon.com/512/16/16410.png'"
               :alt="movie.title"
               width="300px"
               height="auto"
@@ -113,6 +123,10 @@
 <script setup lang="ts">
 import { StarFilled } from '@element-plus/icons-vue';
 import { formatDateToYear } from '~/helpers/formatDate';
+
+definePageMeta({
+  middleware: 'set-page-title'
+})
 
 const movieDetailsStore = useMovieDetailsStore();
 
@@ -138,6 +152,11 @@ onMounted(async () => {
     isLoading.value = false
   }
 });
+
+onUnmounted(() => {
+  movieDetailsStore.movieRecommendations = null
+  movieDetailsStore.selectedMovie = null
+})
 </script>
 
 
@@ -213,6 +232,7 @@ onMounted(async () => {
 .recommendations {
   background-color: rgb(235, 180.6, 99);
   color: white;
+  min-height: 40rem;
   height: auto;
   padding: 2rem 1rem;
   box-sizing: border-box;

@@ -1,6 +1,12 @@
 <template>
   <article class="movie-card" >
-    <NuxtLink class="movie-card__image" :to="`/movie/${movie.id}`">
+    <NuxtLink 
+      class="movie-card__image" 
+      :to="{
+        path: `/movie/${movie.id}`,
+        query: { name: movie.title }
+      }" 
+    >
       <NuxtImg
         class="movie-card__poster"
         :src="moviePoster_url"
@@ -57,10 +63,11 @@ const { loginWithTmdb } = useAuth()
 
 const props = defineProps<{movie: Movie}>();
 
+const isLoading = ref(false)
+
 const isInWatchList = computed(() => {
   return watchlistStore.watchListMovies?.some((movie) => props.movie.id === movie.id) || false
 })
-const isLoading = ref(false)
 
 const moviePoster_url = computed(() => {
   if(props.movie.poster_path) {

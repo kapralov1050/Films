@@ -4,13 +4,13 @@ const ratingStore = useRatingStore()
 const watchlistStore = useWatchlistStore()
 
 definePageMeta({
-  middleware: 'auth'
+  middleware: 'auth',
 })
 
 onMounted(async () => {
   await authStore.fetchUserData()
   if(authStore.userData) {
-    ratingStore.ratedMovies = await ratingStore.getRatedMovies(authStore.userData.id)
+    ratingStore.ratedMovies = await ratingStore.getRatedMovies()
     await watchlistStore.getWatchList()
     navigateTo(`/user/${authStore.userData.username}/rated`)
     }

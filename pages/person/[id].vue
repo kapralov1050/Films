@@ -65,10 +65,16 @@
               class="person-card__scroll-item"
               :key="movie.id"
             >
-              <NuxtLink :to="`/movie/${movie.id}`">
+              <NuxtLink 
+              :to="{
+                path: `/movie/${movie.id}`,
+                query: { name: movie.title }
+              }" 
+              >
                 <NuxtImg
                   class="person-card__image"
-                  :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
+                  :src="movie.poster_path ?
+                  `https://image.tmdb.org/t/p/w185${movie.poster_path}` :'https://cdn-icons-png.flaticon.com/512/16/16410.png'"
                   :alt="movie.title"
                   width="150px"
                   height="auto"
@@ -92,6 +98,10 @@ import { formatDateToYear } from '~/helpers/formatDate';
 import { Gender } from '~/types/common';
 import dayjs from 'dayjs'
 
+definePageMeta({
+  middleware: 'set-page-title'
+})
+
 const movieDetailsStore = useMovieDetailsStore()
 const route = useRoute();
 const id = route.params.id as string;
@@ -105,7 +115,7 @@ const personAge = computed(() => {
   return age
  })
 
- const personPoster_url = computed(() => {
+const personPoster_url = computed(() => {
   if(movieDetailsStore.personDetails?.profile_path) {
     return `https://image.tmdb.org/t/p/w500${movieDetailsStore.personDetails?.profile_path}`
   } else {
@@ -113,22 +123,10 @@ const personAge = computed(() => {
   }
 })
 
-async function getPersonDetails(id: string) {
-    try {
-      const response = await instance.get(`/person/${id}`, {
-        params: { append_to_response: 'movie_credits,images'}
-      })
-      return response.data
-    } catch (error) {
-      console.error('error while loading person information',error)
-      throw error
-    }
-  }
-
 onMounted(async () => {
   isLoading.value = true
   try {
-    movieDetailsStore.personDetails = await getPersonDetails(id)
+    await movieDetailsStore.getPersonDetails(id)
   } catch (error) {
     console.error(`error while loading person details ${id}:`,error)
   } finally {
@@ -137,7 +135,7 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
-  movieDetailsStore.personDetails = undefined
+  movieDetailsStore.personDetails = null
 })
 </script>
 

@@ -76,8 +76,8 @@ const watchlistStore = useWatchlistStore()
 const moviesStore = useMoviesStore()
 const authStore = useAuthStore()
 const ratingStore = useRatingStore()
-const route = useRoute()
 const { loginWithTmdb } = useAuth()
+const route = useRoute()
 
 const isLoading = ref(false)
 
@@ -127,8 +127,6 @@ const selectList = (listName: string) => {
 }
 
 const deboucedHandleSearch = debounce(handleSearch, 300)
-
-
 </script>
 
 

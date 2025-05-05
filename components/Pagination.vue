@@ -69,6 +69,7 @@ const props = defineProps<paginationParams>()
 const emit = defineEmits(['update:page']);
 
 const currentPage = ref(props.page)
+
 const totalPages = computed(() => {
   return props.totalResults >= 500 ? 500 : props.totalResults
 })

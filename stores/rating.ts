@@ -9,19 +9,19 @@ export const useRatingStore = defineStore('ratingStore', () => {
   async function rateMovie(movieId: number, rating: number) {
     try {
       const response = await postRating(movieId, rating)
-      if (response.data.status_code === 1 && authStore.userData?.id) {
-        await getRatedMovies(authStore.userData.id)
+      if (response.data.status_code === 1) {
+        await getRatedMovies()
       }
       return response.data.status_code === 1 ? true : false
     } catch (error) {
       throw error
-      console.error(error)
     }
   }
 
-  const getRatedMovies = async (accountId: number) => {
+  const getRatedMovies = async () => {
     try {
-      const { data } = await instance.get(`account/${accountId}/rated/movies`, {
+      if(!authStore.userData) return
+      const { data } = await instance.get(`account/${authStore.userData.id}/rated/movies`, {
         params: {
           session_id: authStore.sessionId
         }

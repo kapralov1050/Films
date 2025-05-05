@@ -69,6 +69,7 @@ const selectList = (id: number) => {
 }
 
 definePageMeta({
+  title: 'Lists',
   layout: 'userpage',
   middleware: 'auth'
 })

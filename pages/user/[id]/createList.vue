@@ -18,14 +18,16 @@
 </template>
 
 
-<script setup>
+<script setup lang="ts">
 import AddMoviesToListForm from '~/components/AddMoviesToListForm.vue'
 import CreateNewListForm from '~/components/CreateNewListForm.vue'
 
 const authStore = useAuthStore()
 const listStore = useListStore()
+
 const activeStep = ref(1)
-const currentStepForm = ref('CreateNewListForm')
+const currentStepForm = ref<'CreateNewListForm' | 'AddMoviesToListForm'>('CreateNewListForm')
+
 const steps = {
   CreateNewListForm,
   AddMoviesToListForm,
@@ -44,7 +46,7 @@ const next = () => {
         activeStep.value++
         break
       case 2: 
-        navigateTo(`/user/${authStore.userData.username}/lists`)
+        navigateTo(`/user/${authStore.userData?.username}/lists`)
         break
     }
   }

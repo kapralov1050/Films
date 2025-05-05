@@ -42,18 +42,20 @@ import { List } from '@element-plus/icons-vue'
 
 definePageMeta({
   layout: 'userpage',
-  middleware: 'auth'
+  middleware: 'auth',
+  title: 'Rated'
 })
 
 const ratingStore = useRatingStore()
 const authStore = useAuthStore()
+
 const isLoading = ref(false)
 
 onMounted(async () => {
   isLoading.value = true
   try {
     if (authStore.userData?.id) {
-      ratingStore.ratedMovies = await ratingStore.getRatedMovies(authStore.userData.id)
+      ratingStore.ratedMovies = await ratingStore.getRatedMovies()
     }
   } catch (error) {
     console.error('error while loading rated movies',error)

@@ -47,8 +47,13 @@
 <script setup lang="ts">
 import { List } from '@element-plus/icons-vue';
 
+useHead({
+  title: 'Search Results'
+})
+
 const searchStore = useSearchMovieStore()
 const moviesStore = useMoviesStore()
+
 const isLoading = ref(false)
 
 const handlePageChange = async (newPage: number) => {

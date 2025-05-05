@@ -10,10 +10,10 @@
     </el-button>
     <el-image-viewer
       v-if="isOpen"
-      :url-list="srcList"
+      :url-list="list_url"
       show-progress
       :initial-index="1"
-      :preview-src-list="srcList"
+      :preview-src-list="list_url"
       @close="$emit('update:is-open', false)"
     />
   </div>
@@ -29,7 +29,7 @@ const props = defineProps<{
   isOpen: boolean
 }>()
 
-const srcList = computed(() => props.images.map(image => `https://image.tmdb.org/t/p/w500${image.file_path}`))
+const list_url = computed(() => props.images.map(image => `https://image.tmdb.org/t/p/w500${image.file_path}`))
 </script>
 
 

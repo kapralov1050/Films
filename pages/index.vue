@@ -4,9 +4,9 @@
 </template>
 
 
-<script setup>
+<script setup lang="ts">
 definePageMeta({
-  middleware: 'auth-callback'
+  middleware: 'response-tmdb'
 })
 
 onMounted(() => { 

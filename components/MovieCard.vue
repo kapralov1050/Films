@@ -66,7 +66,7 @@ const props = defineProps<{movie: Movie}>();
 const isLoading = ref(false)
 
 const isInWatchList = computed(() => {
-  return watchlistStore.watchListMovies?.some((movie) => props.movie.id === movie.id) || false
+  return watchlistStore.watchListMovies?.some((movie: Movie) => props.movie.id === movie.id) || false
 })
 
 const moviePoster_url = computed(() => {
@@ -78,18 +78,13 @@ const moviePoster_url = computed(() => {
 })
 
 const toggleInWatchListStatus = () => {
+  isLoading.value = true
   if(authStore.sessionId) {
-    isLoading.value = true
-    watchlistStore.addToWatchList(props.movie.id, !isInWatchList.value)
-    isLoading.value = false
+    watchlistStore.addToWatchList(props.movie.id, !isInWatchList.value, props.movie.title)
   } else {
-    isLoading.value = true
-    localStorage.setItem('pending_watchlist_action', JSON.stringify({
-      [props.movie.id]: !isInWatchList.value
-    }))
     loginWithTmdb()
-    isLoading.value = false
   }
+  isLoading.value = false
 }
 </script>
 

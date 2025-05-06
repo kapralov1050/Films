@@ -72,7 +72,6 @@ onMounted(async () => {
     await fetchData()
     if(authStore.sessionId) {
       await Promise.all ([
-        authStore.fetchUserData(),
         ratingStore.getRatedMovies(),
         watchlistStore.getWatchList()
       ])

@@ -18,7 +18,7 @@ export const useWatchlistStore = defineStore('watchlistStore', () => {
     }
   }
 
-  const addToWatchList = async (movieId: number, isWatchlist: boolean) => {
+  const addToWatchList = async (movieId: number, isWatchlist: boolean, movieTitle: string) => {
     try {
       if(!authStore.userData) return 
       await instance.post(`account/${authStore.userData.id}/watchlist`, {
@@ -29,19 +29,13 @@ export const useWatchlistStore = defineStore('watchlistStore', () => {
         params: {session_id: authStore.sessionId}
       })
       getWatchList()
-      ElMessage.success(isWatchlist ? 'Added to watchlist' : 'Deleted from watchlist')
+      ElMessage.success(`${movieTitle} ${isWatchlist 
+        ? 'was added to watchlist' 
+        : 'was deleted from watchlist'
+      }`)
     } catch (error) {
         console.error(error)
     }
-  }
-
-  const processPendingWatchlist = async (movieId: number) => {
-    const pendingAction = JSON.parse(
-      localStorage.getItem('pending_watchlist_action') || '{}');
-    if(pendingAction[movieId] !== undefined) {
-      await addToWatchList(movieId, pendingAction[movieId])
-      localStorage.removeItem('pending_watchlist_action')
-    } 
   }
 
   const getWatchList = async () => {
@@ -55,7 +49,6 @@ export const useWatchlistStore = defineStore('watchlistStore', () => {
     getWatchListMovies,
     watchListMovies,
     addToWatchList,
-    processPendingWatchlist,
     getWatchList
   }
     

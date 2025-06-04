@@ -1,75 +1,28 @@
-# Nuxt Minimal Starter
+# TMDB Mini Clone  "Cinematch"
+ **Демо**: https://ds-nuxt.vercel.app/ (запуск с VPN)
+ 
+Мини-копия TMDB (The Movie Database), использующая их официальное API. Позволяет просматривать популярные фильмы, искать по названию, смотреть детали фильмов и т.д.  
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Возможности:
+- Просмотр популярных фильмов  
+- Поиск фильмов по названию  
+- Детальная страница фильма (описание, рейтинг, актеры)  
+- Фильтры
+- Возможность оценивать фильм, добавлять в избранное.
+- Личный кабинет:
+  1. Список оцененных фильмов
+  2. Список избранного
+  3. Статистика
+  4. Пользовательские листы просмотра
 
-## Setup
+Технологии:
+- **Frontend**: Vue.js / Nuxt 3 / JS / TS / Axios / Element Plus / SCSS 
+- **API**: [The Movie Database (TMDB)](https://www.themoviedb.org/)  
 
-Make sure to install dependencies:
+  Скриншоты:
 
-```bash
-# npm
-npm install
+  ![image](https://github.com/user-attachments/assets/53ef48b1-eaac-4001-8344-aedb1de0358a)
+![image](https://github.com/user-attachments/assets/95fe39a2-5385-4f6b-a128-658dac80eb2a)
+![image](https://github.com/user-attachments/assets/7cd8f40f-8536-4534-8ce3-28bb5cbcc057)
+![image](https://github.com/user-attachments/assets/13a229b0-966e-4f58-9d39-f2071b98cfc1)
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
